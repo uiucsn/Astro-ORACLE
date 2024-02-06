@@ -30,7 +30,7 @@ While ingesting the parquet row data, we also pre process the light curve. For t
 3. Keep all non-detection after the trigger and before the last detection (if available).
 4. Keep all detections.
 
-We can plot these flux curves using the `plot_flux_curve()` function. 
+We can plot these flux curves using the `LSST_Source.plot_flux_curve()` function. 
 
 At this point, we have the `LSST_Source` object with all the data we need. However, all the light curves are full length. This is not realistic since real alerts will get objects with partial light curves. For this reason, we apply windowing to all the time series data in the original light curve. Thus, we create (potentially) multiple instance of the `LSST_Source` object with differing light curve lengths. We do this using the `LSST_Source.get_augmented_sources()` function which returns a list of these augmented sources. It is important to note that all the other features (non time series) are shared between these augmented objects. 
 
