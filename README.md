@@ -36,4 +36,10 @@ At this point, we have the `LSST_Source` object with all the data we need. Howev
 
 Finally, once we have the augmented sources, we want to get the feature tensors for all these objects. 
 
+## Step 3 - Building the Tensors
+
+## Step 4 - Classification Hierarchy
+
+## Step 5 - Machine learning models
+
 TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data. Build out classification hierarchy.
