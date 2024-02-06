@@ -22,6 +22,12 @@ class LSST_Source:
     }
 
     def __init__(self, parquet_row, class_label) -> None:
+        """Create an LSST_Source object to store both photometric and host galaxy data from the Elasticc simulations.
+
+        Args:
+            parquet_row (_type_): A row from the polars data frame that was generated from the Elasticc FITS files using fits_to_parquet.py
+            class_label (str): The Elasticc class label for this LSST_Source object.
+        """
 
         # Set all the class attributes
         setattr(self, 'ELASTICC_class', class_label)
@@ -38,6 +44,13 @@ class LSST_Source:
 
     
     def process_lightcurve(self) -> None:
+        """Process the flux information with phot flags. Processing is done in 4 steps:
+        1. Remove saturations.
+        2. Keep the last non-detection before the trigger (if available).
+        3. Keep all non-detection after the trigger and before the last detection (if available).
+        4. Keep all detections.
+        Finally, all the time series data is modified to conform to the 4 steps mentioned above.
+        """
 
         # Remove saturations from the light curves
         saturation_mask =  (self.PHOTFLAG & 1024) == 0
@@ -60,6 +73,8 @@ class LSST_Source:
 
 
     def plot_flux_curve(self) -> None:
+        """Plot the SNANA calibrated flux vs time plot for all the data in the processed time series. All detections are marked with a star while non detections are marked with dots. Observations are color codded by their passband. This function is fundamentally a visualization tool and is not intended for making plots for papers.
+        """
 
         # Colorize the data
         c = [self.colors[band] for band in self.BAND]
@@ -86,6 +101,14 @@ class LSST_Source:
         pass
 
     def get_augmented_sources(self, min_length = 2) -> list:
+        """Function to augment the length of time series data in an LSST_Source object and produce a list of several LSST_Source objects each with differing length. All objects start with the left most observation (earliest observation) with window length increasing by 1 every time. The minimum length of the time series can be adjusted using the min_length argument.
+
+        Args:
+            min_length (int, optional): Minimum length of time series data in the augmented sources. Defaults to 2. This values is chosen to ensure at least 1 detection.
+
+        Returns:
+            list: List of augmented LSST_Source objects. All of these objects share host properties with the parent object, however the time series lengths are different.
+        """
 
         assert min_length >= 1, "Minimum length of the light curve should be >= 1."
         
