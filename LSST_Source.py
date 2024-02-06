@@ -85,7 +85,7 @@ class LSST_Source:
     def get_ML_Tensor(self):
         pass
 
-    def get_augmented_sources(self, min_length = 1) -> list:
+    def get_augmented_sources(self, min_length = 2) -> list:
 
         assert min_length >= 1, "Minimum length of the light curve should be >= 1."
         
