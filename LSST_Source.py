@@ -1,14 +1,15 @@
 import copy
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 class LSST_Source:
 
     # List of time series features actually stored in the instance of the class.
-    time_series_features = ['MJD', 'BAND', 'CCDNUM', 'FIELD', 'PHOTFLAG', 'PHOTPROB', 'FLUXCAL', 'FLUXCALERR', 'PSF_SIG1', 'PSF_SIG2', 'PSF_RATIO', 'SKY_SIG', 'SKY_SIG_T', 'RDNOISE', 'ZEROPT', 'ZEROPT_ERR', 'GAIN', 'XPIX', 'YPIX', 'SIM_FLUXCAL_HOSTERR', 'SIM_MAGOBS']
+    time_series_features = ['MJD', 'BAND', 'PHOTFLAG', 'FLUXCAL', 'FLUXCALERR']
 
     # List of other features actually stored in the instance of the class.
-    other_features = ['SNID', 'IAUC', 'FAKE', 'RA', 'DEC', 'PIXSIZE', 'NXPIX', 'NYPIX', 'SNTYPE', 'NOBS', 'PTROBS_MIN', 'PTROBS_MAX', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'REDSHIFT_FINAL', 'REDSHIFT_FINAL_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_NMATCH', 'HOSTGAL_NMATCH2', 'HOSTGAL_OBJID', 'HOSTGAL_FLAG', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_CONFUSION', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_OBJID2', 'HOSTGAL_SQRADIUS', 'HOSTGAL_OBJID_UNIQUE', 'HOSTGAL_ZPHOT_Q000', 'HOSTGAL_ZPHOT_Q010', 'HOSTGAL_ZPHOT_Q020', 'HOSTGAL_ZPHOT_Q030', 'HOSTGAL_ZPHOT_Q040', 'HOSTGAL_ZPHOT_Q050', 'HOSTGAL_ZPHOT_Q060', 'HOSTGAL_ZPHOT_Q070', 'HOSTGAL_ZPHOT_Q080', 'HOSTGAL_ZPHOT_Q090', 'HOSTGAL_ZPHOT_Q100', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y', 'HOSTGAL2_OBJID', 'HOSTGAL2_FLAG', 'HOSTGAL2_PHOTOZ', 'HOSTGAL2_PHOTOZ_ERR', 'HOSTGAL2_SPECZ', 'HOSTGAL2_SPECZ_ERR', 'HOSTGAL2_RA', 'HOSTGAL2_DEC', 'HOSTGAL2_SNSEP', 'HOSTGAL2_DDLR', 'HOSTGAL2_LOGMASS', 'HOSTGAL2_LOGMASS_ERR', 'HOSTGAL2_LOGSFR', 'HOSTGAL2_LOGSFR_ERR', 'HOSTGAL2_LOGsSFR', 'HOSTGAL2_LOGsSFR_ERR', 'HOSTGAL2_COLOR', 'HOSTGAL2_COLOR_ERR', 'HOSTGAL2_ELLIPTICITY', 'HOSTGAL2_OBJID2', 'HOSTGAL2_SQRADIUS', 'HOSTGAL2_OBJID_UNIQUE', 'HOSTGAL2_MAG_u', 'HOSTGAL2_MAG_g', 'HOSTGAL2_MAG_r', 'HOSTGAL2_MAG_i', 'HOSTGAL2_MAG_z', 'HOSTGAL2_MAG_Y', 'HOSTGAL2_MAGERR_u', 'HOSTGAL2_MAGERR_g', 'HOSTGAL2_MAGERR_r', 'HOSTGAL2_MAGERR_i', 'HOSTGAL2_MAGERR_z', 'HOSTGAL2_MAGERR_Y', 'HOSTGAL2_ZPHOT_Q000', 'HOSTGAL2_ZPHOT_Q010', 'HOSTGAL2_ZPHOT_Q020', 'HOSTGAL2_ZPHOT_Q030', 'HOSTGAL2_ZPHOT_Q040', 'HOSTGAL2_ZPHOT_Q050', 'HOSTGAL2_ZPHOT_Q060', 'HOSTGAL2_ZPHOT_Q070', 'HOSTGAL2_ZPHOT_Q080', 'HOSTGAL2_ZPHOT_Q090', 'HOSTGAL2_ZPHOT_Q100', 'HOSTGAL_SB_FLUXCAL_u', 'HOSTGAL_SB_FLUXCAL_g', 'HOSTGAL_SB_FLUXCAL_r', 'HOSTGAL_SB_FLUXCAL_i', 'HOSTGAL_SB_FLUXCAL_z', 'HOSTGAL_SB_FLUXCAL_Y', 'PEAKMJD', 'MJD_TRIGGER', 'MJD_DETECT_FIRST', 'MJD_DETECT_LAST', 'SEARCH_TYPE', 'SIM_MODEL_NAME', 'SIM_MODEL_INDEX', 'SIM_TYPE_INDEX', 'SIM_TYPE_NAME', 'SIM_TEMPLATE_INDEX', 'SIM_LIBID', 'SIM_NGEN_LIBID', 'SIM_NOBS_UNDEFINED', 'SIM_SEARCHEFF_MASK', 'SIM_REDSHIFT_HELIO', 'SIM_REDSHIFT_CMB', 'SIM_REDSHIFT_HOST', 'SIM_REDSHIFT_FLAG', 'SIM_VPEC', 'SIM_HOSTLIB_GALID', 'SIM_HOSTLIB(LOGMASS_TRUE)', 'SIM_HOSTLIB(LOG_SFR)', 'SIM_DLMU', 'SIM_LENSDMU', 'SIM_RA', 'SIM_DEC', 'SIM_MWEBV', 'SIM_PEAKMJD', 'SIM_MJD_EXPLODE', 'SIM_MAGSMEAR_COH', 'SIM_AV', 'SIM_RV', 'SIM_SALT2x0', 'SIM_SALT2x1', 'SIM_SALT2c', 'SIM_SALT2mB', 'SIM_SALT2alpha', 'SIM_SALT2beta', 'SIM_SALT2gammaDM', 'SIM_PEAKMAG_u', 'SIM_PEAKMAG_g', 'SIM_PEAKMAG_r', 'SIM_PEAKMAG_i', 'SIM_PEAKMAG_z', 'SIM_PEAKMAG_Y', 'SIM_EXPOSURE_u', 'SIM_EXPOSURE_g', 'SIM_EXPOSURE_r', 'SIM_EXPOSURE_i', 'SIM_EXPOSURE_z', 'SIM_EXPOSURE_Y', 'SIM_GALFRAC_u', 'SIM_GALFRAC_g', 'SIM_GALFRAC_r', 'SIM_GALFRAC_i', 'SIM_GALFRAC_z', 'SIM_GALFRAC_Y', 'SIM_SUBSAMPLE_INDEX']
+    other_features = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_FLAG', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_CONFUSION', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y', 'SIM_EXPOSURE_u', 'SIM_EXPOSURE_g', 'SIM_EXPOSURE_r', 'SIM_EXPOSURE_i', 'SIM_EXPOSURE_z', 'SIM_EXPOSURE_Y']
 
     # Pass band to color dict
     colors = {
@@ -24,6 +25,7 @@ class LSST_Source:
 
         # Set all the class attributes
         setattr(self, 'ELASTICC_class', class_label)
+        setattr(self, 'SNID', parquet_row['SNID'].to_numpy()[0])
 
         for key in parquet_row.columns:
             if key in self.other_features:
@@ -32,46 +34,50 @@ class LSST_Source:
                 setattr(self, key, parquet_row[key].to_numpy()[0])
 
         # Run processing code on the light curves
-        #self.process_lightcurve()
+        self.process_lightcurve()
 
     
     def process_lightcurve(self) -> None:
 
-        # Remove non detections and saturations from the light curves
-        mask = ((self.PHOTFLAG & 4096) != 0) & ((self.PHOTFLAG & 1024) == 0)
+        # Remove saturations from the light curves
+        saturation_mask =  (self.PHOTFLAG & 1024) == 0
 
-        # Alter time series data to use the mask
-        self.MJD = self.MJD[mask]
-        self.BAND = self.BAND[mask] 
-        self.FLUXCAL = self.FLUXCAL[mask]
-        self.FLUXCALERR = self.FLUXCALERR[mask]
+        detection_mask = (self.PHOTFLAG & 4096) != 0
+        first_detection_idx = np.where(detection_mask)[0][0]
+        last_detection_idx = np.where(detection_mask)[0][-1]
 
-        # Convert flux to mags
+        # Allow for one non detection before the trigger and add all non-detection after the trigger and before the last detection
+        ts_start = max(first_detection_idx - 1, 0)
+        ts_end = last_detection_idx + 1
+        idx = range(ts_start,ts_end)
+
+        # Alter time series data to remove saturations and only preserve all data between trigger and last detections + 1 non detection before the trigger
+        self.MJD = self.MJD[saturation_mask][idx]
+        self.BAND = self.BAND[saturation_mask][idx]
+        self.FLUXCAL = self.FLUXCAL[saturation_mask][idx]
+        self.FLUXCALERR = self.FLUXCALERR[saturation_mask][idx]
+        self.PHOTFLAG = self.PHOTFLAG[saturation_mask][idx]
 
 
-    def plot_lightcurve(self) -> None:
+    def plot_flux_curve(self) -> None:
 
         # Colorize the data
         c = [self.colors[band] for band in self.BAND]
-        patches = [mpatches.Patch(color=self.colors[band], label=band) for band in self.colors]
+        patches = [mpatches.Patch(color=self.colors[band], label=band, linewidth=1) for band in self.colors]
+        fmts = np.where((self.PHOTFLAG & 4096) != 0, '*', '.')
+
 
         # Plot flux time series
         for i in range(len(self.MJD)):
-            plt.errorbar(x=self.MJD[i], y=self.FLUXCAL[i], yerr=self.FLUXCALERR[i], color=c[i], fmt='o')
+            plt.errorbar(x=self.MJD[i], y=self.FLUXCAL[i], yerr=self.FLUXCALERR[i], color=c[i], fmt=fmts[i], markersize = '10')
 
         # Labels
         plt.title(f"SNID: {self.SNID} | CLASS: {self.ELASTICC_class}")
         plt.xlabel('Time (MJD)')
-        plt.ylabel('Flux')
+        plt.ylabel('Calibrated Flux')
         plt.legend(handles=patches)
 
         plt.show()
-
-    def get_light_curve(self) -> dict:
-        pass
-
-    def get_host_galaxy_properties(self) -> dict:
-        pass
 
     def get_classification_hierarchy(self):
         pass
@@ -80,6 +86,8 @@ class LSST_Source:
         pass
 
     def get_augmented_sources(self, min_length = 1) -> list:
+
+        assert min_length >= 1, "Minimum length of the light curve should be >= 1."
         
         augmented_sources = []
         time_series_length = len(self.MJD)
