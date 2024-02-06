@@ -56,8 +56,6 @@ def main(argv=None):
     # Make mandatory transformations
     df = df.with_columns(pl.col('SNID').cast(int))
 
-    print(df)
-
     print(args.output, len(df), '/', count_lcs)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
