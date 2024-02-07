@@ -55,21 +55,29 @@ class LSST_Source:
         # Remove saturations from the light curves
         saturation_mask =  (self.PHOTFLAG & 1024) == 0
 
+        # Alter time series data to remove saturations 
+        self.MJD = self.MJD[saturation_mask]
+        self.BAND = self.BAND[saturation_mask]
+        self.FLUXCAL = self.FLUXCAL[saturation_mask]
+        self.FLUXCALERR = self.FLUXCALERR[saturation_mask]
+        self.PHOTFLAG = self.PHOTFLAG[saturation_mask]
+
+        # Find the first and last detections
         detection_mask = (self.PHOTFLAG & 4096) != 0
         first_detection_idx = np.where(detection_mask)[0][0]
         last_detection_idx = np.where(detection_mask)[0][-1]
 
         # Allow for one non detection before the trigger and add all non-detection after the trigger and before the last detection
         ts_start = max(first_detection_idx - 1, 0)
-        ts_end = last_detection_idx + 1
+        ts_end = last_detection_idx
         idx = range(ts_start,ts_end)
 
-        # Alter time series data to remove saturations and only preserve all data between trigger and last detections + 1 non detection before the trigger
-        self.MJD = self.MJD[saturation_mask][idx]
-        self.BAND = self.BAND[saturation_mask][idx]
-        self.FLUXCAL = self.FLUXCAL[saturation_mask][idx]
-        self.FLUXCALERR = self.FLUXCALERR[saturation_mask][idx]
-        self.PHOTFLAG = self.PHOTFLAG[saturation_mask][idx]
+        # Alter time series data to only preserve all data between trigger and last detections + 1 non detection before the trigger
+        self.MJD = self.MJD[idx]
+        self.BAND = self.BAND[idx]
+        self.FLUXCAL = self.FLUXCAL[idx]
+        self.FLUXCALERR = self.FLUXCALERR[idx]
+        self.PHOTFLAG = self.PHOTFLAG[idx]
 
 
     def plot_flux_curve(self) -> None:
