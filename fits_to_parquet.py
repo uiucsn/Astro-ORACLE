@@ -19,7 +19,7 @@ def parse_args(argv=None):
     parser.add_argument('input', type=Path, 
                         help='Path to folder containing {HEAD,PHOT}.FITS.gz files')
     parser.add_argument('output', type=Path,
-                        help='Output parquet file path, tipically has .parquet extension')
+                        help='Output parquet file path, typically has .parquet extension')
 
     return parser.parse_args(argv)
 
