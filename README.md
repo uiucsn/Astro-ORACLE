@@ -27,8 +27,7 @@ While ingesting the parquet row data, we also pre process the light curve. For t
 
 1. Remove saturations.
 2. Keep the last non-detection before the trigger (if available).
-3. Keep all non-detection after the trigger and before the last detection (if available).
-4. Keep all detections.
+3. Keep non-detection after the trigger and before the last detection (if available). 
 
 We can plot these flux curves using the `LSST_Source.plot_flux_curve()` function. 
 

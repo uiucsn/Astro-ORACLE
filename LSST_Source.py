@@ -9,7 +9,7 @@ class LSST_Source:
     time_series_features = ['MJD', 'BAND', 'PHOTFLAG', 'FLUXCAL', 'FLUXCALERR']
 
     # List of other features actually stored in the instance of the class.
-    other_features = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_FLAG', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_CONFUSION', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y', 'SIM_EXPOSURE_u', 'SIM_EXPOSURE_g', 'SIM_EXPOSURE_r', 'SIM_EXPOSURE_i', 'SIM_EXPOSURE_z', 'SIM_EXPOSURE_Y']
+    other_features = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_FLAG', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_CONFUSION', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y']
 
     # Pass band to color dict
     colors = {
@@ -33,6 +33,8 @@ class LSST_Source:
         setattr(self, 'ELASTICC_class', class_label)
         setattr(self, 'SNID', parquet_row['SNID'].to_numpy()[0])
 
+        print(parquet_row.columns)
+
         for key in parquet_row.columns:
             if key in self.other_features:
                 setattr(self, key, parquet_row[key].to_numpy()[0])
@@ -44,23 +46,19 @@ class LSST_Source:
 
     
     def process_lightcurve(self) -> None:
-        """Process the flux information with phot flags. Processing is done in 4 steps:
+        """Process the flux information with phot flags. Processing is done using the following steps:
         1. Remove saturations.
         2. Keep the last non-detection before the trigger (if available).
-        3. Keep all non-detection after the trigger and before the last detection (if available).
-        4. Keep all detections.
+        3. Keep non-detection after the trigger and before the last detection (if available). 
         Finally, all the time series data is modified to conform to the 4 steps mentioned above.
         """
 
         # Remove saturations from the light curves
-        saturation_mask =  (self.PHOTFLAG & 1024) == 0
+        saturation_mask =  (self.PHOTFLAG & 1024) == 0 
 
-        # Alter time series data to remove saturations 
-        self.MJD = self.MJD[saturation_mask]
-        self.BAND = self.BAND[saturation_mask]
-        self.FLUXCAL = self.FLUXCAL[saturation_mask]
-        self.FLUXCALERR = self.FLUXCALERR[saturation_mask]
-        self.PHOTFLAG = self.PHOTFLAG[saturation_mask]
+        # Alter time series data to remove saturations
+        for time_series_feature in self.time_series_features:
+            setattr(self, time_series_feature, getattr(self, time_series_feature)[saturation_mask])
 
         # Find the first and last detections
         detection_mask = (self.PHOTFLAG & 4096) != 0
@@ -73,11 +71,8 @@ class LSST_Source:
         idx = range(ts_start,ts_end)
 
         # Alter time series data to only preserve all data between trigger and last detections + 1 non detection before the trigger
-        self.MJD = self.MJD[idx]
-        self.BAND = self.BAND[idx]
-        self.FLUXCAL = self.FLUXCAL[idx]
-        self.FLUXCALERR = self.FLUXCALERR[idx]
-        self.PHOTFLAG = self.PHOTFLAG[idx]
+        for time_series_feature in self.time_series_features:
+            setattr(self, time_series_feature, getattr(self, time_series_feature)[idx])
 
 
     def plot_flux_curve(self) -> None:
@@ -88,7 +83,6 @@ class LSST_Source:
         c = [self.colors[band] for band in self.BAND]
         patches = [mpatches.Patch(color=self.colors[band], label=band, linewidth=1) for band in self.colors]
         fmts = np.where((self.PHOTFLAG & 4096) != 0, '*', '.')
-
 
         # Plot flux time series
         for i in range(len(self.MJD)):
@@ -134,8 +128,9 @@ class LSST_Source:
                 original_source_attribute = getattr(augmented_source, time_series_feature)
                 setattr(augmented_source, time_series_feature, original_source_attribute[:data_length])
 
-            # Append the data to the list
-            augmented_sources.append(augmented_source)
+            # Append the data to the list if there is any time series data.
+            if len(augmented_source.MJD >= 0):
+                augmented_sources.append(augmented_source)
 
         return augmented_sources
 
