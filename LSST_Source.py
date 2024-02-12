@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
@@ -32,8 +33,6 @@ class LSST_Source:
         # Set all the class attributes
         setattr(self, 'ELASTICC_class', class_label)
         setattr(self, 'SNID', parquet_row['SNID'].to_numpy()[0])
-
-        print(parquet_row.columns)
 
         for key in parquet_row.columns:
             if key in self.other_features:
@@ -100,6 +99,36 @@ class LSST_Source:
         pass
 
     def get_ML_Tensor(self):
+
+        # Dataframe for time series data.
+        df_ts = pd.DataFrame()
+
+        # Find time since last observation
+        df_ts['time_since_first_obs'] = self.MJD - self.MJD[0]
+
+        # 1 if it was a detection, zero otherwise.
+        df_ts['detection_flag'] = np.where((self.PHOTFLAG & 4096) != 0, 1, 0)
+
+        # Transform flux cal and flux cal err to more manageable values (more consistent order of magnitude)
+        df_ts['FLUXCAL_asinh'] = np.arcsinh(self.FLUXCAL)
+        df_ts['FLUXCALERR_asinh'] = np.arcsinh(self.FLUXCALERR)
+
+        # One hot encoding for the pass band
+        df_ts['band_label'] = self.BAND
+        one_hot_encoding = pd.get_dummies(df_ts['band_label'], dtype=int)
+        df_ts = df_ts.drop('band_label', axis=1)
+        df_ts = df_ts.join(one_hot_encoding)
+        np_ts = df_ts.to_numpy()
+
+        # Consistency check
+        assert np_ts.shape[0] == len(self.MJD), "Length of time series tensor does not match the number of mjd values."
+
+        # Array for static features.
+        np_static = []
+        for other_feature in self.other_features:
+            np_static.append(getattr(self, other_feature))
+        np_static = np.array(np_static)
+
         pass
 
     def get_augmented_sources(self, min_length = 2) -> list:
