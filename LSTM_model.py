@@ -38,7 +38,6 @@ class LSTMClassifier(nn.Module):
 
         # Concatenate LSTM output with the static features and 
         concat_tensor = torch.concat((lstm_out[-1, :], x_static))
-        print(concat_tensor.size())
 
         # Pass the concatenated tensors through the fully connected layers
         out = self.fc1(concat_tensor) 
