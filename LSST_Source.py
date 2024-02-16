@@ -1,4 +1,5 @@
 import copy
+import torch
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -21,6 +22,9 @@ class LSST_Source:
         'z': 'orange',
         'Y': 'purple',
     }
+
+    # 6 broadband filters used in LSST.
+    LSST_bands = ['u', 'g', 'r', 'i', 'z', 'Y']
 
     def __init__(self, parquet_row, class_label) -> None:
         """Create an LSST_Source object to store both photometric and host galaxy data from the Elasticc simulations.
@@ -100,13 +104,13 @@ class LSST_Source:
 
     def get_ML_Tensor(self):
 
-        # Dataframe for time series data.
+        # Dataframe for time series data
         df_ts = pd.DataFrame()
 
         # Find time since last observation
         df_ts['time_since_first_obs'] = self.MJD - self.MJD[0]
 
-        # 1 if it was a detection, zero otherwise.
+        # 1 if it was a detection, zero otherwise
         df_ts['detection_flag'] = np.where((self.PHOTFLAG & 4096) != 0, 1, 0)
 
         # Transform flux cal and flux cal err to more manageable values (more consistent order of magnitude)
@@ -115,21 +119,21 @@ class LSST_Source:
 
         # One hot encoding for the pass band
         df_ts['band_label'] = self.BAND
-        one_hot_encoding = pd.get_dummies(df_ts['band_label'], dtype=int)
+        for band in self.LSST_bands:
+            df_ts[f"band_label_{band}"] = (df_ts['band_label'] == band).astype(int)
         df_ts = df_ts.drop('band_label', axis=1)
-        df_ts = df_ts.join(one_hot_encoding)
         np_ts = df_ts.to_numpy()
 
         # Consistency check
         assert np_ts.shape[0] == len(self.MJD), "Length of time series tensor does not match the number of mjd values."
 
-        # Array for static features.
+        # Array for static features
         np_static = []
         for other_feature in self.other_features:
             np_static.append(getattr(self, other_feature))
         np_static = np.array(np_static)
 
-        pass
+        return torch.tensor(np_ts), torch.tensor(np_static)
 
     def get_augmented_sources(self, min_length = 2) -> list:
         """Function to augment the length of time series data in an LSST_Source object and produce a list of several LSST_Source objects each with differing length. All objects start with the left most observation (earliest observation) with window length increasing by 1 every time. The minimum length of the time series can be adjusted using the min_length argument.
