@@ -1,6 +1,13 @@
 # ELAsTiCC-Classification
 Hierarchical classification of ELAsTiCC 2.
 
+# General file descriptions:
+
+* fits_to_parquet.py - Convert SNANA fits files to parquet files
+* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as py torch tensors.
+* LSST_Source.py - Class for storing relevant data from the parquet files. Has additional functionality for data augmentation, flux curve plotting etc.
+* LSTM_model.py - Class for the LSTM classifier 
+* train_LSTM_model.py - Script for training LSTM classifier. 
 
 ## STEP 1 - Convert the data to a more usable form:
 
@@ -37,8 +44,19 @@ Finally, once we have the augmented sources, we want to get the feature tensors 
 
 ## Step 3 - Building the Tensors
 
+We are using pytorch for building our classification models so we convert all our LSST source objects into tensor representations. This is done using the `LSST_Source.get_ML_Tensor()` function which returns two tensors for each `LSST_Source` object. 
+
+One of them is a `(sequence_length, n_ts_features)` shaped tensor that represents the time series data. We apply one hot encoding to represent the passband data and pass the `FLUXCAL` and `FLUXCALERR` data through the `asinh` function to squish it and get some more workable numerical values.
+
+The other tensor is a `(n_static_features)` shaped tensor that represents all the static data from the SNANA header file.
+
+The motivating idea here is when we have limited time series data, we can still make broader classification accurately (higher up the taxonomy) using these static features. Further, as more time series data becomes available we can make more granular classification lower in the tree and finally have the correct classification in the leaves. 
+
 ## Step 4 - Classification Hierarchy
 
+There is no universally correct classification hierarchy - however we want to build something that is able to best serve real world science cases.
+
 ## Step 5 - Machine learning models
+
 
 TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data. Build out classification hierarchy.

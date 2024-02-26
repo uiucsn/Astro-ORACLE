@@ -62,5 +62,7 @@ if __name__=='__main__':
 
     outputs = model(input_ts, input_static)
 
-    print(outputs)
+    
+    print(input_ts.size(), input_static.size())
+    print(outputs.size())
 

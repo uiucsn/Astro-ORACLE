@@ -24,7 +24,7 @@ class LSST_Source:
     }
 
     # 6 broadband filters used in LSST.
-    LSST_bands = ['u', 'g', 'r', 'i', 'z', 'Y']
+    LSST_bands = list(colors.keys())
 
     def __init__(self, parquet_row, class_label) -> None:
         """Create an LSST_Source object to store both photometric and host galaxy data from the Elasticc simulations.
@@ -134,38 +134,6 @@ class LSST_Source:
         np_static = np.array(np_static)
 
         return torch.tensor(np_ts), torch.tensor(np_static)
-
-    def get_augmented_sources(self, min_length = 2) -> list:
-        """Function to augment the length of time series data in an LSST_Source object and produce a list of several LSST_Source objects each with differing length. All objects start with the left most observation (earliest observation) with window length increasing by 1 every time. The minimum length of the time series can be adjusted using the min_length argument.
-
-        Args:
-            min_length (int, optional): Minimum length of time series data in the augmented sources. Defaults to 2. This values is chosen to ensure at least 1 detection.
-
-        Returns:
-            list: List of augmented LSST_Source objects. All of these objects share host properties with the parent object, however the time series lengths are different.
-        """
-
-        assert min_length >= 1, "Minimum length of the light curve should be >= 1."
-        
-        augmented_sources = []
-        time_series_length = len(self.MJD)
-
-        # Loop to apply windowing
-        for data_length in range(time_series_length, min_length - 1, -1):
-
-            # Create a copy of the object
-            augmented_source = copy.deepcopy(self)
-            
-            # Trim the time series data 
-            for time_series_feature in self.time_series_features:
-                original_source_attribute = getattr(augmented_source, time_series_feature)
-                setattr(augmented_source, time_series_feature, original_source_attribute[:data_length])
-
-            # Append the data to the list if there is any time series data.
-            if len(augmented_source.MJD >= 0):
-                augmented_sources.append(augmented_source)
-
-        return augmented_sources
 
     def __str__(self) -> str:
 
