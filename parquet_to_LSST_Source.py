@@ -14,7 +14,7 @@ def parse_args(argv=None):
     parser.add_argument('input', type=Path, 
                         help='Path to the parquet file')
     parser.add_argument('output', type=Path,
-                        help='Output tensors from the feature extraction of LSST_Source objects')
+                        help='Output folder for astropy tables from the feature extraction of LSST_Source objects')
 
     return parser.parse_args(argv)
 
