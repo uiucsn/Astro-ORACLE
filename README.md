@@ -1,6 +1,8 @@
 # ELAsTiCC-Classification
 Hierarchical classification of ELAsTiCC 2.
 
+The motivating idea here is when we have limited time series data, we can still make broader classification accurately (higher up the taxonomy) using these static features. Further, as more time series data becomes available we can make more granular classification lower in the tree and finally have the correct classification in the leaves. 
+
 # General file descriptions:
 
 * fits_to_parquet.py - Convert SNANA fits files to parquet files
@@ -38,25 +40,29 @@ While ingesting the parquet row data, we also pre process the light curve. For t
 
 We can plot these flux curves using the `LSST_Source.plot_flux_curve()` function. 
 
-At this point, we have the `LSST_Source` object with all the data we need. However, all the light curves are full length. This is not realistic since real alerts will get objects with partial light curves. For this reason, we apply windowing to all the time series data in the original light curve. Thus, we create (potentially) multiple instance of the `LSST_Source` object with differing light curve lengths. We do this using the `LSST_Source.get_augmented_sources()` function which returns a list of these augmented sources. It is important to note that all the other features (non time series) are shared between these augmented objects. 
-
-Finally, once we have the augmented sources, we want to get the feature tensors for all these objects. 
+At this point, we have the `LSST_Source` object with all the data we need. However, all the light curves are full length. This is not realistic since real alerts will get objects with partial light curves. For this reason, we apply windowing to all the time series data in the original light curve. Thus, we create (potentially) multiple instance of the `LSST_Source` object with differing light curve lengths. We do this using pytorch transformations. It is important to note that all the other features (non time series) are shared between these augmented objects. 
 
 ## Step 3 - Building the Tensors
 
-We are using pytorch for building our classification models so we convert all our LSST source objects into tensor representations. This is done using the `LSST_Source.get_ML_Tensor()` function which returns two tensors for each `LSST_Source` object. 
+We are using pytorch for building our classification models so we convert all our LSST source objects into tensor representations. As an intermediate step, we store all these events as Astropy tables in the ecsv format. This is done using the LSST_Source.get_event_table() function.
 
-One of them is a `(sequence_length, n_ts_features)` shaped tensor that represents the time series data. We apply one hot encoding to represent the passband data and pass the `FLUXCAL` and `FLUXCALERR` data through the `asinh` function to squish it and get some more workable numerical values.
+In order to do this, we use the following steps:
 
-The other tensor is a `(n_static_features)` shaped tensor that represents all the static data from the SNANA header file.
+- `cd data/data/elasticc2_train`
+- `mkdir event_tables`
+- Convert all the data to astropy ecsv tables: `ls parquet | xargs -IXXX -P32 python ../../../parquet_to_LSST_Source.py parquet/XXX event_tables/`
 
-The motivating idea here is when we have limited time series data, we can still make broader classification accurately (higher up the taxonomy) using these static features. Further, as more time series data becomes available we can make more granular classification lower in the tree and finally have the correct classification in the leaves. 
+This will store all the LSST sources, along with the associate photometry and host galaxy information in astropy tables.
 
-## Step 4 - Classification Hierarchy
+We use this representation to build tensors using the pytorch data loader to create two tensors for each event. One of them is a `(sequence_length, n_ts_features)` shaped tensor that represents the time series data. We apply one hot encoding to represent the passband data and pass the `FLUXCAL` and `FLUXCALERR` data through the `asinh` function to squish it and get some more workable numerical values. The other tensor is a `(n_static_features)` shaped tensor that represents all the static data from the SNANA header file in addition to the `custom_engineered_features`.
+
+## Step 4 - Pytorch Data sets, data loaders and transformations
+
+## Step 5 - Classification Hierarchy
 
 There is no universally correct classification hierarchy - however we want to build something that is able to best serve real world science cases.
 
-## Step 5 - Machine learning models
+## Step 6 - Machine learning models
 
 
 TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data. Build out classification hierarchy.
