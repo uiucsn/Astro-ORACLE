@@ -6,7 +6,7 @@ The motivating idea here is when we have limited time series data, we can still 
 # General file descriptions:
 
 * fits_to_parquet.py - Convert SNANA fits files to parquet files
-* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as py torch tensors.
+* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as astropy tables.
 * LSST_Source.py - Class for storing relevant data from the parquet files. Has additional functionality for data augmentation, flux curve plotting etc.
 * LSTM_model.py - Class for the LSTM classifier 
 * train_LSTM_model.py - Script for training LSTM classifier. 
