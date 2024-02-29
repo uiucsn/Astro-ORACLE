@@ -29,15 +29,15 @@ def main(argv=None):
     df = pl.read_parquet(parquet_file_path)
     print(f'Starting data augmentation for {parquet_file_path} Number of objects: {df.shape[0]} SNANA Feature length: {df.shape[1]}')
 
+    # Make directory
+    table_file_path.parent.mkdir(parents=True, exist_ok=True)
+    
     for i in range(df.shape[0]):
 
         row = df[i]
         source = LSST_Source(row, object_class)
-        source.plot_flux_curve()
-        t  = source.get_event_table()
 
-        # Make directory
-        table_file_path.parent.mkdir(parents=True, exist_ok=True)
+        t  = source.get_event_table()
 
         # Save the event table
         file_name = str(table_file_path) + f'/{source.SNID}_{source.ELASTICC_class}.ecsv'
