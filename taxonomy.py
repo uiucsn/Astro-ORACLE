@@ -99,8 +99,8 @@ def get_classification_labels(astrophysical_class):
     tree = get_taxonomy_tree()
     leaf_nodes = [x for x in tree.nodes() if tree.out_degree(x)==0 and tree.in_degree(x)==1]
 
-    assert astrophysical_class in sorted(list(set(class_map.values()))), 'astrophysical_class was not one of elasticc classes'
-    assert astrophysical_class in leaf_nodes, 'astrophysical_class was not one of the leaf nodes in the taxonomy'
+    assert astrophysical_class in sorted(list(set(class_map.values()))), f'astrophysical_class {astrophysical_class} was not one of elasticc classes'
+    assert astrophysical_class in leaf_nodes, f'astrophysical_class {astrophysical_class} was not one of the leaf nodes in the taxonomy'
 
 
     # Do a level order traversal of the tree to get an ordering of the nodes
