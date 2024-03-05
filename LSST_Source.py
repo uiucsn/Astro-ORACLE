@@ -100,7 +100,10 @@ class LSST_Source:
         # Allow for one non detection before the trigger and add all non-detection after the trigger and before the last detection
         ts_start = max(first_detection_idx - 1, 0)
         ts_end = last_detection_idx
-        idx = range(ts_start,ts_end)
+        if ts_start == ts_end:
+            idx = [ts_end]
+        else:
+            idx = range(ts_start,ts_end)
 
         # Alter time series data to only preserve all data between trigger and last detections + 1 non detection before the trigger
         for time_series_feature in self.time_series_features:
