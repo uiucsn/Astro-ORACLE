@@ -9,6 +9,7 @@ from torchvision import transforms, utils
 from astropy.io import ascii
 
 from LSTM_model import LSTMClassifier
+from taxonomy import get_classification_labels, get_astrophysical_class
 
 # All samples in the same batch need to have consistent sequence length. This adds padding for sequences shorter than sequence_length and truncates light sequences longer than sequence_length 
 sequence_length = 1000
@@ -34,6 +35,10 @@ class LSSTSourceDataSet(Dataset):
 
         if torch.is_tensor(idx):
             idx = idx.tolist()
+        
+        elasticc_class = self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1]
+        astrophysical_class = get_astrophysical_class(elasticc_class)
+        class_labels = get_classification_labels(astrophysical_class)
 
         table_path = os.path.join(self.file_names[idx])
         table = ascii.read(table_path)

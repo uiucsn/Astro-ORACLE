@@ -6,10 +6,14 @@ The motivating idea here is when we have limited time series data, we can still 
 # General file descriptions:
 
 * fits_to_parquet.py - Convert SNANA fits files to parquet files
-* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as astropy tables.
+* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as astropy tables
 * LSST_Source.py - Class for storing relevant data from the parquet files. Has additional functionality for data augmentation, flux curve plotting etc.
 * LSTM_model.py - Class for the LSTM classifier 
-* train_LSTM_model.py - Script for training LSTM classifier. 
+* train_LSTM_model.py - Script for training LSTM classifier
+* class_summaries.py - Summarize the number of objects in each class and the length of the TS data for each of those objects
+* dataloader.py - Convert the astropy tables to tensors. Augment the data with padding/truncation and transforms if necessary
+* loss.py - Loss function for hierarchical classification
+* taxonomy.py - Utility function for the taxonomy used for this work
 
 ## STEP 1 - Convert the data to a more usable form:
 
@@ -58,11 +62,21 @@ We use this representation to build tensors using the pytorch data loader to cre
 
 ## Step 4 - Pytorch Data sets, data loaders and transformations
 
-## Step 5 - Classification Hierarchy
+## Step 5 - Classification Taxonomy
 
-There is no universally correct classification hierarchy - however we want to build something that is able to best serve real world science cases.
+There is no universally correct classification taxonomy - however we want to build something that is able to best serve real world science cases. For obvious reasons, the leaf nodes need to be the true class of the object however what we decide for nodes higher up in the taxonomy is ultimately determined by the science case. 
+
+For this work, we are implementing a hierarchy that will be of interest to the TVS (Transient and Variable star) community since it overlaps well with the classes of the elasticc data set. The exact taxonomy used is shown below:
+
+![](images/Taxonomy.png)
+
+A trap we wanted to avoid was mixing different "metaphors" for classification. For instance, we decided against using `Galactic vs Extra galactic` classification since we would be mixing a spatial distinction with temporal ones (like `Periodic vs Non periodic`). This makes the problem trickier since some objects, like Cepheids, can be both galactic and extragalactic which would result in an artificial inflation in the number of leaf nodes without adding much value to the science case.
+
+*Note:* There is some inconsistency around the Mira/LPV object in the elasticc documentation however we have confirmed that this object was removed for the elasticc2 data set that we use in this work.
 
 ## Step 6 - Machine learning models
 
+## Step 7 - Loss function
 
-TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data. Build out classification hierarchy.
+
+TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data.
