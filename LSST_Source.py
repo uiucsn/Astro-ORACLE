@@ -6,6 +6,7 @@ from astropy.table import Table
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from collections import OrderedDict
+from taxonomy import get_classification_labels, get_astrophysical_class
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -63,6 +64,7 @@ class LSST_Source:
         # Set all the class attributes
         setattr(self, 'ELASTICC_class', class_label)
         setattr(self, 'SNID', parquet_row['SNID'].to_numpy()[0])
+        setattr(self, 'astrophysical_class', get_astrophysical_class(self.ELASTICC_class))
 
         for key in parquet_row.columns:
             if key in self.other_features:
@@ -154,8 +156,9 @@ class LSST_Source:
 
         plt.show()
 
-    def get_classification_hierarchy(self):
-        pass
+    def get_classification_labels(self):
+        
+        return get_classification_labels(self.astrophysical_class)
 
     def get_event_table(self):
 
