@@ -6,6 +6,42 @@ from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 
 source_node_label = 'Alert'
 
+# Elasticc class to Astrophysical class
+class_map = {
+                'SNII-NMF': 'SNII', 
+                'SNIc-Templates': 'SNIb/c', 
+                'CART': 'CART', 
+                'EB': 'EB', 
+                'SNIc+HostXT_V19': 'SNIb/c', 
+                'd-Sct': 'Delta Scuti', 
+                'SNIb-Templates': 'SNIb/c', 
+                'SNIIb+HostXT_V19': 'SNII', 
+                'SNIcBL+HostXT_V19': 'SNII', 
+                'CLAGN': 'AGN', 
+                'PISN': 'PISN', 
+                'Cepheid': 'Cepheid', 
+                'TDE': 'TDE', 
+                'SNIa-91bg': 'SNI91bg', 
+                'SLSN-I+host': 'SLSN', 
+                'SNIIn-MOSFIT': 'SNII', 
+                'SNII+HostXT_V19': 'SNII', 
+                'SLSN-I_no_host': 'SLSN', 
+                'SNII-Templates': 'SNII', 
+                'SNIax': 'SNIax', 
+                'SNIa-SALT3': 'SNIa', 
+                'KN_K17': 'KN', 
+                'SNIIn+HostXT_V19': 'SNII', 
+                'dwarf-nova': 'Dwarf Novae', 
+                'uLens-Binary': 'uLens', 
+                'RRL': 'RR Lyrae', 
+                'Mdwarf-flare': 'M-dwarf Flare', 
+                'ILOT': 'ILOT', 
+                'KN_B19': 'KN', 
+                'uLens-Single-GenLens': 'uLens', 
+                'SNIb+HostXT_V19': 'SNIb/c', 
+                'uLens-Single_PyLIMA': 'uLens'
+            }
+
 def get_taxonomy_tree():
 
     # Graph to store taxonomy
@@ -51,42 +87,6 @@ def get_taxonomy_tree():
     return tree
 
 def get_astrophysical_class(elasticc_class):
-
-    # Elasticc class to Astrophysical class
-    class_map = {
-                    'SNII-NMF': 'SNII', 
-                    'SNIc-Templates': 'SNIb/c', 
-                    'CART': 'CART', 
-                    'EB': 'EB', 
-                    'SNIc+HostXT_V19': 'SNIb/c', 
-                    'd-Sct': 'Delta Scuti', 
-                    'SNIb-Templates': 'SNIb/c', 
-                    'SNIIb+HostXT_V19': 'SNII', 
-                    'SNIcBL+HostXT_V19': 'SNII', 
-                    'CLAGN': 'AGN', 
-                    'PISN': 'PISN', 
-                    'Cepheid': 'Cepheid', 
-                    'TDE': 'TDE', 
-                    'SNIa-91bg': 'SNI91bg', 
-                    'SLSN-I+host': 'SLSN', 
-                    'SNIIn-MOSFIT': 'SNII', 
-                    'SNII+HostXT_V19': 'SNII', 
-                    'SLSN-I_no_host': 'SLSN', 
-                    'SNII-Templates': 'SNII', 
-                    'SNIax': 'SNIax', 
-                    'SNIa-SALT3': 'SNIa', 
-                    'KN_K17': 'KN', 
-                    'SNIIn+HostXT_V19': 'SNII', 
-                    'dwarf-nova': 'Dwarf Novae', 
-                    'uLens-Binary': 'uLens', 
-                    'RRL': 'RR Lyrae', 
-                    'Mdwarf-flare': 'M-dwarf Flare', 
-                    'ILOT': 'ILOT', 
-                    'KN_B19': 'KN', 
-                    'uLens-Single-GenLens': 'uLens', 
-                    'SNIb+HostXT_V19': 'SNIb/c', 
-                    'uLens-Single_PyLIMA': 'uLens'
-                }
     
     tree = get_taxonomy_tree()
     leaf_nodes = [x for x in tree.nodes() if tree.out_degree(x)==0 and tree.in_degree(x)==1]
@@ -97,6 +97,11 @@ def get_astrophysical_class(elasticc_class):
 def get_classification_labels(astrophysical_class):
 
     tree = get_taxonomy_tree()
+    leaf_nodes = [x for x in tree.nodes() if tree.out_degree(x)==0 and tree.in_degree(x)==1]
+
+    assert astrophysical_class in sorted(list(set(class_map.values()))), 'astrophysical_class was not one of elasticc classes'
+    assert astrophysical_class in leaf_nodes, 'astrophysical_class was not one of the leaf nodes in the taxonomy'
+
 
     # Do a level order traversal of the tree to get an ordering of the nodes
     level_order_nodes = nx.bfs_tree(tree, source=source_node_label).nodes()
