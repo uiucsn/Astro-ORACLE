@@ -6,7 +6,7 @@ from astropy.table import Table
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from collections import OrderedDict
-from taxonomy import get_classification_labels, get_astrophysical_class
+from taxonomy import get_classification_labels, get_astrophysical_class, plot_colored_tree
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -159,6 +159,12 @@ class LSST_Source:
     def get_classification_labels(self):
         
         return get_classification_labels(self.astrophysical_class)
+    
+    def plot_classification_tree(self):
+
+        node, labels = self.get_classification_labels()
+        plot_colored_tree(labels)
+
 
     def get_event_table(self):
 

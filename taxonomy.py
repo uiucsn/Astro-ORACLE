@@ -116,6 +116,15 @@ def get_classification_labels(astrophysical_class):
     
     return level_order_nodes, labels
 
+def plot_colored_tree(labels):
+
+    # Get the tree and labels
+    tree = get_taxonomy_tree()
+
+    pos = graphviz_layout(tree, prog='dot')
+    nx.draw_networkx(tree, with_labels=True, font_weight='bold', arrows=True, node_color=labels, font_size = 8, pos=pos, cmap='Wistia')
+
+    plt.show()
 
 if __name__=='__main__':
 
