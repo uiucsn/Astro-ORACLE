@@ -1,6 +1,7 @@
 import os
 import torch
 import glob
+import math
 
 import numpy as np
 
@@ -15,7 +16,17 @@ from taxonomy import get_classification_labels, get_astrophysical_class
 sequence_length = 500
 
 # Value used for padding tensors to make them the correct length
-padding_constant = -9
+padding_constant = 0
+
+def reduce_length_uniform(np_ts):
+
+    ts_length = np_ts.shape[0]
+
+    # Fraction of ts to retain
+    new_ts_length = int(math.ceil(np.random.uniform(low=0, high=1) * ts_length))
+    np_ts = np_ts[:new_ts_length, ]
+
+    return np_ts
 
 class LSSTSourceDataSet(Dataset):
 
@@ -47,9 +58,6 @@ class LSSTSourceDataSet(Dataset):
         table = ascii.read(table_path)
         ts_np = table.to_pandas().to_numpy()
 
-        # Number of rows in original time series data
-        original_ts_sequence_length = ts_np.shape[0]
-        
         # Shorten the length of the time series data so the classifier learn to classify partial phase light curves
         if self.length_transform:
             ts_np = self.length_transform(ts_np)
@@ -74,10 +82,8 @@ class LSSTSourceDataSet(Dataset):
 if __name__=='__main__':
     
     # Simple test to verify data loader
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables')
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables', length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size = 4)
     for X_ts, X_static, Y in loader:
         print(X_ts.shape, X_static.shape, Y.shape)
-
         print(X_ts[1, :, :])
-        break
