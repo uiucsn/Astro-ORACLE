@@ -78,11 +78,37 @@ class LSSTSourceDataSet(Dataset):
         static_np = np.array(list(table.meta.values()))
 
         return ts_np, static_np, class_labels
+    
+    def get_dimensions(self):
+
+        idx = 0
+
+        elasticc_class = self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1]
+        astrophysical_class = get_astrophysical_class(elasticc_class)
+        _, class_labels = get_classification_labels(astrophysical_class)
+
+        table_path = os.path.join(self.file_names[idx])
+        table = ascii.read(table_path)
+        ts_np = table.to_pandas().to_numpy()
+
+        # Getting the static features from the table
+        static_np = np.array(list(table.meta.values()))
+
+        dims = {
+            'ts': ts_np.shape[1],
+            'static': static_np.shape[0],
+            'labels': class_labels.shape[0]
+        }
+
+        return dims
+
 
 if __name__=='__main__':
     
     # Simple test to verify data loader
     data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables', length_transform=reduce_length_uniform)
+
+    print(data_set.get_dimensions())
     loader = DataLoader(data_set, shuffle=True, batch_size = 4)
     for X_ts, X_static, Y in loader:
         print(X_ts.shape, X_static.shape, Y.shape)
