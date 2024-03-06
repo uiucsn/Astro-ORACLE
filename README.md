@@ -60,7 +60,11 @@ This will store all the LSST sources, along with the associate photometry and ho
 
 We use this representation to build tensors using the pytorch data loader to create two tensors for each event. One of them is a `(sequence_length, n_ts_features)` shaped tensor that represents the time series data. We apply one hot encoding to represent the passband data and pass the `FLUXCAL` and `FLUXCALERR` data through the `asinh` function to squish it and get some more workable numerical values. The other tensor is a `(n_static_features)` shaped tensor that represents all the static data from the SNANA header file in addition to the `custom_engineered_features`.
 
-## Step 4 - Pytorch Data sets, data loaders and transformations
+## Step 4 - Pytorch Datasets, data loaders and transformations
+
+We first create a Pytorch Dataset that unpacks the LSST Source object tables. We separate the static and TS data, add padding (and optionally alter the TS length), and compute the classification labels. 
+
+We can create a datasets using the test and train subsets of our elasticc data set. These data sets can be used to build the data loader. All of this code along with a simple example is present in the `dataloader.py` file.
 
 ## Step 5 - Classification Taxonomy
 
