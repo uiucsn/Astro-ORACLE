@@ -30,14 +30,14 @@ class LSTMClassifier(nn.Module):
     def forward(self, x_ts, x_static):
         
         # Initialize hidden and cell states with zeros
-        h0 = torch.zeros(self.lstm_num_layers, self.lstm_hidden_dim).requires_grad_()
-        c0 = torch.zeros(self.lstm_num_layers, self.lstm_hidden_dim).requires_grad_()
+        h0 = torch.zeros(self.lstm_num_layers, x_ts.size(0), self.lstm_hidden_dim).requires_grad_()
+        c0 = torch.zeros(self.lstm_num_layers, x_ts.size(0), self.lstm_hidden_dim).requires_grad_()
 
         # Pass the time series data through the LSTM
         lstm_out, (hn, cn) = self.lstm(x_ts, (h0.detach(), c0.detach()))
 
-        # Concatenate LSTM output with the static features and 
-        concat_tensor = torch.concat((lstm_out[-1, :], x_static))
+        # Concatenate LSTM output with the static features
+        concat_tensor = torch.concat((lstm_out[:, -1, :], x_static), dim=1)
 
         # Pass the concatenated tensors through the fully connected layers
         out = self.fc1(concat_tensor) 
@@ -51,18 +51,18 @@ if __name__=='__main__':
     ts_input_dim = 5
     static_input_dim = 5
     lstm_hidden_dim = 64
-    output_dim = 5
+    output_dim = 7
     lstm_num_layers = 4
+    batch_size = 4
 
     model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
 
     ts_length = 5
-    input_ts = torch.randn(ts_length, ts_input_dim)
-    input_static = torch.randn(static_input_dim)
+    input_ts = torch.randn(batch_size, ts_length, ts_input_dim)
+    input_static = torch.randn(batch_size, static_input_dim)
 
     outputs = model(input_ts, input_static)
 
-    
-    print(input_ts.size(), input_static.size())
-    print(outputs.size())
+    print('Input:', input_ts.size(), input_static.size())
+    print('Output:', outputs.size())
 
