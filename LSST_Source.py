@@ -157,10 +157,16 @@ class LSST_Source:
         plt.show()
 
     def get_classification_labels(self):
-        
+        """Get the classification labels (hierarchical) for this LSST Source object in the Taxonomy tree.
+
+        Returns:
+            (tree_nodes, numerical_labels): A tuple containing two list like objects. The first object contains the ordering of the nodes. The second list contains the labels themselves (0 when the object does not belong to the class and 1 when it does). The labels in the second object correspond to the nodes in the first object.
+        """
         return get_classification_labels(self.astrophysical_class)
     
     def plot_classification_tree(self):
+        """Plot the classification tree (based on our taxonomy) for this LSST Source object.
+        """
 
         node, labels = self.get_classification_labels()
         plot_colored_tree(labels)
