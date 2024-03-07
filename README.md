@@ -82,5 +82,7 @@ A trap we wanted to avoid was mixing different "metaphors" for classification. F
 
 ## Step 7 - Loss function
 
+The loss function defines what the machine learning model(s) are incentivized to learn. In our case, we want to the activations in our final layer to represent some (pseudo) probabilities for the classes in our taxonomy. The first loss function that we experiment with is the [Villar et al.](https://arxiv.org/abs/2312.02266v1) `Hierarchical Cross-entropy Loss for Classification`. The paper related to this loss function is available on [arXiv](https://arxiv.org/abs/2312.02266v1). 
+
 
 TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data.
