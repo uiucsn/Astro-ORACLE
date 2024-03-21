@@ -141,3 +141,6 @@ if __name__=='__main__':
 
     plt.title('Taxonomy for hierarchical classification.')
     plt.show()
+
+    _, labels = get_classification_labels(astrophysical_class)
+    plot_colored_tree(labels)
