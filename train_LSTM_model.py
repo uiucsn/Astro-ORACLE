@@ -7,6 +7,8 @@ from torch.utils.data import Dataset, DataLoader
 
 from LSTM_model import LSTMClassifier
 from dataloader import LSSTSourceDataSet, reduce_length_uniform
+from loss import WHXE_Loss
+from taxonomy import get_taxonomy_tree
 
 
 if __name__=='__main__':
@@ -38,7 +40,9 @@ if __name__=='__main__':
     model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
     
     # Loss and optimizer
-    criterion = nn.CrossEntropyLoss() # Change with custom loss function
+    tree = get_taxonomy_tree()
+    loss_object = WHXE_Loss(tree, data_set.get_labels()) # TODO: Revert the labels list to the list from the data set
+    criterion = loss_object.compute_loss
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Training loop
