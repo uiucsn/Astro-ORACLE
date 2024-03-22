@@ -101,7 +101,17 @@ class LSSTSourceDataSet(Dataset):
         }
 
         return dims
+    
+    def get_labels(self):
 
+        astrophysical_labels = []
+        for idx in range(len(self.file_names)):
+
+            elasticc_class = self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1]
+            astrophysical_class = get_astrophysical_class(elasticc_class)
+            astrophysical_labels.append(astrophysical_class)
+        
+        return astrophysical_labels
 
 if __name__=='__main__':
     
