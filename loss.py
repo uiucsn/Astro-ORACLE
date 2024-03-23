@@ -64,10 +64,8 @@ class WHXE_Loss:
         for node in self.level_order_nodes:
             N_c.append(counts_dict[node])
 
-        N_c = np.array(N_c)
-
         # Compute the final weights, ordered by level order traversal of the tree
-        self.class_weights = N_all / (N_labels * N_c)
+        self.class_weights = torch.tensor(N_all / (N_labels * np.array(N_c)))
 
     def compute_parents(self):
 
@@ -105,30 +103,28 @@ class WHXE_Loss:
         self.path_lengths = np.array(self.path_lengths)
 
         # Compute the secondary weight term, which emphasizes different levels of the tree. See paper for more details.
-        self.lambda_term = np.exp(-self.alpha * self.path_lengths)
+        self.lambda_term = torch.tensor(np.exp(-self.alpha * self.path_lengths))
 
 
     def masked_softmax(self, y_pred):
 
         # Create a new array to store pseudo conditional probabilities.
-        y_pred = y_pred.detach()
-        pseud_probabilities = np.zeros(y_pred.shape)
+        pseudo_probabilities = y_pred.clone().detach()
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-            pseud_probabilities[:, mask] = F.softmax(y_pred[:, mask], dim = 1)
+            pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask], dim = 1) 
 
-        return pseud_probabilities
+        return pseudo_probabilities
     
     def compute_loss(self, y_pred, target_probabilities):
 
-        target_probabilities = target_probabilities.detach().numpy()
-
-        # Apply hierarchical soft max to get pseudo probability outputs using the data from the machine learning models.
+        # Apply hierarchical soft max to get "pseudo" probability outputs using the data from the machine learning models.
         pred_probabilities = self.masked_softmax(y_pred)
-        log_pred_probabilities = np.log(pred_probabilities)
-
-        print(self.lambda_term.shape, self.class_weights.shape, log_pred_probabilities.shape, target_probabilities.shape, np.sum(log_pred_probabilities * target_probabilities, axis = 1).shape)
+        log_pred_probabilities = pred_probabilities.log()
+        #log_pred_probabilities = torch.nan_to_num(log_pred_probabilities, neginf=0)
+    
+        #print(pred_probabilities, log_pred_probabilities)
 
         # Multiply the indicator term (target_probabilities) with the conditional probability terms
         result1 = log_pred_probabilities * target_probabilities
@@ -136,18 +132,18 @@ class WHXE_Loss:
         # Multiply the first result with the class weights and hierarchy level weight terms (lambda)
         result2 =  result1 * self.class_weights * self.lambda_term
 
-        # Sum all of the terms that belong to a sample in the batch. At the end of this step, the number of values should be equal to the batch size
-        loss = np.sum(result2, axis=1)
+        # Sum all of the terms that belong to a sample in the batch. At the end of this step, the number of values should be equal to the batch size. We then find the mean across the entire batch
+        loss = result2.sum(dim = 1).mean(dim=0)
         loss = -1 * loss
 
-        return torch.tensor(loss)
+        return loss
 
 
 
 if __name__=='__main__':
-
+    
     tree = get_taxonomy_tree()
-    loss = WHXE_Loss(tree, ['KN', 'SLSN'])
+    loss = WHXE_Loss(tree, list(tree.nodes))
 
     learning_rate = 0.001
     ts_input_dim = 5
@@ -164,5 +160,6 @@ if __name__=='__main__':
     input_static = torch.randn(batch_size, static_input_dim)
 
     outputs = model(input_ts, input_static)
+    print(loss.compute_loss(outputs, outputs))
 
 
