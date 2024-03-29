@@ -113,7 +113,7 @@ class WHXE_Loss:
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-            pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask], dim = 1) 
+            pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
 
         return pseudo_probabilities
     
@@ -122,9 +122,6 @@ class WHXE_Loss:
         # Apply hierarchical soft max to get "pseudo" probability outputs using the data from the machine learning models.
         pred_probabilities = self.masked_softmax(y_pred)
         log_pred_probabilities = pred_probabilities.log()
-        #log_pred_probabilities = torch.nan_to_num(log_pred_probabilities, neginf=0)
-    
-        #print(pred_probabilities, log_pred_probabilities)
 
         # Multiply the indicator term (target_probabilities) with the conditional probability terms
         result1 = log_pred_probabilities * target_probabilities
