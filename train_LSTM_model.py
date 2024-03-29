@@ -14,8 +14,8 @@ from argparse import ArgumentParser
 
 def parse_args(argv=None):
     parser = ArgumentParser(
-        prog='SNANA2parquet',
-        description='Convert SNANA simulated light curves from FITS to parquet',
+        prog='Train LSTM',
+        description='Script to train LSTM model',
     )
     parser.add_argument('--epochs', type=int, default=100,
                         help='Number of epochs.')
