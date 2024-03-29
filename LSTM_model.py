@@ -40,6 +40,7 @@ class LSTMClassifier(nn.Module):
         concat_tensor = torch.concat((lstm_out[:, -1, :], x_static), dim=1)
 
         # Pass the concatenated tensors through the fully connected layers
+        concat_tensor = self.relu(concat_tensor)
         out = self.fc1(concat_tensor) 
         out = self.relu(out)
         out = self.fc_final(out)
