@@ -57,7 +57,7 @@ def main(argv=None):
     
     # Loss and optimizer
     tree = get_taxonomy_tree()
-    loss_object = WHXE_Loss(tree, data_set.get_labels()) # TODO: Revert the labels list to the list from the data set
+    loss_object = WHXE_Loss(tree, list(tree.nodes)) # TODO: Revert the labels list to the list from the data set
     criterion = loss_object.compute_loss
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
