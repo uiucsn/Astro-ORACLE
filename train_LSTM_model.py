@@ -10,12 +10,33 @@ from dataloader import LSSTSourceDataSet, reduce_length_uniform
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
+from argparse import ArgumentParser
 
-if __name__=='__main__':
+def parse_args(argv=None):
+    parser = ArgumentParser(
+        prog='SNANA2parquet',
+        description='Convert SNANA simulated light curves from FITS to parquet',
+    )
+    parser.add_argument('--epochs', type=int, default=100,
+                        help='Number of epochs.')
+    parser.add_argument('--batch_size', type=int, default=16,
+                        help='Batch size.')
+    parser.add_argument('--lr', type=float, default=0.001,
+                        help='Learning rate.')
+
+    return parser.parse_args(argv)
+
+def main(argv=None):
+
+    # ML parameters
+    args = parse_args(argv)
+    learning_rate = args.lr
+    batch_size = args.batch_size
+    num_epochs = args.epochs
 
     # Data loader for training
     data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables', length_transform=reduce_length_uniform)
-    loader = DataLoader(data_set, shuffle=True, batch_size = 4)
+    loader = DataLoader(data_set, shuffle=True, batch_size=batch_size)
 
     # These might change - Should come from the LSST Source Tensor shapes.
     dims = data_set.get_dimensions()
@@ -30,11 +51,6 @@ if __name__=='__main__':
 
     lstm_hidden_dim = 64
     lstm_num_layers = 4
-
-    # Other parameters
-    learning_rate = 0.001
-    batch_size = 4
-    num_epochs = 100
 
     # Initialize models
     model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
@@ -59,3 +75,8 @@ if __name__=='__main__':
             optimizer.step()
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+
+if __name__=='__main__':
+
+    main()
