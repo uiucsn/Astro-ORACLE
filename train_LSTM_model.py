@@ -35,7 +35,7 @@ def main(argv=None):
     num_epochs = args.epochs
 
     # Data loader for training
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables', length_transform=reduce_length_uniform)
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables/test', length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size=batch_size)
 
     # These might change - Should come from the LSST Source Tensor shapes.
