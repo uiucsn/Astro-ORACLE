@@ -11,6 +11,7 @@ from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
 from argparse import ArgumentParser
+from pathlib import Path
 
 def parse_args(argv=None):
     parser = ArgumentParser(
@@ -23,6 +24,8 @@ def parse_args(argv=None):
                         help='Batch size.')
     parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate.')
+    parser.add_argument('--output_path', type=Path, default='models/LSTM.pt',
+                        help='Save the weights here.')
 
     return parser.parse_args(argv)
 
@@ -33,6 +36,8 @@ def main(argv=None):
     learning_rate = args.lr
     batch_size = args.batch_size
     num_epochs = args.epochs
+
+    output_path = args.output_path
 
     # Data loader for training
     data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables/test', length_transform=reduce_length_uniform)
@@ -78,6 +83,8 @@ def main(argv=None):
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
+    # Save the final model. @TODO change this to save the best model only.
+    torch.save(model.state_dict(), output_path)
 
 if __name__=='__main__':
 
