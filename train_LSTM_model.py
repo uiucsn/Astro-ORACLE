@@ -61,6 +61,8 @@ def main(argv=None):
     criterion = loss_object.compute_loss
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
+    print('Starting Training Loop...', flush=True)
+
     # Training loop
     for epoch in range(num_epochs):
         for X_ts, X_static, labels in loader:
