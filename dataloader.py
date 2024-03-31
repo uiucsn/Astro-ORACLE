@@ -50,7 +50,9 @@ class LSSTSourceDataSet(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
         
+        # TODO: This code is really embarrassing. Like it hurts my soul. Please fix it.
         elasticc_class = '_'.join(self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1:])
+
         astrophysical_class = get_astrophysical_class(elasticc_class)
         _, class_labels = get_classification_labels(astrophysical_class)
 
