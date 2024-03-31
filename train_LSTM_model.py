@@ -74,7 +74,7 @@ def main(argv=None):
             loss.backward()
             optimizer.step()
 
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
 
 if __name__=='__main__':
