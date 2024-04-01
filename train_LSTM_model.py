@@ -20,7 +20,7 @@ def parse_args(argv=None):
     )
     parser.add_argument('--epochs', type=int, default=100,
                         help='Number of epochs.')
-    parser.add_argument('--batch_size', type=int, default=16,
+    parser.add_argument('--batch_size', type=int, default=512,
                         help='Batch size.')
     parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate.')
