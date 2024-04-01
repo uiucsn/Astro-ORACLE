@@ -40,7 +40,8 @@ def main(argv=None):
     output_path = args.output_path
 
     # Data loader for training
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables/train', length_transform=reduce_length_uniform)
+    # TODO: Switch this back to train data
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables/test', length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size=batch_size)
 
     # These might change - Should come from the LSST Source Tensor shapes.
@@ -83,8 +84,8 @@ def main(argv=None):
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
-    # Save the final model. @TODO change this to save the best model only.
-    torch.save(model.state_dict(), output_path)
+        # Save the model. TODO change this to save the best model only.
+        torch.save(model.state_dict(), output_path)
 
 if __name__=='__main__':
 
