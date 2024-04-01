@@ -71,7 +71,7 @@ class LSSTSourceDataSet(Dataset):
             # If the length of the TS is less than sequence_length, add padding
             ts_np = np.pad(ts_np, [(padding_length, 0), (0, 0)], mode='constant', constant_values=padding_constant)
 
-        elif ts_np.shape[0] < sequence_length:
+        elif ts_np.shape[0] > sequence_length:
 
             # If the length of the TS is more than sequence_length, keep the first sequence_length number of data points
             ts_np = ts_np[:sequence_length, :]
