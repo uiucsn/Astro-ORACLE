@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import torch.nn.functional as F
 
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 
@@ -85,6 +86,52 @@ def get_taxonomy_tree():
     tree.add_edges_from([('Periodic', level_3d_node) for level_3d_node in level_3d_nodes])
 
     return tree
+
+def get_prediction_probs(y_pred):
+
+    tree = get_taxonomy_tree()
+
+    # Create a new array to store pseudo conditional probabilities.
+    pseudo_probabilities = y_pred.clone().detach()
+
+    level_order_nodes = nx.bfs_tree(tree, source=source_node_label).nodes()
+    parents = [list(tree.predecessors(node)) for node in level_order_nodes]
+    for idx in range(len(parents)):
+
+        # Make sure the graph is a tree.
+        assert len(parents[idx]) == 0 or len(parents[idx]) == 1, 'Number of parents for each node should be 0 (for root) or 1.'
+        
+        if len(parents[idx]) == 0:
+            parents[idx] = ''
+        else:
+            parents[idx] = parents[idx][0]
+
+    # Finding unique parents for masking
+    unique_parents = list(set(parents))
+    unique_parents.sort()
+
+    # Create masks for applying soft max and calculating loss values.
+    masks = []
+    for parent in unique_parents:
+        masks.append(np.array(parents) == parent)
+    
+    for mask in masks:
+        pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
+
+    return pseudo_probabilities
+
+def plot_pred_vs_truth(true, pred):
+
+    tree = get_taxonomy_tree()
+
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(5, 3))
+
+    pos = graphviz_layout(tree, prog='dot')
+
+    nx.draw_networkx(tree, ax=axes[0], with_labels=True, font_weight='bold', arrows=True, node_color=true, font_size = 8, pos=pos, cmap='Wistia')
+    nx.draw_networkx(tree, ax=axes[1], with_labels=True, font_weight='bold', arrows=True, node_color=pred, font_size = 8, pos=pos, cmap='Wistia')
+
+    plt.show()
 
 def get_astrophysical_class(elasticc_class):
     
