@@ -4,7 +4,7 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=vedgs2@illinois.edu
 #SBATCH --nodes=1
-#SBATCH --mem=MaxMemPerNode
+#SBATCH --mem-per-cpu=36G 
 #SBATCH --cpus-per-task=4
 #SBATCH --output=train_LSTM.out
 #SBATCH --error=train_LSTM.err
