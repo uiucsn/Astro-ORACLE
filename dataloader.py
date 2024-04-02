@@ -13,7 +13,7 @@ from LSST_Source import LSST_Source
 from taxonomy import get_classification_labels, get_astrophysical_class, get_taxonomy_tree
 
 # All samples in the same batch need to have consistent sequence length. This adds padding for sequences shorter than sequence_length and truncates light sequences longer than sequence_length 
-sequence_length = 500
+sequence_length = 200
 
 # Value used for padding tensors to make them the correct length
 padding_constant = 0

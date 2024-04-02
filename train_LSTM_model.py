@@ -20,7 +20,7 @@ def parse_args(argv=None):
     )
     parser.add_argument('--epochs', type=int, default=100,
                         help='Number of epochs.')
-    parser.add_argument('--batch_size', type=int, default=512,
+    parser.add_argument('--batch_size', type=int, default=128,
                         help='Batch size.')
     parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate.')
@@ -71,7 +71,7 @@ def main(argv=None):
 
     # Training loop
     for epoch in range(num_epochs):
-        for X_ts, X_static, labels in loader:
+        for i, (X_ts, X_static, labels) in enumerate(loader):
 
             # Forward pass
             outputs = model(X_ts.float(), X_static.float())
@@ -81,6 +81,9 @@ def main(argv=None):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+            if i % 1000 == 999:
+                print(f"Batch {i + 1}")
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
