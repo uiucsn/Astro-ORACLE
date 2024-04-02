@@ -1,16 +1,16 @@
 import os
 import torch
-import glob
 import math
 
 import numpy as np
+import polars as pl
 
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
-from astropy.io import ascii
 
 from LSTM_model import LSTMClassifier
-from taxonomy import get_classification_labels, get_astrophysical_class
+from LSST_Source import LSST_Source
+from taxonomy import get_classification_labels, get_astrophysical_class, get_taxonomy_tree
 
 # All samples in the same batch need to have consistent sequence length. This adds padding for sequences shorter than sequence_length and truncates light sequences longer than sequence_length 
 sequence_length = 500
@@ -31,33 +31,36 @@ def reduce_length_uniform(np_ts):
 class LSSTSourceDataSet(Dataset):
 
 
-    def __init__(self, root_dir, length_transform=None):
+    def __init__(self, path, length_transform=None):
         """
         Arguments:
-            root_dir (string): Directory with all the astropy tables.
+            path (string): Directory with all the astropy tables.
             transform (callable, optional): Optional transform to be applied on a sample.
         """
-        self.root_dir = root_dir
-        self.file_names = glob.glob(f"{root_dir}/*")
+
+        print(f'Loading parquet dataset: {path}', flush=True)
+
+        self.path = path
+        self.parquet = pl.read_parquet(path)
+        self.num_sample = self.parquet.shape[0]
         self.length_transform = length_transform
 
     def __len__(self):
 
-        return len(self.file_names)
+        return self.num_sample
 
     def __getitem__(self, idx):
 
         if torch.is_tensor(idx):
             idx = idx.tolist()
         
-        # TODO: This code is really embarrassing. Like it hurts my soul. Please fix it.
-        elasticc_class = '_'.join(self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1:])
+        row = self.parquet[idx]
+        source = LSST_Source(row)
+        table = source.get_event_table()
 
-        astrophysical_class = get_astrophysical_class(elasticc_class)
+        astrophysical_class = get_astrophysical_class(source.ELASTICC_class)
         _, class_labels = get_classification_labels(astrophysical_class)
 
-        table_path = os.path.join(self.file_names[idx])
-        table = ascii.read(table_path)
         ts_np = table.to_pandas().to_numpy()
 
         # Shorten the length of the time series data so the classifier learn to classify partial phase light curves
@@ -88,17 +91,7 @@ class LSSTSourceDataSet(Dataset):
     def get_dimensions(self):
 
         idx = 0
-
-        elasticc_class = self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1]
-        astrophysical_class = get_astrophysical_class(elasticc_class)
-        _, class_labels = get_classification_labels(astrophysical_class)
-
-        table_path = os.path.join(self.file_names[idx])
-        table = ascii.read(table_path)
-        ts_np = table.to_pandas().to_numpy()
-
-        # Getting the static features from the table
-        static_np = np.array(list(table.meta.values()))
+        ts_np, static_np, class_labels = self.__getitem__(idx)
 
         dims = {
             'ts': ts_np.shape[1],
@@ -110,10 +103,12 @@ class LSSTSourceDataSet(Dataset):
     
     def get_labels(self):
 
+        ELASTICC_labels = self.parquet['ELASTICC_class']
         astrophysical_labels = []
-        for idx in range(len(self.file_names)):
 
-            elasticc_class = self.file_names[idx].split('/')[-1].split('.')[0].split('_')[1]
+        for idx in range(self.num_sample):
+
+            elasticc_class = ELASTICC_labels[idx]
             astrophysical_class = get_astrophysical_class(elasticc_class)
             astrophysical_labels.append(astrophysical_class)
         
@@ -122,7 +117,7 @@ class LSSTSourceDataSet(Dataset):
 if __name__=='__main__':
     
     # Simple test to verify data loader
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables', length_transform=reduce_length_uniform)
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet', length_transform=reduce_length_uniform)
 
     print(data_set.get_dimensions())
     loader = DataLoader(data_set, shuffle=True, batch_size = 4)

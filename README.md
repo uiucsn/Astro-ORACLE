@@ -6,14 +6,14 @@ The motivating idea here is when we have limited time series data, we can still 
 # General file descriptions:
 
 * fits_to_parquet.py - Convert SNANA fits files to parquet files
-* parquet_to_LSST_Source.py - Convert the rows of the parquet files into LSST Source objects, which can be stored as astropy tables
+* combine_parquet.py - Combine the parquet files into a training and testing set.
 * LSST_Source.py - Class for storing relevant data from the parquet files. Has additional functionality for data augmentation, flux curve plotting etc.
 * LSTM_model.py - Class for the LSTM classifier 
 * train_LSTM_model.py - Script for training LSTM classifier
 * class_summaries.py - Summarize the number of objects in each class and the length of the TS data for each of those objects
-* dataloader.py - Convert the astropy tables to tensors. Augment the data with padding/truncation and transforms if necessary
+* dataloader.py - Convert the parquet rows to tensors. Augment the data with padding/truncation and transforms if necessary
 * loss.py - Loss function for hierarchical classification
-* taxonomy.py - Utility function for the taxonomy used for this work
+* taxonomy.py - Utility functions for the taxonomy used for this work
 
 ## Step 1 - Convert the data to a more usable form:
 
@@ -48,15 +48,13 @@ At this point, we have the `LSST_Source` object with all the data we need. Howev
 
 ## Step 3 - Building the Tensors
 
-We are using pytorch for building our classification models so we convert all our LSST source objects into tensor representations. As an intermediate step, we store all these events as Astropy tables in the ecsv format. This is done using the LSST_Source.get_event_table() function.
+We are using pytorch for building our classification models so we convert all our LSST source objects into tensor representations. As an intermediate step, we combine the parquet files into a combined train parquet file and a combined test parquet file.
 
-In order to do this, we use the following steps:
+In order to do this, we use the following step(s):
 
-- `cd data/data/elasticc2_train`
-- `mkdir event_tables`
-- Convert all the data to astropy ecsv tables: `ls parquet | xargs -IXXX -P32 python ../../../parquet_to_LSST_Source.py parquet/XXX event_tables/`
+- `python combine_parquet.py data/data/elasticc2_train/parquet/  data/data/elasticc2_train/train_parquet.parquet data/data/elasticc2_train/test_parquet.parquet`
 
-This will store all the LSST sources, along with the associate photometry and host galaxy information in astropy tables.
+This will store all the LSST sources, along with the associate photometry and host galaxy information in parquet files.
 
 We use this representation to build tensors using the pytorch data loader to create two tensors for each event. One of them is a `(sequence_length, n_ts_features)` shaped tensor that represents the time series data. We apply one hot encoding to represent the passband data and pass the `FLUXCAL` and `FLUXCALERR` data through the `asinh` function to squish it and get some more workable numerical values. The other tensor is a `(n_static_features)` shaped tensor that represents all the static data from the SNANA header file in addition to the `custom_engineered_features`.
 

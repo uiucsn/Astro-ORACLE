@@ -118,6 +118,24 @@ def get_prediction_probs(y_pred):
     for mask in masks:
         pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
 
+    # Add weights to edges based on the probabilities.
+    level_order_nodes = list(level_order_nodes)
+    for i in range(len(level_order_nodes)):
+
+        node = level_order_nodes[i]
+        parent = parents[i]
+        weight = pseudo_probabilities[0][i]
+
+        if parent != '':
+            tree[parent][node]['weight'] = weight.detach().numpy()
+
+    pos = graphviz_layout(tree, prog='dot')
+    nx.draw_networkx(tree, pos = pos, font_weight='bold', font_size = 8, node_color='white')
+    labels = {(u, v): f'{d["weight"]:.2f}' for u, v, d in tree.edges(data=True)}
+    nx.draw_networkx_edge_labels(tree, pos = pos, edge_labels = labels)
+    longest_path = nx.dag_longest_path(tree)
+    print(longest_path)
+    
     return pseudo_probabilities
 
 def plot_pred_vs_truth(true, pred):

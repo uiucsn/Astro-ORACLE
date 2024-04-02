@@ -41,7 +41,7 @@ def main(argv=None):
 
     # Data loader for training
     # TODO: Switch this back to train data
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/event_tables/test', length_transform=reduce_length_uniform)
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet', length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size=batch_size)
 
     # These might change - Should come from the LSST Source Tensor shapes.

@@ -53,7 +53,7 @@ class LSST_Source:
     ddf_separation_radius_threshold = 3.5 / 2
 
 
-    def __init__(self, parquet_row, class_label) -> None:
+    def __init__(self, parquet_row) -> None:
         """Create an LSST_Source object to store both photometric and host galaxy data from the Elasticc simulations.
 
         Args:
@@ -62,7 +62,7 @@ class LSST_Source:
         """
 
         # Set all the class attributes
-        setattr(self, 'ELASTICC_class', class_label)
+        setattr(self, 'ELASTICC_class', parquet_row['ELASTICC_class'].to_numpy()[0])
         setattr(self, 'SNID', parquet_row['SNID'].to_numpy()[0])
         setattr(self, 'astrophysical_class', get_astrophysical_class(self.ELASTICC_class))
 
