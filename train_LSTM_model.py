@@ -86,7 +86,7 @@ def main(argv=None):
             optimizer.step()
 
             if i % 1000 == 999:
-                print(f"Batch {i + 1}")
+                print(f"Batch {i + 1}", flush=True)
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
