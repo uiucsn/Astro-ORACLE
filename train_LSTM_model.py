@@ -12,6 +12,7 @@ from taxonomy import get_taxonomy_tree
 
 from argparse import ArgumentParser
 from pathlib import Path
+from tqdm import tqdm
 
 def parse_args(argv=None):
     parser = ArgumentParser(
@@ -28,6 +29,8 @@ def parse_args(argv=None):
                         help='Learning rate.')
     parser.add_argument('--output_path', type=Path, default='models/LSTM.pt',
                         help='Save the weights here.')
+    parser.add_argument('--train_path', type=Path, default='data/data/elasticc2_train/train_parquet.parquet',
+                        help='Path to the training parquet file.')
 
     return parser.parse_args(argv)
 
@@ -39,12 +42,13 @@ def main(argv=None):
     batch_size = args.batch_size
     num_epochs = args.epochs
     num_dl_workers = args.num_dl_workers
+    training_path = args.train_path
 
     output_path = args.output_path
 
     # Data loader for training
     # TODO: Switch this back to train data
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet', length_transform=reduce_length_uniform)
+    data_set = LSSTSourceDataSet(training_path, length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size=batch_size, num_workers=num_dl_workers)
 
     # These might change - Should come from the LSST Source Tensor shapes.
@@ -66,7 +70,7 @@ def main(argv=None):
     
     # Loss and optimizer
     tree = get_taxonomy_tree()
-    loss_object = WHXE_Loss(tree, list(tree.nodes)) # TODO: Revert the labels list to the list from the data set
+    loss_object = WHXE_Loss(tree, data_set.get_labels()) 
     criterion = loss_object.compute_loss
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -74,7 +78,7 @@ def main(argv=None):
 
     # Training loop
     for epoch in range(num_epochs):
-        for i, (X_ts, X_static, labels) in enumerate(loader):
+        for i, (X_ts, X_static, labels) in enumerate(tqdm(loader)):
 
             # Forward pass
             outputs = model(X_ts.float(), X_static.float())
@@ -84,9 +88,6 @@ def main(argv=None):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
-            if i % 1000 == 999:
-                print(f"Batch {i + 1}", flush=True)
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
 
