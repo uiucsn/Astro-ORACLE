@@ -22,6 +22,8 @@ def parse_args(argv=None):
                         help='Number of epochs.')
     parser.add_argument('--batch_size', type=int, default=128,
                         help='Batch size.')
+    parser.add_argument('--num_dl_workers', type=int, default=4,
+                        help='Number of workers for Dataloader.')
     parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate.')
     parser.add_argument('--output_path', type=Path, default='models/LSTM.pt',
@@ -36,13 +38,14 @@ def main(argv=None):
     learning_rate = args.lr
     batch_size = args.batch_size
     num_epochs = args.epochs
+    num_dl_workers = args.num_dl_workers
 
     output_path = args.output_path
 
     # Data loader for training
     # TODO: Switch this back to train data
     data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet', length_transform=reduce_length_uniform)
-    loader = DataLoader(data_set, shuffle=True, batch_size=batch_size)
+    loader = DataLoader(data_set, shuffle=True, batch_size=batch_size, num_workers=num_dl_workers)
 
     # These might change - Should come from the LSST Source Tensor shapes.
     dims = data_set.get_dimensions()

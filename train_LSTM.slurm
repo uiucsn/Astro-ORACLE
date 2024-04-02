@@ -5,7 +5,7 @@
 #SBATCH --mail-user=vedgs2@illinois.edu
 #SBATCH --nodes=1
 #SBATCH --mem-per-cpu=36G 
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --output=train_LSTM.out
 #SBATCH --error=train_LSTM.err
 #SBATCH --partition=caps

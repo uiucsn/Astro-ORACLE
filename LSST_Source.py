@@ -70,7 +70,7 @@ class LSST_Source:
             if key in self.other_features:
                 setattr(self, key, parquet_row[key].to_numpy()[0])
             elif key in self.time_series_features:
-                setattr(self, key, parquet_row[key])
+                setattr(self, key, parquet_row[key][0].to_numpy())
 
         # Run processing code on the light curves
         self.process_lightcurve()
