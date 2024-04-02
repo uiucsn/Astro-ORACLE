@@ -47,7 +47,7 @@ def main(argv=None):
         dataframe = dataframe.sample(fraction=1, shuffle=True, seed=seed)
 
         # Split intro train and test sets
-        test_size = int(args.train_frac * dataframe.shape[0])
+        test_size = int((1 - args.train_frac) * dataframe.shape[0])
         test, train = dataframe.head(test_size), dataframe.tail(-test_size)
 
         print(f"Total DF: {dataframe.shape[0]} | Train DF: {train.shape[0]} | Test DF: {test.shape[0]}")
@@ -64,6 +64,8 @@ def main(argv=None):
     # Write the combined DataFrame to a new parquet file.
     combined_train.write_parquet(args.train_output)
     combined_test.write_parquet(args.test_output)
+
+    print("Saved!")
 
 if __name__ == '__main__':
     main()

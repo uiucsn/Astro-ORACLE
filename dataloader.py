@@ -45,6 +45,8 @@ class LSSTSourceDataSet(Dataset):
         self.num_sample = self.parquet.shape[0]
         self.length_transform = length_transform
 
+        print(f"Number of sources: {self.num_sample}")
+
     def __len__(self):
 
         return self.num_sample
