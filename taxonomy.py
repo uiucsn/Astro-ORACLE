@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import torch.nn.functional as F
 
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
@@ -128,28 +129,51 @@ def get_prediction_probs(y_pred):
 
         if parent != '':
             tree[parent][node]['weight'] = weight.detach().numpy()
-
-    pos = graphviz_layout(tree, prog='dot')
-    nx.draw_networkx(tree, pos = pos, font_weight='bold', font_size = 8, node_color='white')
-    labels = {(u, v): f'{d["weight"]:.2f}' for u, v, d in tree.edges(data=True)}
-    nx.draw_networkx_edge_labels(tree, pos = pos, edge_labels = labels)
-    longest_path = nx.dag_longest_path(tree)
-    print(longest_path)
     
-    return pseudo_probabilities
+    return pseudo_probabilities, tree
 
-def plot_pred_vs_truth(true, pred):
+def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
 
-    tree = get_taxonomy_tree()
-
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(5, 3))
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6))
 
     pos = graphviz_layout(tree, prog='dot')
 
-    nx.draw_networkx(tree, ax=axes[0], with_labels=True, font_weight='bold', arrows=True, node_color=true, font_size = 8, pos=pos, cmap='Wistia')
-    nx.draw_networkx(tree, ax=axes[1], with_labels=True, font_weight='bold', arrows=True, node_color=pred, font_size = 8, pos=pos, cmap='Wistia')
+    # Plot the ground truth and predicted probs
+    nx.draw_networkx(tree, ax=axes[0][0], with_labels=True, font_weight='bold', arrows=True, node_color=true, font_size = 8, pos=pos, cmap='Wistia')
+    nx.draw_networkx(tree, ax=axes[0][1], with_labels=True, font_weight='bold', arrows=True, node_color=pred, font_size = 8, pos=pos, cmap='Wistia')
 
-    plt.show()
+    pos = graphviz_layout(tree, prog='dot')
+    nx.draw_networkx(tree, ax=axes[1][0], pos = pos, font_weight='bold', font_size = 8, node_color='white')
+    labels = {(u, v): f'{d["weight"]:.2f}' for u, v, d in tree.edges(data=True)}
+    nx.draw_networkx_edge_labels(tree, ax=axes[1][0], pos = pos, edge_labels = labels)
+
+    time = X_ts[0, :, 0]
+    detection_flag = X_ts[0, :, 1]
+    cal_flux = np.sinh(X_ts[0, :, 2])
+    cal_flux_err = np.sinh(X_ts[0, :, 3])
+
+    lsst_bands = ['u', 'g', 'r', 'i', 'z', 'Y']
+
+    c = np.zeros(len(time), dtype=int)
+    for i in range(4, 10):
+        band_flag = X_ts[0, :, i]
+        c[band_flag == 1] = int(i)
+
+    c = [f"C{i}" for i in c]
+    fmts = np.where((detection_flag) == 1, '*', '.')
+
+    # Plot flux time series
+    for i in range(len(time)):
+        axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], color=c[i], fmt=fmts[i], markersize = '10')
+
+    axes[1][1].set_xlabel('Time Since first observations')
+    axes[1][1].set_ylabel('Calibrate Flux')
+
+    patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
+    axes[1][1].legend(handles=patches)
+
+    plt.tight_layout()
+    plt.show()  
 
 def get_astrophysical_class(elasticc_class):
     

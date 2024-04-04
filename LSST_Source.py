@@ -23,14 +23,14 @@ class LSST_Source:
     custom_engineered_features = ['MW_plane_flag', 'ELAIS_S1_flag', 'XMM-LSS_flag', 'Extended_Chandra_Deep_Field-South_flag', 'COSMOS_flag']
 
     # Pass band to color dict
-    colors = {
+    colors = OrderedDict({
         'u': 'blue',
         'g': 'green',
         'r': 'red',
         'i': 'teal',
         'z': 'orange',
         'Y': 'purple',
-    }
+    })
 
     # 6 broadband filters used in LSST.
     LSST_bands = list(colors.keys())
