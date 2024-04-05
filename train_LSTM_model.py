@@ -78,10 +78,11 @@ def main(argv=None):
 
     # Training loop
     for epoch in range(num_epochs):
-        for i, (X_ts, X_static, labels) in enumerate(tqdm(loader)):
-
+        for i, (X_ts, X_static, labels, sequence_lengths) in enumerate(tqdm(loader)):
+        
+            pack = torch.nn.utils.rnn.pack_padded_sequence(X_ts, sequence_lengths, batch_first=True, enforce_sorted=False)
             # Forward pass
-            outputs = model(X_ts.float(), X_static.float())
+            outputs = model(pack.float(), X_static.float())
             loss = criterion(outputs, labels.float())
 
             # Backward and optimize
