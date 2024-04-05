@@ -32,15 +32,16 @@ class LSTMClassifier(nn.Module):
     def forward(self, x_ts, x_static):
         
         # Initialize hidden and cell states with zeros
-        h0 = torch.zeros(self.lstm_num_layers, x_ts.size(0), self.lstm_hidden_dim).requires_grad_()
-        c0 = torch.zeros(self.lstm_num_layers, x_ts.size(0), self.lstm_hidden_dim).requires_grad_()
+        h0 = torch.zeros(self.lstm_num_layers, x_static.size(0), self.lstm_hidden_dim).requires_grad_()
+        c0 = torch.zeros(self.lstm_num_layers, x_static.size(0), self.lstm_hidden_dim).requires_grad_()
 
         # Pass the time series data through the LSTM
         lstm_out, (hn, cn) = self.lstm(x_ts, (h0.detach(), c0.detach()))
+        unpacked, unpacked_len = torch.nn.utils.rnn.pad_packed_sequence(lstm_out, batch_first=True)
 
         # Concatenate LSTM output with the static features
-        concat_tensor = lstm_out[:, -1, :]
-        # concat_tensor = torch.concat((lstm_out[:, -1, :], x_static), dim=1)
+        concat_tensor = unpacked[:, -1, :]
+        # concat_tensor = torch.concat((unpacked[:, -1, :], x_static), dim=1)
 
         # Pass the concatenated tensors through the fully connected layers
         concat_tensor = self.relu(concat_tensor)

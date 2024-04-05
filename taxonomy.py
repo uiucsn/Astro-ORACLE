@@ -166,7 +166,7 @@ def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
     for i in range(len(time)):
         axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], color=c[i], fmt=fmts[i], markersize = '10')
 
-    axes[1][1].set_xlabel('Time Since first observations')
+    axes[1][1].set_xlabel('Time since first observation')
     axes[1][1].set_ylabel('Calibrate Flux')
 
     patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
