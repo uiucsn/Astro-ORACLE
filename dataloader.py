@@ -92,6 +92,7 @@ class LSSTSourceDataSet(Dataset):
         # Replace flag values like 999 and -9999 with -9
         static_np[static_np == -9999] = -9
         static_np[static_np == 999] = -9
+        static_np[static_np == -999] = -9
 
         return ts_np, static_np, class_labels, final_seq_length
     
