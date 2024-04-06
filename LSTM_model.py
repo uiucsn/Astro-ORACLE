@@ -21,8 +21,8 @@ class LSTMClassifier(nn.Module):
         self.lstm = nn.LSTM(input_size=ts_input_dim, hidden_size=lstm_hidden_dim, num_layers=lstm_num_layers, batch_first=True)
         
         # Fully connected layer(s) for merging LSTM output with static features
-        self.fc1 = nn.Linear(lstm_hidden_dim, 128)
-        # self.fc1 = nn.Linear(lstm_hidden_dim + static_input_dim, 128)
+        # self.fc1 = nn.Linear(lstm_hidden_dim, 128)
+        self.fc1 = nn.Linear(lstm_hidden_dim + static_input_dim, 128)
 
 
         # Layer to output the class probabilities.
@@ -40,8 +40,7 @@ class LSTMClassifier(nn.Module):
         unpacked, unpacked_len = torch.nn.utils.rnn.pad_packed_sequence(lstm_out, batch_first=True)
 
         # Concatenate LSTM output with the static features
-        concat_tensor = unpacked[:, -1, :]
-        # concat_tensor = torch.concat((unpacked[:, -1, :], x_static), dim=1)
+        concat_tensor = torch.concat((unpacked[:, -1, :], x_static), dim=1)
 
         # Pass the concatenated tensors through the fully connected layers
         concat_tensor = self.relu(concat_tensor)
