@@ -47,8 +47,7 @@ def main(argv=None):
     output_path = args.output_path
 
     # Data loader for training
-    # TODO: Switch this back to train data
-    data_set = LSSTSourceDataSet(training_path)
+    data_set = LSSTSourceDataSet(training_path, length_transform=reduce_length_uniform)
     loader = DataLoader(data_set, shuffle=True, batch_size=batch_size, num_workers=num_dl_workers)
 
     # These might change - Should come from the LSST Source Tensor shapes.
