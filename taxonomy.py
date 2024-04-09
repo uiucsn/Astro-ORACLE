@@ -132,6 +132,35 @@ def get_prediction_probs(y_pred):
     
     return pseudo_probabilities, tree
 
+def get_most_likely_path(tree, path, source=source_node_label):
+
+    # Get all the children to the node
+    successors = list(tree.successors(source))
+
+    # If you are at the leaf node, exit and return the full path
+    if len(successors) == 0:
+        return path
+
+    # Else, recursively take the most likely step at each node in your decision tree
+    weights = []
+    children = []
+
+    # Loop through all children and find the path that has highest probability
+    for node in successors:
+
+        w = tree[source][node]['weight']
+        weights.append(w)
+        children.append(node)
+
+    # Find the highest probability step and add to the list
+    idx = np.argmax(weights)
+    next_node = children[idx]
+    path.append(next_node)
+
+    # Recurse and return
+    return get_most_likely_path(tree, path, next_node)
+
+
 def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
 
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6))
