@@ -50,7 +50,7 @@ class LSSTSourceDataSet(Dataset):
 
     def __len__(self):
 
-        return self.num_sample
+        return 1000
 
     def __getitem__(self, idx):
 
