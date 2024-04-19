@@ -2,7 +2,9 @@ import numpy as np
 import polars as pl
 
 from LSST_Source import LSST_Source
-from taxonomy import get_classification_labels, get_astrophysical_class, get_taxonomy_tree
+from taxonomy import get_classification_labels, get_astrophysical_class
+
+ts_length = 300
 
 class LSSTSourceDataSet():
 
@@ -40,7 +42,7 @@ class LSSTSourceDataSet():
     def get_dimensions(self):
 
         idx = 0
-        source, class_labels = data_set.get_item(idx)
+        source, class_labels = self.get_item(idx)
         table = source.get_event_table()
 
         ts_np = table.to_pandas().to_numpy()
