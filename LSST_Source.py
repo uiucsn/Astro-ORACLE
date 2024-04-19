@@ -1,5 +1,3 @@
-import copy
-import torch
 import numpy as np
 
 from astropy.table import Table
