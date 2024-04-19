@@ -35,12 +35,13 @@ class LSSTSourceDataSet():
         astrophysical_class = get_astrophysical_class(source.ELASTICC_class)
         _, class_labels = get_classification_labels(astrophysical_class)
 
-        return table, class_labels
+        return source, class_labels
     
     def get_dimensions(self):
 
         idx = 0
-        table, class_labels = self.get_item(idx)
+        source, class_labels = data_set.get_item(idx)
+        table = source.get_event_table()
 
         ts_np = table.to_pandas().to_numpy()
         static_np = np.array(list(table.meta.values()))
@@ -69,9 +70,13 @@ class LSSTSourceDataSet():
 if __name__=='__main__':
     
     # Simple test to verify data loader
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet')
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/test_parquet.parquet')
     print(data_set.get_dimensions())
 
-    table, class_label = data_set.get_item(0)
-    print(table.meta, table, class_label)
+    source, class_labels = data_set.get_item(0)
+    table = source.get_event_table()
+    print(source.astrophysical_class)
+    print(table.meta)
+    print(table)
+    print(class_labels)
     
