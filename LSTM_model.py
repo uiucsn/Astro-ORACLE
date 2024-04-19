@@ -1,73 +1,58 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
+import tensorflow as tf
 import numpy as np
 
+from tensorflow import keras
+from tensorflow.keras.layers import Input, LSTM, Dense, Masking, concatenate, GRU
 
-class LSTMClassifier(nn.Module):
+from dataloader import ts_length
 
-    def __init__(self, ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers, dropout=0.1): 
+def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
 
-        super(LSTMClassifier, self).__init__()
+    input_1 = Input((ts_length, ts_dim), name='lc') 
+    masking_input1 = Masking(mask_value=0.)(input_1)
 
-        self.ts_input_dim = ts_input_dim
-        self.static_input_dim = static_input_dim
-        self.lstm_hidden_dim = lstm_hidden_dim
-        self.output_dim = output_dim
-        self.lstm_num_layers = lstm_num_layers
-        self.dropout = dropout
+    lstm1 = GRU(100, return_sequences=True, activation='tanh')(masking_input1)
+    lstm2 = GRU(100, return_sequences=False, activation='tanh')(lstm1)
 
-        # LSTM block to process some time series input
-        self.lstm = nn.LSTM(input_size=ts_input_dim, hidden_size=lstm_hidden_dim, num_layers=lstm_num_layers, batch_first=True)
-        
-        # Fully connected layer(s) for merging LSTM output with static features
-        self.fc1 = nn.Linear(lstm_hidden_dim, 128)
-        #self.fc1 = nn.Linear(lstm_hidden_dim + static_input_dim, 128)
+    dense1 = Dense(100, activation='tanh')(lstm2)
 
+    input_2 = Input(shape = (static_dim, ), name='host_features') # CHANGE
 
-        # Layer to output the class probabilities.
-        self.fc_final = nn.Linear(128, output_dim)
-        self.relu = nn.ReLU()
+    dense2 = Dense(10)(input_2)
 
-    def forward(self, x_ts, x_static):
-        
-        # Initialize hidden and cell states with zeros
-        h0 = torch.zeros(self.lstm_num_layers, x_static.size(0), self.lstm_hidden_dim).requires_grad_()
-        c0 = torch.zeros(self.lstm_num_layers, x_static.size(0), self.lstm_hidden_dim).requires_grad_()
+    merge1 = concatenate([dense1, dense2])
 
-        # Pass the time series data through the LSTM
-        lstm_out, (hn, cn) = self.lstm(x_ts, (h0.detach(), c0.detach()))
-        unpacked, unpacked_len = torch.nn.utils.rnn.pad_packed_sequence(lstm_out, batch_first=True)
+    dense3 = Dense(100, activation='relu')(merge1)
 
-        # Concatenate LSTM output with the static features
-        concat_tensor = unpacked[:, -1, :]
-        # concat_tensor = torch.concat((unpacked[:, -1, :], x_static), dim=1)
+    dense4 = Dense(latent_size, activation='relu', name='latent')(dense3)
 
-        # Pass the concatenated tensors through the fully connected layers
-        concat_tensor = self.relu(concat_tensor)
-        out = self.fc1(concat_tensor) 
-        out = self.relu(out)
-        out = self.fc_final(out)
-        return out
+    output = Dense(output_dim)(dense4)
+
+    # TODO: add masked softmax here
+
+    model = keras.Model(inputs=[input_1, input_2], outputs=output)
+
+    model.compile(loss = "categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
     
+    return model
+
 if __name__=='__main__':
 
-    learning_rate = 0.001
-    ts_input_dim = 5
-    static_input_dim = 5
-    lstm_hidden_dim = 64
-    output_dim = 7
-    lstm_num_layers = 4
+    ts_dim = 5
+    static_dim = 15
+    latent_size = 10
+    output_dim = 15
+
     batch_size = 4
 
-    model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
 
-    ts_length = 5
-    input_ts = torch.randn(batch_size, ts_length, ts_input_dim)
-    input_static = torch.randn(batch_size, static_input_dim)
+    input_ts = np.random.randn(batch_size, ts_length, ts_dim)
+    input_static = np.random.randn(batch_size, static_dim)
 
-    outputs = model(input_ts, input_static)
+    outputs = model.predict([input_ts, input_static])
+    print(outputs)
 
-    print('Input:', input_ts.size(), input_static.size())
-    print('Output:', outputs.size())
+    # print('Input:', input_ts.size(), input_static.size())
+    # print('Output:', outputs.size())
 
