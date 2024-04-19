@@ -4,7 +4,7 @@ import polars as pl
 from LSST_Source import LSST_Source
 from taxonomy import get_classification_labels, get_astrophysical_class
 
-ts_length = 300
+ts_length = 500
 
 class LSSTSourceDataSet():
 
@@ -36,6 +36,7 @@ class LSSTSourceDataSet():
 
         astrophysical_class = get_astrophysical_class(source.ELASTICC_class)
         _, class_labels = get_classification_labels(astrophysical_class)
+        class_labels = np.array(class_labels)
 
         return source, class_labels
     
