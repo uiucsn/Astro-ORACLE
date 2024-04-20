@@ -108,7 +108,7 @@ def main(argv=None):
     X_ts_train, X_ts_val, X_static_train, X_static_val, Y_train, Y_val, astrophysical_classes_train, astrophysical_classes_val, elasticc_classes_train, elasticc_classes_val = train_test_split(X_ts, X_static, Y, astrophysical_classes, elasticc_classes, random_state = 40, test_size = 0.1)
 
     # Do some processing for tensorflow
-    X_ts_train = np.squeeze(np.array(X_ts_train))
+    X_ts_train = np.squeeze(np.reshape(X_ts_train))
     X_ts_val = np.squeeze(np.array(X_ts_val))
 
     X_static_train = np.squeeze(np.array(X_static_train))
@@ -130,8 +130,8 @@ def main(argv=None):
     except Exception as e:
         print(e)
 
-    model.save(f"models/RedshiftLatent_{latent_size}")
-    save(f"models/RedshiftLatent_{latent_size}_history", history)
+    model.save(f"models/RedshiftLatent_{latent_size}.keras")
+    #save(f"models/RedshiftLatent_{latent_size}_history", history)
 
 if __name__=='__main__':
 
