@@ -1,3 +1,4 @@
+import torch
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
@@ -93,7 +94,8 @@ def get_prediction_probs(y_pred):
     tree = get_taxonomy_tree()
 
     # Create a new array to store pseudo conditional probabilities.
-    pseudo_probabilities = y_pred.clone().detach()
+    y_pred = torch.tensor(y_pred)
+    pseudo_probabilities = y_pred.clone()
 
     level_order_nodes = nx.bfs_tree(tree, source=source_node_label).nodes()
     parents = [list(tree.predecessors(node)) for node in level_order_nodes]
