@@ -125,10 +125,9 @@ def main(argv=None):
                               restore_best_weights=True
                               )
 
-    try:
-        history = model.fit(x = [X_ts_train, X_static_train],  y = Y_train, validation_data=([X_ts_val, X_static_val], Y_val), epochs=num_epochs, batch_size = batch_size, callbacks=[early_stopping])
-    except Exception as e:
-        print(e)
+
+    history = model.fit(x = [X_ts_train, X_static_train],  y = Y_train, validation_data=([X_ts_val, X_static_val], Y_val), epochs=num_epochs, batch_size = batch_size, callbacks=[early_stopping])
+
 
     model.save(f"models/RedshiftLatent_{latent_size}.keras")
     #save(f"models/RedshiftLatent_{latent_size}_history", history)
