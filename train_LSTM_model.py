@@ -1,3 +1,4 @@
+import pickle
 import numpy as np
 import pandas as pd
 
@@ -11,6 +12,10 @@ from pathlib import Path
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping
+
+def save(save_path , obj):
+    with open(save_path, 'wb') as f:
+        pickle.dump(obj, f)
 
 def parse_args(argv=None):
     parser = ArgumentParser(
@@ -125,6 +130,8 @@ def main(argv=None):
     except Exception as e:
         print(e)
 
+    model.save(f"models/RedshiftLatent_{latent_size}")
+    save(f"models/RedshiftLatent_{latent_size}_history", history)
 
 if __name__=='__main__':
 
