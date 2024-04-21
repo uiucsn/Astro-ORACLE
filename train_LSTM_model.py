@@ -117,6 +117,8 @@ def main(argv=None):
     Y_train = np.squeeze(np.array(Y_train))
     Y_val = np.squeeze(np.array(Y_val))
 
+    print('Num objects in training data', np.unique(astrophysical_classes_train, return_counts=True))
+
     print('Start training...')
     early_stopping = EarlyStopping(
                               patience=5,
