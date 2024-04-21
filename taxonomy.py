@@ -117,7 +117,6 @@ def get_prediction_probs(y_pred):
         masks.append(np.array(parents) == parent)
     
     for mask in masks:
-        print(y_pred[:, mask])
         pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
 
     # Add weights to edges based on the probabilities.
