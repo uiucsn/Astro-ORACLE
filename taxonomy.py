@@ -1,11 +1,10 @@
-import torch
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import torch.nn.functional as F
 
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
+from tensorflow import keras
 
 source_node_label = 'Alert'
 
@@ -94,8 +93,7 @@ def get_prediction_probs(y_pred):
     tree = get_taxonomy_tree()
 
     # Create a new array to store pseudo conditional probabilities.
-    y_pred = torch.tensor(y_pred)
-    pseudo_probabilities = y_pred.clone()
+    pseudo_probabilities = np.copy(y_pred)
 
     level_order_nodes = nx.bfs_tree(tree, source=source_node_label).nodes()
     parents = [list(tree.predecessors(node)) for node in level_order_nodes]
@@ -119,7 +117,8 @@ def get_prediction_probs(y_pred):
         masks.append(np.array(parents) == parent)
     
     for mask in masks:
-        pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
+        print(y_pred[:, mask])
+        pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
 
     # Add weights to edges based on the probabilities.
     level_order_nodes = list(level_order_nodes)
@@ -130,7 +129,7 @@ def get_prediction_probs(y_pred):
         weight = pseudo_probabilities[0][i]
 
         if parent != '':
-            tree[parent][node]['weight'] = weight.detach().numpy()
+            tree[parent][node]['weight'] = weight
     
     return pseudo_probabilities, tree
 
