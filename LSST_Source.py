@@ -171,7 +171,7 @@ class LSST_Source:
 
         # Find time since last observation
         time_since_first_obs = self.MJD - self.MJD[0]
-        table['scaled_time_since_first_obs'] = time_since_first_obs / np.max(time_since_first_obs)
+        table['scaled_time_since_first_obs'] = time_since_first_obs / 100
 
         # 1 if it was a detection, zero otherwise
         table['detection_flag'] = np.where((self.PHOTFLAG & 4096 != 0), 1, 0)
