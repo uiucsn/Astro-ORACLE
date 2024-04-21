@@ -163,7 +163,7 @@ def get_most_likely_path(tree, path, source=source_node_label):
     return get_most_likely_path(tree, path, next_node)
 
 
-def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
+def plot_pred_vs_truth(true, pred, X_ts, X_static, tree):
 
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6))
 
@@ -178,30 +178,23 @@ def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
     labels = {(u, v): f'{d["weight"]:.2f}' for u, v, d in tree.edges(data=True)}
     nx.draw_networkx_edge_labels(tree, ax=axes[1][0], pos = pos, edge_labels = labels)
 
-    time = X_ts[0, :, 0]
-    detection_flag = X_ts[0, :, 1]
-    cal_flux = np.sinh(X_ts[0, :, 2])
-    cal_flux_err = np.sinh(X_ts[0, :, 3])
+    time = X_ts[0, :, 0] * 100 # Scaled time
+    detection_flag = X_ts[0, :, 1] 
+    cal_flux = X_ts[0, :, 2] # Scaled flux 
+    cal_flux_err = X_ts[0, :, 3]
+    c = X_ts[0, :, 4]
 
-    lsst_bands = ['u', 'g', 'r', 'i', 'z', 'Y']
-
-    c = np.zeros(len(time), dtype=int)
-    for i in range(4, 10):
-        band_flag = X_ts[0, :, i]
-        c[band_flag == 1] = int(i)
-
-    c = [f"C{i}" for i in c]
     fmts = np.where((detection_flag) == 1, '*', '.')
 
     # Plot flux time series
     for i in range(len(time)):
-        axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], color=c[i], fmt=fmts[i], markersize = '10')
+        axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], fmt=fmts[i], markersize = '10')
 
     axes[1][1].set_xlabel('Time since first observation')
     axes[1][1].set_ylabel('Calibrate Flux')
 
-    patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
-    axes[1][1].legend(handles=patches)
+    # patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
+    # axes[1][1].legend(handles=patches)
 
     plt.tight_layout()
     plt.show()  
