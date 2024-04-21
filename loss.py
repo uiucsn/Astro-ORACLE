@@ -1,10 +1,11 @@
-import torch 
 import numpy as np
 import networkx as nx
-import torch.nn.functional as F
+
+from tensorflow import keras
 
 from taxonomy import source_node_label, get_taxonomy_tree
-from LSTM_model import LSTMClassifier
+from LSTM_model import get_LSTM_Classifier
+from dataloader import ts_length
 
 class WHXE_Loss:
 
@@ -65,7 +66,7 @@ class WHXE_Loss:
             N_c.append(counts_dict[node])
 
         # Compute the final weights, ordered by level order traversal of the tree
-        self.class_weights = torch.tensor(N_all / (N_labels * np.array(N_c)))
+        self.class_weights = N_all / (N_labels * np.array(N_c))
 
     def compute_parents(self):
 
@@ -103,17 +104,17 @@ class WHXE_Loss:
         self.path_lengths = np.array(self.path_lengths)
 
         # Compute the secondary weight term, which emphasizes different levels of the tree. See paper for more details.
-        self.lambda_term = torch.tensor(np.exp(-self.alpha * self.path_lengths))
+        self.lambda_term = np.exp(-self.alpha * self.path_lengths)
 
 
     def masked_softmax(self, y_pred):
 
         # Create a new array to store pseudo conditional probabilities.
-        pseudo_probabilities = y_pred.clone().detach()
+        pseudo_probabilities = np.copy(y_pred)
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-            pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
+            pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
 
         return pseudo_probabilities
     
@@ -121,7 +122,7 @@ class WHXE_Loss:
 
         # Apply hierarchical soft max to get "pseudo" probability outputs using the data from the machine learning models.
         pred_probabilities = self.masked_softmax(y_pred)
-        log_pred_probabilities = pred_probabilities.log()
+        log_pred_probabilities = np.log10(pred_probabilities)
 
         # Multiply the indicator term (target_probabilities) with the conditional probability terms
         result1 = log_pred_probabilities * target_probabilities
@@ -130,7 +131,7 @@ class WHXE_Loss:
         result2 =  result1 * self.class_weights * self.lambda_term
 
         # Sum all of the terms that belong to a sample in the batch. At the end of this step, the number of values should be equal to the batch size. We then find the mean across the entire batch
-        loss = result2.sum(dim = 1).mean(dim=0)
+        loss = np.mean(np.sum(result2, axis=1), axis=0)
         loss = -1 * loss
 
         return loss
@@ -142,21 +143,19 @@ if __name__=='__main__':
     tree = get_taxonomy_tree()
     loss = WHXE_Loss(tree, list(tree.nodes))
 
-    learning_rate = 0.001
-    ts_input_dim = 5
-    static_input_dim = 5
-    lstm_hidden_dim = 64
-    output_dim = len(loss.level_order_nodes)
-    lstm_num_layers = 4
+    ts_dim = 5
+    static_dim = 15
+    latent_size = 10
+    output_dim = len(list(tree.nodes))
+
     batch_size = 4
 
-    model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
 
-    ts_length = 5
-    input_ts = torch.randn(batch_size, ts_length, ts_input_dim)
-    input_static = torch.randn(batch_size, static_input_dim)
+    input_ts = np.random.randn(batch_size, ts_length, ts_dim)
+    input_static = np.random.randn(batch_size, static_dim)
 
-    outputs = model(input_ts, input_static)
+    outputs = model.predict([input_ts, input_static])
     print(loss.compute_loss(outputs, outputs))
 
 
