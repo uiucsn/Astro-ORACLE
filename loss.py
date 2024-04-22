@@ -1,5 +1,6 @@
 import numpy as np
 import networkx as nx
+import tensorflow as tf
 
 from tensorflow import keras
 
@@ -107,34 +108,28 @@ class WHXE_Loss:
         self.lambda_term = np.exp(-self.alpha * self.path_lengths)
 
 
-    def masked_softmax(self, y_pred):
+    def compute_loss(self, y_pred, target_probabilities, epsilon=1e-10):
 
-        # Create a new array to store pseudo conditional probabilities.
-        pseudo_probabilities = np.copy(y_pred)
+        total = 0
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-            pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
 
-        return pseudo_probabilities
+            logits = tf.boolean_mask(y_pred, mask, axis=1) + epsilon
+            masked_soft_maxes = keras.activations.softmax(logits, axis = 1)
+
+            log_p = tf.math.log(masked_soft_maxes)
+            result0 = tf.math.subtract(1.0, tf.boolean_mask(target_probabilities, mask, axis=1))
+            result1 = tf.math.multiply(log_p, result0)
+            result2 = tf.math.multiply(result1, self.class_weights[mask])
+            result3 = tf.math.multiply(result2, self.lambda_term[mask])
+            result4 = tf.math.reduce_sum(result3, axis=1)
+            result5 = tf.math.reduce_mean(result4, axis=0)
     
-    def compute_loss(self, y_pred, target_probabilities):
-
-        # Apply hierarchical soft max to get "pseudo" probability outputs using the data from the machine learning models.
-        pred_probabilities = self.masked_softmax(y_pred)
-        log_pred_probabilities = np.log10(pred_probabilities)
-
-        # Multiply the indicator term (target_probabilities) with the conditional probability terms
-        result1 = log_pred_probabilities * target_probabilities
-
-        # Multiply the first result with the class weights and hierarchy level weight terms (lambda)
-        result2 =  result1 * self.class_weights * self.lambda_term
-
-        # Sum all of the terms that belong to a sample in the batch. At the end of this step, the number of values should be equal to the batch size. We then find the mean across the entire batch
-        loss = np.mean(np.sum(result2, axis=1), axis=0)
-        loss = -1 * loss
-
-        return loss
+            total -= result5
+            
+        return total
+    
 
 
 
@@ -150,7 +145,7 @@ if __name__=='__main__':
 
     batch_size = 4
 
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, "categorical_crossentropy")
 
     input_ts = np.random.randn(batch_size, ts_length, ts_dim)
     input_static = np.random.randn(batch_size, static_dim)
