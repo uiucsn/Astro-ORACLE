@@ -6,7 +6,7 @@ from tensorflow.keras.layers import Input, LSTM, Dense, Masking, concatenate, GR
 
 from dataloader import ts_length
 
-def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
+def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, loss_func):
 
     input_1 = Input((ts_length, ts_dim), name='lc') 
     masking_input1 = Masking(mask_value=0.)(input_1)
@@ -32,7 +32,7 @@ def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
 
     model = keras.Model(inputs=[input_1, input_2], outputs=output)
 
-    model.compile(loss = "categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
+    model.compile(loss = loss_func, optimizer="adam", metrics=['accuracy'])
     
     return model
 
@@ -45,7 +45,7 @@ if __name__=='__main__':
 
     batch_size = 4
 
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size,  "categorical_crossentropy")
 
     input_ts = np.random.randn(batch_size, ts_length, ts_dim)
     input_static = np.random.randn(batch_size, static_dim)
