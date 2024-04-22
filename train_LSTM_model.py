@@ -4,7 +4,7 @@ import pandas as pd
 
 from LSTM_model import get_LSTM_Classifier
 from dataloader import LSSTSourceDataSet, ts_length
-#from loss import WHXE_Loss
+from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
 from argparse import ArgumentParser
@@ -12,6 +12,8 @@ from pathlib import Path
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.utils import plot_model
+
 
 def save(save_path , obj):
     with open(save_path, 'wb') as f:
@@ -64,15 +66,16 @@ def main(argv=None):
     output_dim = n_outputs
     latent_size = 10
 
-    # Initialize models
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
-    
     # Loss and optimizer
     tree = get_taxonomy_tree()
-    # loss_object = WHXE_Loss(tree, train_set.get_labels()) 
-    # criterion = loss_object.compute_loss
+    loss_object = WHXE_Loss(tree, train_set.get_labels()) 
+    criterion = loss_object.compute_loss
 
-    print('Started loading data...', flush=True)
+    # Initialize models
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, criterion)
+    plot_model(model, to_file='LSTM.png', show_shapes=True, show_layer_names=True)
+
+    print('Loading data...', flush=True)
 
     X_ts = [] # info => for each time step, store time, median passband wavelength, flux, flux error
     X_static = [] # static features
@@ -117,9 +120,9 @@ def main(argv=None):
     Y_train = np.squeeze(np.array(Y_train))
     Y_val = np.squeeze(np.array(Y_val))
 
-    print('Num objects in training data', np.unique(astrophysical_classes_train, return_counts=True))
+    print('Num objects in training data', np.unique(astrophysical_classes_train, return_counts=True), flush=True)
+    print('Training...', flush=True)
 
-    print('Start training...')
     early_stopping = EarlyStopping(
                               patience=5,
                               min_delta=0.001,                               
