@@ -20,12 +20,14 @@ class LSSTSourceDataSet():
 
         self.path = path
         self.parquet = pl.read_parquet(path)
+        #self.parquet = self.parquet.sample(fraction=1, shuffle=True, seed=42)
         self.num_sample = self.parquet.shape[0]
 
         print(f"Number of sources: {self.num_sample}")
 
     def get_len(self):
 
+        #return 10000
         return self.num_sample
 
     def get_item(self, idx):
