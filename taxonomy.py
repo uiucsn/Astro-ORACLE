@@ -160,6 +160,18 @@ def get_most_likely_path(tree, path, source=source_node_label):
     # Recurse and return
     return get_most_likely_path(tree, path, next_node)
 
+def get_highest_prob_path(tree, source=source_node_label):
+
+    leaf_nodes = [x for x in tree.nodes() if tree.out_degree(x)==0 and tree.in_degree(x)==1]
+    leaf_probs = []
+
+    for leaf in leaf_nodes:
+        path = nx.shortest_path(tree, source, leaf)
+        weight_prod = np.prod([tree.get_edge_data(u, v)['weight'] for u, v in zip(path[:-1], path[1:])])
+        leaf_probs.append(weight_prod)
+    
+    idx = np.argmax(leaf_probs)
+    return nx.shortest_path(tree, source, leaf_nodes[idx])
 
 def plot_pred_vs_truth(true, pred, X_ts, X_static, tree):
 
