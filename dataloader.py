@@ -1,41 +1,18 @@
-import os
-import torch
-import math
-
 import numpy as np
 import polars as pl
 
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms, utils
-from tqdm import tqdm
-
-from LSTM_model import LSTMClassifier
 from LSST_Source import LSST_Source
-from taxonomy import get_classification_labels, get_astrophysical_class, get_taxonomy_tree
+from taxonomy import get_classification_labels, get_astrophysical_class
 
-# All samples in the same batch need to have consistent sequence length. This adds padding for sequences shorter than sequence_length and truncates light sequences longer than sequence_length 
-sequence_length = 500
+ts_length = 500
 
-# Value used for padding tensors to make them the correct length
-padding_constant = 0
-
-def reduce_length_uniform(np_ts):
-
-    ts_length = np_ts.shape[0]
-
-    # Fraction of ts to retain
-    new_ts_length = int(math.ceil(np.random.uniform(low=0, high=1) * ts_length))
-    np_ts = np_ts[:new_ts_length, ]
-
-    return np_ts
-
-class LSSTSourceDataSet(Dataset):
+class LSSTSourceDataSet():
 
 
-    def __init__(self, path, length_transform=None):
+    def __init__(self, path):
         """
         Arguments:
-            path (string): Directory with all the astropy tables.
+            path (string): Parquet file.
             transform (callable, optional): Optional transform to be applied on a sample.
         """
 
@@ -43,19 +20,17 @@ class LSSTSourceDataSet(Dataset):
 
         self.path = path
         self.parquet = pl.read_parquet(path)
+        #self.parquet = self.parquet.sample(fraction=1, shuffle=True, seed=42)
         self.num_sample = self.parquet.shape[0]
-        self.length_transform = length_transform
 
         print(f"Number of sources: {self.num_sample}")
 
-    def __len__(self):
+    def get_len(self):
 
+        #return 10000
         return self.num_sample
 
-    def __getitem__(self, idx):
-
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
+    def get_item(self, idx):
         
         row = self.parquet[idx]
         source = LSST_Source(row)
@@ -63,43 +38,18 @@ class LSSTSourceDataSet(Dataset):
 
         astrophysical_class = get_astrophysical_class(source.ELASTICC_class)
         _, class_labels = get_classification_labels(astrophysical_class)
+        class_labels = np.array(class_labels)
 
-        ts_np = table.to_pandas().to_numpy()
-
-        # Shorten the length of the time series data so the classifier learn to classify partial phase light curves
-        if self.length_transform:
-            ts_np = self.length_transform(ts_np)
-            
-
-        if ts_np.shape[0] < sequence_length:
-
-            final_seq_length = ts_np.shape[0] 
-            padding_length = sequence_length - ts_np.shape[0] 
-
-            # If the length of the TS is less than sequence_length, add padding
-            ts_np = np.pad(ts_np, [(0, padding_length), (0, 0)], mode='constant', constant_values=padding_constant)
-
-        elif ts_np.shape[0] >= sequence_length:
-
-            final_seq_length = sequence_length
-
-            # If the length of the TS is more than sequence_length, keep the first sequence_length number of data points
-            ts_np = ts_np[:sequence_length, :]
-
-        # Getting the static features from the table
-        static_np = np.array(list(table.meta.values()))
-
-        # Replace flag values like 999 and -9999 with -9
-        static_np[static_np == -9999] = -9
-        static_np[static_np == 999] = -9
-        static_np[static_np == -999] = -9
-
-        return ts_np, static_np, class_labels, final_seq_length
+        return source, class_labels
     
     def get_dimensions(self):
 
         idx = 0
-        ts_np, static_np, class_labels, _ = self.__getitem__(idx)
+        source, class_labels = self.get_item(idx)
+        table = source.get_event_table()
+
+        ts_np = table.to_pandas().to_numpy()
+        static_np = np.array(list(table.meta.values()))
 
         dims = {
             'ts': ts_np.shape[1],
@@ -125,10 +75,13 @@ class LSSTSourceDataSet(Dataset):
 if __name__=='__main__':
     
     # Simple test to verify data loader
-    data_set = LSSTSourceDataSet('data/data/elasticc2_train/train_parquet.parquet', length_transform=reduce_length_uniform)
-
+    data_set = LSSTSourceDataSet('data/data/elasticc2_train/test_parquet.parquet')
     print(data_set.get_dimensions())
-    loader = DataLoader(data_set, shuffle=True, batch_size = 4)
-    for i, (X_ts, X_static, Y, sequence_lengths) in enumerate(tqdm(loader)):
-        pass
-        #print(X_ts.shape, X_static.shape, Y.shape, sequence_lengths.shape)
+
+    source, class_labels = data_set.get_item(0)
+    table = source.get_event_table()
+    print(source.astrophysical_class)
+    print(table.meta)
+    print(table)
+    print(class_labels)
+    

@@ -1,5 +1,3 @@
-import copy
-import torch
 import numpy as np
 
 from astropy.table import Table
@@ -17,10 +15,20 @@ class LSST_Source:
     time_series_features = ['MJD', 'BAND', 'PHOTFLAG', 'FLUXCAL', 'FLUXCALERR']
 
     # List of other features actually stored in the instance of the class.
-    other_features = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_FLAG', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_CONFUSION', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y']
+    other_features = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_DDLR', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_LOGSFR', 'HOSTGAL_LOGSFR_ERR', 'HOSTGAL_LOGsSFR', 'HOSTGAL_LOGsSFR_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y']
 
     # Additional features computed based on time_series_features and other_features mentioned in SNANA fits.
     custom_engineered_features = ['MW_plane_flag', 'ELAIS_S1_flag', 'XMM-LSS_flag', 'Extended_Chandra_Deep_Field-South_flag', 'COSMOS_flag']
+
+    # Get the mean wavelengths for each filter and then convert to micro meters
+    pb_wavelengths = {
+        'u': (320 + 400) / (2 * 1000),
+        'g': (400 + 552) / (2 * 1000),
+        'r': (552 + 691) / (2 * 1000),
+        'i': (691 + 818) / (2 * 1000),
+        'z': (818 + 922) / (2 * 1000),
+        'Y': (950 + 1080) / (2 * 1000),
+    }
 
     # Pass band to color dict
     colors = OrderedDict({
@@ -48,6 +56,9 @@ class LSST_Source:
 
     # MW_plane_flag is set to one if |self.b| <= b_threshold. Indicative of weather the object is in the galactic plane.
     b_threshold = 15 
+
+    # Flux scaling value
+    flux_scaling_const = 1000
 
     # Radius of the deep drilling field for LSST, in degrees.
     ddf_separation_radius_threshold = 3.5 / 2
@@ -82,9 +93,7 @@ class LSST_Source:
     def process_lightcurve(self) -> None:
         """Process the flux information with phot flags. Processing is done using the following steps:
         1. Remove saturations.
-        2. Keep the last non-detection before the trigger (if available).
-        3. Keep non-detection after the trigger and before the last detection (if available). 
-        Finally, all the time series data is modified to conform to the 4 steps mentioned above.
+        Finally, all the time series data is modified to conform to the steps mentioned above.
         """
 
         # Remove saturations from the light curves
@@ -93,23 +102,6 @@ class LSST_Source:
         # Alter time series data to remove saturations
         for time_series_feature in self.time_series_features:
             setattr(self, time_series_feature, getattr(self, time_series_feature)[saturation_mask])
-
-        # Find the first and last detections
-        detection_mask = (self.PHOTFLAG & 4096) != 0
-        first_detection_idx = np.where(detection_mask)[0][0]
-        last_detection_idx = np.where(detection_mask)[0][-1]
-
-        # Allow for one non detection before the trigger and add all non-detection after the trigger and before the last detection
-        ts_start = max(first_detection_idx - 1, 0)
-        ts_end = last_detection_idx
-        if ts_start == ts_end:
-            idx = [ts_end]
-        else:
-            idx = range(ts_start,ts_end)
-
-        # Alter time series data to only preserve all data between trigger and last detections + 1 non detection before the trigger
-        for time_series_feature in self.time_series_features:
-            setattr(self, time_series_feature, getattr(self, time_series_feature)[idx])
         
     def compute_custom_features(self) -> None:
 
@@ -178,20 +170,18 @@ class LSST_Source:
         table = Table()
 
         # Find time since last observation
-        table['time_since_first_obs'] = self.MJD - self.MJD[0]
+        time_since_first_obs = self.MJD - self.MJD[0]
+        table['scaled_time_since_first_obs'] = time_since_first_obs / 100
 
         # 1 if it was a detection, zero otherwise
-        table['detection_flag'] = np.where((self.PHOTFLAG & 4096) != 0, 1, 0)
+        table['detection_flag'] = np.where((self.PHOTFLAG & 4096 != 0), 1, 0)
 
         # Transform flux cal and flux cal err to more manageable values (more consistent order of magnitude)
-        table['FLUXCAL_asinh'] = np.arcsinh(self.FLUXCAL)
-        table['FLUXCALERR_asinh'] = np.arcsinh(self.FLUXCALERR)
+        table['scaled_FLUXCAL'] = self.FLUXCAL / self.flux_scaling_const
+        table['scaled_FLUXCALERR'] = self.FLUXCALERR / self.flux_scaling_const
 
         # One hot encoding for the pass band
-        table['band_label'] = self.BAND
-        for band in self.LSST_bands:
-            table[f"band_label_{band}"] = (table['band_label'] == band).astype(int)
-        table.remove_column('band_label')
+        table['band_label'] = [self.pb_wavelengths[pb] for pb in self.BAND]
 
         # Consistency check
         assert len(table) == len(self.MJD), "Length of time series tensor does not match the number of mjd values."

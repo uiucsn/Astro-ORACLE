@@ -1,18 +1,23 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
+import pickle
 import numpy as np
+import pandas as pd
 
-from torch.utils.data import Dataset, DataLoader
-
-from LSTM_model import LSTMClassifier
-from dataloader import LSSTSourceDataSet, reduce_length_uniform
+from LSTM_model import get_LSTM_Classifier
+from dataloader import LSSTSourceDataSet, ts_length
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
 from argparse import ArgumentParser
 from pathlib import Path
 from tqdm import tqdm
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.utils import plot_model
+
+
+def save(save_path , obj):
+    with open(save_path, 'wb') as f:
+        pickle.dump(obj, f)
 
 def parse_args(argv=None):
     parser = ArgumentParser(
@@ -47,52 +52,90 @@ def main(argv=None):
     output_path = args.output_path
 
     # Data loader for training
-    data_set = LSSTSourceDataSet(training_path, length_transform=reduce_length_uniform)
-    loader = DataLoader(data_set, shuffle=True, batch_size=batch_size, num_workers=num_dl_workers)
+    train_set = LSSTSourceDataSet(training_path)
 
     # These might change - Should come from the LSST Source Tensor shapes.
-    dims = data_set.get_dimensions()
+    dims = train_set.get_dimensions()
     n_ts_features = dims['ts']
     n_static_features = dims['static']
     n_outputs = dims['labels']
 
     # Inputs for model
-    ts_input_dim = n_ts_features
-    static_input_dim = n_static_features
+    ts_dim = n_ts_features
+    static_dim = n_static_features
     output_dim = n_outputs
+    latent_size = 10
 
-    lstm_hidden_dim = 64
-    lstm_num_layers = 4
-
-    # Initialize models
-    model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
-    
     # Loss and optimizer
     tree = get_taxonomy_tree()
-    loss_object = WHXE_Loss(tree, data_set.get_labels()) 
+    loss_object = WHXE_Loss(tree, train_set.get_labels()) 
     criterion = loss_object.compute_loss
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    print('Starting Training Loop...', flush=True)
+    # Initialize models
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, criterion)
+    plot_model(model, to_file='LSTM.png', show_shapes=True, show_layer_names=True)
 
-    # Training loop
-    for epoch in range(num_epochs):
-        for i, (X_ts, X_static, labels, sequence_lengths) in enumerate(tqdm(loader)):
-        
-            pack = torch.nn.utils.rnn.pack_padded_sequence(X_ts, sequence_lengths, batch_first=True, enforce_sorted=False)
-            # Forward pass
-            outputs = model(pack.float(), X_static.float())
-            loss = criterion(outputs, labels.float())
+    print('Loading data...', flush=True)
 
-            # Backward and optimize
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+    X_ts = [] # info => for each time step, store time, median passband wavelength, flux, flux error
+    X_static = [] # static features
+    Y = [] # store labels
+    astrophysical_classes = []
+    elasticc_classes = []
+    lengths = []
 
-        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}', flush=True)
+    for i in tqdm(range(train_set.get_len())):
+    
+        source, labels = train_set.get_item(i)
+        table = source.get_event_table()
 
-        # Save the model. TODO change this to save the best model only.
-        torch.save(model.state_dict(), output_path)
+        meta_data = np.array(list(table.meta.values()))
+        ts_data = pd.DataFrame(np.array(table)) # astropy table to pandas dataframe
+
+        # Append data for ML
+        X_ts.append(ts_data)
+        X_static.append(meta_data)
+        Y.append(labels)
+
+        # Append other useful data
+        astrophysical_classes.append(source.astrophysical_class)
+        elasticc_classes.append(source.ELASTICC_class)
+        lengths.append(ts_data.shape[0])
+
+    # Pad for TF masking layer
+    for ind in range(len(X_ts)):
+        X_ts[ind] = np.pad(X_ts[ind], ((0, ts_length - len(X_ts[ind])), (0, 0)))
+
+
+    # Split into train and validation
+    X_ts_train, X_ts_val, X_static_train, X_static_val, Y_train, Y_val, astrophysical_classes_train, astrophysical_classes_val, elasticc_classes_train, elasticc_classes_val = train_test_split(X_ts, X_static, Y, astrophysical_classes, elasticc_classes, random_state = 40, test_size = 0.1)
+
+    # Do some processing for tensorflow
+    X_ts_train = np.squeeze(np.array(X_ts_train))
+    X_ts_val = np.squeeze(np.array(X_ts_val))
+
+    X_static_train = np.squeeze(np.array(X_static_train))
+    X_static_val = np.squeeze(np.array(X_static_val))
+
+    Y_train = np.squeeze(np.array(Y_train))
+    Y_val = np.squeeze(np.array(Y_val))
+
+    print('Num objects in training data', np.unique(astrophysical_classes_train, return_counts=True), flush=True)
+    print('Training...', flush=True)
+
+    early_stopping = EarlyStopping(
+                              patience=5,
+                              min_delta=0.001,                               
+                              monitor="val_loss",
+                              restore_best_weights=True
+                              )
+
+
+    history = model.fit(x = [X_ts_train, X_static_train],  y = Y_train, validation_data=([X_ts_val, X_static_val], Y_val), epochs=num_epochs, batch_size = batch_size, callbacks=[early_stopping])
+
+
+    model.save(f"models/RedshiftLatent_{latent_size}.keras")
+    #save(f"models/RedshiftLatent_{latent_size}_history", history)
 
 if __name__=='__main__':
 

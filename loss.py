@@ -1,10 +1,12 @@
-import torch 
 import numpy as np
 import networkx as nx
-import torch.nn.functional as F
+import tensorflow as tf
+
+from tensorflow import keras
 
 from taxonomy import source_node_label, get_taxonomy_tree
-from LSTM_model import LSTMClassifier
+from LSTM_model import get_LSTM_Classifier
+from dataloader import ts_length
 
 class WHXE_Loss:
 
@@ -65,7 +67,7 @@ class WHXE_Loss:
             N_c.append(counts_dict[node])
 
         # Compute the final weights, ordered by level order traversal of the tree
-        self.class_weights = torch.tensor(N_all / (N_labels * np.array(N_c)))
+        self.class_weights = N_all / (N_labels * np.array(N_c))
 
     def compute_parents(self):
 
@@ -103,37 +105,31 @@ class WHXE_Loss:
         self.path_lengths = np.array(self.path_lengths)
 
         # Compute the secondary weight term, which emphasizes different levels of the tree. See paper for more details.
-        self.lambda_term = torch.tensor(np.exp(-self.alpha * self.path_lengths))
+        self.lambda_term = np.exp(-self.alpha * self.path_lengths)
 
 
-    def masked_softmax(self, y_pred):
+    def compute_loss(self, y_pred, target_probabilities, epsilon=1e-10):
 
-        # Create a new array to store pseudo conditional probabilities.
-        pseudo_probabilities = y_pred.clone().detach()
+        total = 0
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-            pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
 
-        return pseudo_probabilities
+            logits = tf.boolean_mask(y_pred, mask, axis=1) + epsilon
+            masked_soft_maxes = keras.activations.softmax(logits, axis = 1)
+
+            log_p = tf.math.log(masked_soft_maxes)
+            result0 = tf.math.subtract(1.0, tf.boolean_mask(target_probabilities, mask, axis=1))
+            result1 = tf.math.multiply(log_p, result0)
+            result2 = tf.math.multiply(result1, self.class_weights[mask])
+            result3 = tf.math.multiply(result2, self.lambda_term[mask])
+            result4 = tf.math.reduce_sum(result3, axis=1)
+            result5 = tf.math.reduce_mean(result4, axis=0)
     
-    def compute_loss(self, y_pred, target_probabilities):
-
-        # Apply hierarchical soft max to get "pseudo" probability outputs using the data from the machine learning models.
-        pred_probabilities = self.masked_softmax(y_pred)
-        log_pred_probabilities = pred_probabilities.log()
-
-        # Multiply the indicator term (target_probabilities) with the conditional probability terms
-        result1 = log_pred_probabilities * target_probabilities
-
-        # Multiply the first result with the class weights and hierarchy level weight terms (lambda)
-        result2 =  result1 * self.class_weights * self.lambda_term
-
-        # Sum all of the terms that belong to a sample in the batch. At the end of this step, the number of values should be equal to the batch size. We then find the mean across the entire batch
-        loss = result2.sum(dim = 1).mean(dim=0)
-        loss = -1 * loss
-
-        return loss
+            total -= result5
+            
+        return total
+    
 
 
 
@@ -142,21 +138,19 @@ if __name__=='__main__':
     tree = get_taxonomy_tree()
     loss = WHXE_Loss(tree, list(tree.nodes))
 
-    learning_rate = 0.001
-    ts_input_dim = 5
-    static_input_dim = 5
-    lstm_hidden_dim = 64
-    output_dim = len(loss.level_order_nodes)
-    lstm_num_layers = 4
+    ts_dim = 5
+    static_dim = 15
+    latent_size = 10
+    output_dim = len(list(tree.nodes))
+
     batch_size = 4
 
-    model = LSTMClassifier(ts_input_dim, static_input_dim, lstm_hidden_dim, output_dim, lstm_num_layers)
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, "categorical_crossentropy")
 
-    ts_length = 5
-    input_ts = torch.randn(batch_size, ts_length, ts_input_dim)
-    input_static = torch.randn(batch_size, static_input_dim)
+    input_ts = np.random.randn(batch_size, ts_length, ts_dim)
+    input_static = np.random.randn(batch_size, static_dim)
 
-    outputs = model(input_ts, input_static)
+    outputs = model.predict([input_ts, input_static])
     print(loss.compute_loss(outputs, outputs))
 
 

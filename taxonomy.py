@@ -2,9 +2,9 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import torch.nn.functional as F
 
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
+from tensorflow import keras
 
 source_node_label = 'Alert'
 
@@ -93,7 +93,7 @@ def get_prediction_probs(y_pred):
     tree = get_taxonomy_tree()
 
     # Create a new array to store pseudo conditional probabilities.
-    pseudo_probabilities = y_pred.clone().detach()
+    pseudo_probabilities = np.copy(y_pred)
 
     level_order_nodes = nx.bfs_tree(tree, source=source_node_label).nodes()
     parents = [list(tree.predecessors(node)) for node in level_order_nodes]
@@ -117,7 +117,7 @@ def get_prediction_probs(y_pred):
         masks.append(np.array(parents) == parent)
     
     for mask in masks:
-        pseudo_probabilities[:, mask] = F.softmax(y_pred[:, mask] + 1e-10, dim = 1)
+        pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
 
     # Add weights to edges based on the probabilities.
     level_order_nodes = list(level_order_nodes)
@@ -128,7 +128,7 @@ def get_prediction_probs(y_pred):
         weight = pseudo_probabilities[0][i]
 
         if parent != '':
-            tree[parent][node]['weight'] = weight.detach().numpy()
+            tree[parent][node]['weight'] = weight
     
     return pseudo_probabilities, tree
 
@@ -160,8 +160,20 @@ def get_most_likely_path(tree, path, source=source_node_label):
     # Recurse and return
     return get_most_likely_path(tree, path, next_node)
 
+def get_highest_prob_path(tree, source=source_node_label):
 
-def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
+    leaf_nodes = [x for x in tree.nodes() if tree.out_degree(x)==0 and tree.in_degree(x)==1]
+    leaf_probs = []
+
+    for leaf in leaf_nodes:
+        path = nx.shortest_path(tree, source, leaf)
+        weight_prod = np.prod([tree.get_edge_data(u, v)['weight'] for u, v in zip(path[:-1], path[1:])])
+        leaf_probs.append(weight_prod)
+    
+    idx = np.argmax(leaf_probs)
+    return nx.shortest_path(tree, source, leaf_nodes[idx])
+
+def plot_pred_vs_truth(true, pred, X_ts, X_static, tree):
 
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6))
 
@@ -176,30 +188,23 @@ def plot_pred_vs_truth(true, pred, X_ts, X_static, tree,):
     labels = {(u, v): f'{d["weight"]:.2f}' for u, v, d in tree.edges(data=True)}
     nx.draw_networkx_edge_labels(tree, ax=axes[1][0], pos = pos, edge_labels = labels)
 
-    time = X_ts[0, :, 0]
-    detection_flag = X_ts[0, :, 1]
-    cal_flux = np.sinh(X_ts[0, :, 2])
-    cal_flux_err = np.sinh(X_ts[0, :, 3])
+    time = X_ts[0, :, 0] * 100 # Scaled time
+    detection_flag = X_ts[0, :, 1] 
+    cal_flux = X_ts[0, :, 2] # Scaled flux 
+    cal_flux_err = X_ts[0, :, 3]
+    c = X_ts[0, :, 4]
 
-    lsst_bands = ['u', 'g', 'r', 'i', 'z', 'Y']
-
-    c = np.zeros(len(time), dtype=int)
-    for i in range(4, 10):
-        band_flag = X_ts[0, :, i]
-        c[band_flag == 1] = int(i)
-
-    c = [f"C{i}" for i in c]
     fmts = np.where((detection_flag) == 1, '*', '.')
 
     # Plot flux time series
     for i in range(len(time)):
-        axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], color=c[i], fmt=fmts[i], markersize = '10')
+        axes[1][1].errorbar(x=time[i], y=cal_flux[i], yerr=cal_flux_err[i], fmt=fmts[i], markersize = '10')
 
     axes[1][1].set_xlabel('Time since first observation')
     axes[1][1].set_ylabel('Calibrate Flux')
 
-    patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
-    axes[1][1].legend(handles=patches)
+    # patches = [mpatches.Patch(color=f"C{n}", label=band, linewidth=1) for band, n in zip(lsst_bands, range(4,10))]
+    # axes[1][1].legend(handles=patches)
 
     plt.tight_layout()
     plt.show()  
