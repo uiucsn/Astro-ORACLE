@@ -92,7 +92,7 @@ class WHXE_Loss:
         # Create masks for applying soft max and calculating loss values.
         self.masks = []
         for parent in unique_parents:
-            self.masks.append(np.array(self.parents) == parent)
+            self.masks.append(np.where(np.array(self.parents) == parent,1,0))
 
     def compute_path_lengths(self):
         
@@ -108,30 +108,23 @@ class WHXE_Loss:
         self.lambda_term = np.exp(-self.alpha * self.path_lengths)
 
 
-    def compute_loss(self, y_pred, target_probabilities, epsilon=1e-10):
-
-        total = 0
+    def compute_loss(self, target_probabilities, y_pred, epsilon=1e-10):
 
         # Apply soft max to each set of siblings
         for mask in self.masks:
-
-            logits = tf.boolean_mask(y_pred, mask, axis=1) + epsilon
-            masked_soft_maxes = keras.activations.softmax(logits, axis = 1)
-
-            log_p = tf.math.log(masked_soft_maxes)
-            result0 = tf.math.subtract(1.0, tf.boolean_mask(target_probabilities, mask, axis=1))
-            result1 = tf.math.multiply(log_p, result0)
-            result2 = tf.math.multiply(result1, self.class_weights[mask])
-            result3 = tf.math.multiply(result2, self.lambda_term[mask])
-            result4 = tf.math.reduce_sum(result3, axis=1)
-            result5 = tf.math.reduce_mean(result4, axis=0)
-    
-            total -= result5
             
-        return total
+            exps = tf.math.exp(y_pred)
+            masked_exps = tf.math.multiply(exps, mask)
+            masked_sums = tf.math.reduce_sum(masked_exps, axis=1, keepdims=True) + epsilon
+            y_pred = masked_exps/masked_sums + ((1 - mask) * y_pred)
     
+        y_pred = tf.math.log(y_pred)
+        y_pred = y_pred * self.lambda_term
 
-
+        v1 = tf.math.reduce_sum(self.class_weights * (y_pred * target_probabilities), axis=1)
+        v2 = -1 * tf.math.reduce_mean(v1)
+            
+        return v2
 
 if __name__=='__main__':
     
