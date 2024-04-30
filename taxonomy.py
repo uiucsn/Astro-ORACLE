@@ -117,7 +117,7 @@ def get_prediction_probs(y_pred):
         masks.append(np.array(parents) == parent)
     
     for mask in masks:
-        pseudo_probabilities[:, mask] = keras.activations.softmax(y_pred[:, mask] + 1e-10, axis = 1)
+        pseudo_probabilities[:, mask] = np.exp(y_pred[:, mask]) / np.sum(np.exp(y_pred[:, mask]))
 
     # Add weights to edges based on the probabilities.
     level_order_nodes = list(level_order_nodes)
@@ -171,7 +171,7 @@ def get_highest_prob_path(tree, source=source_node_label):
         leaf_probs.append(weight_prod)
     
     idx = np.argmax(leaf_probs)
-    return nx.shortest_path(tree, source, leaf_nodes[idx])
+    return leaf_probs, nx.shortest_path(tree, source, leaf_nodes[idx])
 
 def plot_pred_vs_truth(true, pred, X_ts, X_static, tree):
 
@@ -261,6 +261,7 @@ if __name__=='__main__':
 
     pos = graphviz_layout(tree, prog='dot')
     nx.draw_networkx(tree, with_labels=True, font_weight='bold', arrows=True, node_color='white', font_size = 8, pos=pos)
+    plt.tight_layout()
 
     plt.title('Taxonomy for hierarchical classification.')
     plt.show()
