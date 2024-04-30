@@ -5,4 +5,6 @@ ELASTICC2_TRAIN_02_NONIaMODEL0-0001_HEAD.FITS.gz
 ELASTICC2_TRAIN_02_NONIaMODEL0-0001_PHOT.FITS.gz
 test.py
 models
+.ipynb_checkpoints/
+processed/
 __pycache__
