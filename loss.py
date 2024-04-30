@@ -110,18 +110,34 @@ class WHXE_Loss:
 
     def compute_loss(self, target_probabilities, y_pred, epsilon=1e-10):
 
-        # Apply soft max to each set of siblings
+        # Go through set of siblings
         for mask in self.masks:
             
+            # Get the e^logits
             exps = tf.math.exp(y_pred)
+
+            # Multiply (dot product) the e^logits with the mask to maintain just the e^logits values that belong to this mask. All other values will be zeros.
             masked_exps = tf.math.multiply(exps, mask)
+
+            # Find the sum of the e^logits values that belong to the mask. Do this for each element in the batch separately. Add a small value to avoid numerical problems with floating point numbers.
             masked_sums = tf.math.reduce_sum(masked_exps, axis=1, keepdims=True) + epsilon
-            y_pred = masked_exps/masked_sums + ((1 - mask) * y_pred)
-    
+
+            # Compute the softmax by dividing the e^logits with the sume (e^logits)
+            softmax = masked_exps/masked_sums
+
+            # (1 - mask) * y_pred gets the logits for all the values not in this mask and zeros out the values in the mask. Add those back so that we can repeat the process for other masks.
+            y_pred =  softmax + ((1 - mask) * y_pred)
+        
+        # At this point we have the masked softmaxes i.e. the pseudo probabilities. We can take the log of these values
         y_pred = tf.math.log(y_pred)
+
+        # Weight them by the level at which the corresponding node appears in the hierarchy
         y_pred = y_pred * self.lambda_term
 
+        # Weight them by the class weight after using the target_probabilities as indicators. Then sum them up for each batch
         v1 = tf.math.reduce_sum(self.class_weights * (y_pred * target_probabilities), axis=1)
+
+        # Finally, find the mean over all batches. Since we are taking logs of numbers <1 (the pseudo probabilities), we have to multiply by -1 to get a +ve loss value.
         v2 = -1 * tf.math.reduce_mean(v1)
             
         return v2
