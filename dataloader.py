@@ -1,3 +1,4 @@
+import pickle
 import numpy as np
 import polars as pl
 
@@ -5,6 +6,64 @@ from LSST_Source import LSST_Source
 from taxonomy import get_classification_labels, get_astrophysical_class
 
 ts_length = 500
+
+def load(file_name):
+    with open(file_name, 'rb') as f:
+        return pickle.load(f)
+
+
+def augment_ts_length(X_ts, fraction, add_padding=True):
+
+    augmented_list = []
+
+    # Loop through all the data
+    for ind in range(len(X_ts)):
+
+        print(f"{(ind/len(X_ts) * 100):.3f} %", end="\r")
+
+        # Multiply the fraction by the original length of the time series to get the new length
+        new_length = int(fraction * X_ts[ind].to_numpy().shape[0])
+
+        # Make sure there is at least 1 observation in the data
+        new_length = max(1, new_length)
+        
+        # Slice the data appropriately, Keep the first new_length number of observations and all columns
+        augmented_list.append(X_ts[ind].to_numpy()[:new_length, :])
+
+        # Optionally - Pad for TF masking layer
+        if add_padding:
+            augmented_list[ind] = np.pad(augmented_list[ind], ((0, ts_length - augmented_list[ind].shape[0]), (0, 0)))
+        
+    return augmented_list
+
+def get_augmented_data(X_ts, X_static, Y, a_classes, fractions):
+
+    # New lists to save the augmented data
+    X_ts_aug = []
+    X_static_aug = []
+    Y_aug = []
+    astrophysical_classes_aug = []
+    lc_fraction_aug = []
+
+    # Augment the length of the ts data
+    for f in fractions:
+        
+        print(f"Augmenting light curve to {f * 100:.2f}%")
+        
+        X_ts_aug += augment_ts_length(X_ts, f)
+        X_static_aug += X_static
+        Y_aug += Y
+        astrophysical_classes_aug += a_classes
+        lc_fraction_aug += ([f] * len(X_ts))
+
+    # Squeeze data into homogeneously shaped numpy arrays
+    X_ts = np.squeeze(X_ts_aug)
+    X_static = np.squeeze(X_static_aug)
+    Y = np.squeeze(Y_aug)
+    astrophysical_classes = np.squeeze(astrophysical_classes_aug)
+    lc_fraction = np.squeeze(lc_fraction_aug)
+
+    return X_ts, X_static, Y, astrophysical_classes, lc_fraction
 
 class LSSTSourceDataSet():
 
