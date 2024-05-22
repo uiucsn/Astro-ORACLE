@@ -7,6 +7,16 @@ from taxonomy import get_classification_labels, get_astrophysical_class
 
 ts_length = 500
 
+# Features to be used in the model
+static_feature_list = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y']
+
+# Flag values for missing data of static feature according to elasticc
+missing_data_flags = [-9, -99, -999, -9999, 999]
+
+# Flag value for masking used in the ML model
+static_flag_value = -9
+ts_flag_value = 0.
+
 def load(file_name):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
@@ -64,6 +74,21 @@ def get_augmented_data(X_ts, X_static, Y, a_classes, fractions):
     lc_fraction = np.squeeze(lc_fraction_aug)
 
     return X_ts, X_static, Y, astrophysical_classes, lc_fraction
+
+def get_static_features(y, feature_list=static_feature_list):
+
+    static_features = []
+
+    # Get the necessary static features from the ordered dictionary
+    for feature in feature_list:
+
+        val = y[feature]
+        if val in missing_data_flags:
+            static_features.append(static_flag_value)
+        else:
+            static_features.append(val)
+
+    return static_features
 
 class LSSTSourceDataSet():
 
