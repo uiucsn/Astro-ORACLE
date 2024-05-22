@@ -4,6 +4,7 @@ import matplotlib.animation as animation
 
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
+
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
 
     font = {'size'   : 17}
