@@ -260,10 +260,11 @@ if __name__=='__main__':
     print(get_classification_labels(astrophysical_class))
 
     pos = graphviz_layout(tree, prog='dot')
-    nx.draw_networkx(tree, with_labels=True, font_weight='bold', arrows=True, node_color='white', font_size = 8, pos=pos)
+    nx.draw_networkx(tree, with_labels=True, font_weight='bold', arrows=True, node_color='white', font_size = 13, pos=pos)
     plt.tight_layout()
 
-    plt.title('Taxonomy for hierarchical classification.')
+    plt.title('Taxonomy for hierarchical classification.', fontsize=15)
+
     plt.show()
 
     _, labels = get_classification_labels(astrophysical_class)
