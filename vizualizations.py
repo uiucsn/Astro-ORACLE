@@ -35,6 +35,7 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
 def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
     chance = np.arange(0,1,0.01)
+    plt.figure(figsize=(12,14))
     plt.plot(chance, chance, '--', color='black', label='Random Chance (AUC = 0.5)')
 
     for i, label in enumerate(labels):
@@ -46,9 +47,10 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
 
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), fancybox=True, shadow=False, ncol=3, fontsize = 8)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), fancybox=True, shadow=False, ncol=3, fontsize = 14)
     plt.title(title)
     plt.tight_layout()
+    plt.gca().set_aspect('equal')
 
     if img_file:
         plt.savefig(img_file)
