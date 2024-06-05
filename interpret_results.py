@@ -4,6 +4,7 @@ import networkx as nx
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 
 from taxonomy import source_node_label
+from vizualizations import plot_confusion_matrix
 
 def get_indices_where(arr, target):
     
