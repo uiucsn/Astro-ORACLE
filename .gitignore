@@ -8,3 +8,4 @@ models
 .ipynb_checkpoints/
 processed/
 __pycache__
+gif/
