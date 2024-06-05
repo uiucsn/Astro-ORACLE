@@ -94,7 +94,7 @@ def get_all_confusion_matrices(y_true, y_pred, tree):
     
     
     # Get the masked softmaxes
-    for mask in masks:
+    for mask in masks[2:]:
         
         true_labels = []
         pred_labels = []
@@ -106,12 +106,12 @@ def get_all_confusion_matrices(y_true, y_pred, tree):
             if np.sum(y_true[i, mask]) == 1:
                  # This object belongs to some class in this mask
                 true_class_idx = mask[np.argmax(y_true[i, mask])]
-                true_labels.append(level_order_nodes[true_class_idx])
+                true_labels.append(true_class_idx - min(mask))
             
             
             elif np.sum(y_true[i, mask]) == 0:
                 # This object does not belong to some class in this mask
-                true_labels.append('Other')
+                true_labels.append(len(mask))
                 
             else:
                 # This means I fucked up
@@ -120,7 +120,7 @@ def get_all_confusion_matrices(y_true, y_pred, tree):
             
             # Find the predicted label
             predicted_class_idx = mask[np.argmax(y_pred[i, mask])]
-            pred_labels.append(level_order_nodes[predicted_class_idx])
-            
-        mask_classes = level_order_nodes[mask] + ['Other']
+            pred_labels.append(predicted_class_idx - min(mask))
+        
+        mask_classes = [level_order_nodes[m] for m in mask] + ['Other']
         plot_confusion_matrix(true_labels, pred_labels, mask_classes)
