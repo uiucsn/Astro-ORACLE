@@ -84,3 +84,15 @@ The loss function defines what the machine learning model(s) are incentivized to
 
 
 TODO: build out object to tensor conversion. Build out pipelines to do this conversion for all the parquet data.
+
+## Some cool results:
+
+First at the root,
+
+![](gif/root_cf/root_cf.gif)
+![](gif/root_roc/root_roc.gif)
+
+And finally, at the leaf...
+
+![](gif/leaf_cf/leaf_cf.gif)
+![](gif/leaf_roc/leaf_roc.gif)
