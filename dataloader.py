@@ -22,7 +22,7 @@ def load(file_name):
         return pickle.load(f)
 
 
-def augment_ts_length(X_ts, fraction, add_padding=True):
+def augment_ts_length(X_ts, add_padding=True, fraction=None):
 
     augmented_list = []
 
@@ -30,6 +30,10 @@ def augment_ts_length(X_ts, fraction, add_padding=True):
     for ind in range(len(X_ts)):
 
         print(f"{(ind/len(X_ts) * 100):.3f} %", end="\r")
+
+        # If no fraction is mentioned, pick a random number between 0 and 1
+        if fraction == None:
+            fraction = np.random.rand()
 
         # Multiply the fraction by the original length of the time series to get the new length
         new_length = int(fraction * X_ts[ind].to_numpy().shape[0])
@@ -46,34 +50,18 @@ def augment_ts_length(X_ts, fraction, add_padding=True):
         
     return augmented_list
 
-def get_augmented_data(X_ts, X_static, Y, a_classes, fractions):
-
-    # New lists to save the augmented data
-    X_ts_aug = []
-    X_static_aug = []
-    Y_aug = []
-    astrophysical_classes_aug = []
-    lc_fraction_aug = []
+def get_augmented_data(X_ts, X_static, Y, a_classes, fraction=None):
 
     # Augment the length of the ts data
-    for f in fractions:
-        
-        print(f"Augmenting light curve to {f * 100:.2f}%")
-        
-        X_ts_aug += augment_ts_length(X_ts, f)
-        X_static_aug += X_static
-        Y_aug += Y
-        astrophysical_classes_aug += a_classes
-        lc_fraction_aug += ([f] * len(X_ts))
+    X_ts = augment_ts_length(X_ts, fraction=fraction)
 
     # Squeeze data into homogeneously shaped numpy arrays
-    X_ts = np.squeeze(X_ts_aug)
-    X_static = np.squeeze(X_static_aug)
-    Y = np.squeeze(Y_aug)
-    astrophysical_classes = np.squeeze(astrophysical_classes_aug)
-    lc_fraction = np.squeeze(lc_fraction_aug)
+    X_ts = np.squeeze(X_ts)
+    X_static = np.squeeze(X_static)
+    Y = np.squeeze(Y).astype(np.float32)
+    astrophysical_classes = np.squeeze(a_classes)
 
-    return X_ts, X_static, Y, astrophysical_classes, lc_fraction
+    return X_ts, X_static, Y, astrophysical_classes
 
 def get_static_features(y, feature_list=static_feature_list):
 

@@ -7,7 +7,7 @@ from tensorflow.keras.layers import Input, LSTM, Dense, Masking, concatenate, GR
 
 from dataloader import ts_length
 
-def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, loss_func):
+def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
 
     input_1 = Input((ts_length, ts_dim), name='light curve') 
     masking_input1 = Masking(mask_value=0.)(input_1)
@@ -30,8 +30,6 @@ def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, loss_func):
     output = Dense(output_dim)(dense4)
 
     model = keras.Model(inputs=[input_1, input_2], outputs=output)
-
-    model.compile(loss = loss_func, optimizer="adam")
     
     return model
 
