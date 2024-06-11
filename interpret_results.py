@@ -4,7 +4,7 @@ import networkx as nx
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 
 from taxonomy import source_node_label
-from vizualizations import plot_confusion_matrix
+from vizualizations import plot_confusion_matrix, plot_roc_curves
 
 def get_indices_where(arr, target):
     
@@ -65,7 +65,10 @@ def get_conditional_probabilites(y_pred, tree):
         
     return pseudo_probabilities, pseudo_conditional_probabilities
 
-def get_all_confusion_matrices(y_true, y_pred, tree):
+def save_all_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
+    
+    def get_path_length(tree, source, target):
+        return len(nx.shortest_path(tree, source=source, target=target)) - 1
     
     # Get all the probabilites
     pseudo_probabilities, pseudo_conditional_probabilities = get_conditional_probabilites(y_pred, tree)
@@ -73,55 +76,47 @@ def get_all_confusion_matrices(y_true, y_pred, tree):
     
     # Find the parents
     level_order_nodes = list(nx.bfs_tree(tree, source=source_node_label).nodes())
-    parents = [list(tree.predecessors(node)) for node in level_order_nodes]
-    for idx in range(len(parents)):
-
-        # Make sure the graph is a tree.
-        assert len(parents[idx]) == 0 or len(parents[idx]) == 1, 'Number of parents for each node should be 0 (for root) or 1.'
-        
-        if len(parents[idx]) == 0:
-            parents[idx] = ''
-        else:
-            parents[idx] = parents[idx][0]
-
-    # Finding unique parents for masking
-    unique_parents = list(set(parents))
-    unique_parents.sort()
+    depths = [get_path_length(tree, source_node_label, node) for node in level_order_nodes]
+    
+    # Finding unique depths for masking
+    unique_depths = list(set(depths))
+    unique_depths.sort()
 
     # Create masks for classification
     masks = []
-    for parent in unique_parents:
-        masks.append(get_indices_where(parents, parent))
+    for depth in unique_depths:
+        masks.append(get_indices_where(depths, depth))
     
     
     # Get the masked softmaxes
-    for mask in masks[2:]:
+    for mask, depth in zip(masks, unique_depths):
         
-        true_labels = []
-        pred_labels = []
+        if depth != 0:
         
-        
-        for i in range(y_true.shape[0]):
-            
-            # Find the true label of the object for this mask
-            if np.sum(y_true[i, mask]) == 1:
-                 # This object belongs to some class in this mask
+            true_labels = []
+            pred_labels = []
+
+            for i in range(y_true.shape[0]):
+
+                # Find the true label
                 true_class_idx = mask[np.argmax(y_true[i, mask])]
-                true_labels.append(true_class_idx - min(mask))
+                true_labels.append(level_order_nodes[true_class_idx])
+
+                # Find the predicted label
+                predicted_class_idx = mask[np.argmax(pseudo_conditional_probabilities[i, mask])]
+                pred_labels.append(level_order_nodes[predicted_class_idx])
+
+            mask_classes = [level_order_nodes[m] for m in mask]
+
+            plot_title = f"~{fraction * 100}% of each LC visible"
+            cf_plot_file = f"gif/level_{depth}_cf/{fraction}.png"
+            roc_plot_file = f"gif/level_{depth}_roc/{fraction}.png"
+
+            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, cf_plot_file)
+            plt.close()
+
+            plot_roc_curves(y_true[:, mask], pseudo_conditional_probabilities[:, mask], mask_classes, plot_title, roc_plot_file)
+            plt.close()
             
-            
-            elif np.sum(y_true[i, mask]) == 0:
-                # This object does not belong to some class in this mask
-                true_labels.append(len(mask))
-                
-            else:
-                # This means I fucked up
-                assert False, 'This should not have happened. I would offer to help but clearly you should not trust me since you reached an unreachable state'
-        
-            
-            # Find the predicted label
-            predicted_class_idx = mask[np.argmax(y_pred[i, mask])]
-            pred_labels.append(predicted_class_idx - min(mask))
-        
-        mask_classes = [level_order_nodes[m] for m in mask] + ['Other']
-        plot_confusion_matrix(true_labels, pred_labels, mask_classes)
+            report = classification_report(true_labels, pred_labels, target_names=mask_classes)
+            print(report)

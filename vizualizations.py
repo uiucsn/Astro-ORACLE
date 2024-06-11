@@ -12,7 +12,7 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     font = {'size'   : 17}
     plt.rc('font', **font)
     
-    cm = confusion_matrix(y_true, y_pred, normalize='true')
+    cm = confusion_matrix(y_true, y_pred, labels=labels, normalize='true')
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
     disp.plot(cmap=plt.cm.Blues)
     disp.im_.colorbar.remove()
