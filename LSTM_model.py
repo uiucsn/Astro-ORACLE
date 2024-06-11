@@ -5,21 +5,22 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from tensorflow.keras.layers import Input, LSTM, Dense, Masking, concatenate, GRU
 
-from dataloader import ts_length
+from dataloader import ts_length, static_flag_value, ts_flag_value
 
 def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
 
     input_1 = Input((ts_length, ts_dim), name='light curve') 
-    masking_input1 = Masking(mask_value=0.)(input_1)
+    masking_input1 = Masking(mask_value=ts_flag_value)(input_1)
 
     lstm1 = GRU(100, return_sequences=True, activation='tanh')(masking_input1)
     lstm2 = GRU(100, return_sequences=False, activation='tanh')(lstm1)
 
     dense1 = Dense(100, activation='tanh')(lstm2)
 
-    input_2 = Input(shape = (static_dim, ), name='static features') # CHANGE
+    input_2 = Input(shape = (static_dim, ), name='static features') 
+    masking_input2 = Masking(mask_value=static_flag_value)(input_2)
 
-    dense2 = Dense(10)(input_2)
+    dense2 = Dense(10)(masking_input2)
 
     merge1 = concatenate([dense1, dense2])
 
