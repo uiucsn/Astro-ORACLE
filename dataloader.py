@@ -2,13 +2,16 @@ import pickle
 import numpy as np
 import polars as pl
 
+from tensorflow.keras.utils import pad_sequences
+
 from LSST_Source import LSST_Source
 from taxonomy import get_classification_labels, get_astrophysical_class
+
 
 ts_length = 500
 
 # Features to be used in the model
-static_feature_list = ['RA', 'DEC', 'MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'VPEC', 'VPEC_ERR', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_LOGMASS', 'HOSTGAL_LOGMASS_ERR', 'HOSTGAL_COLOR', 'HOSTGAL_COLOR_ERR', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y', 'HOSTGAL_MAGERR_u', 'HOSTGAL_MAGERR_g', 'HOSTGAL_MAGERR_r', 'HOSTGAL_MAGERR_i', 'HOSTGAL_MAGERR_z', 'HOSTGAL_MAGERR_Y']
+static_feature_list = ['MWEBV', 'MWEBV_ERR', 'REDSHIFT_HELIO', 'REDSHIFT_HELIO_ERR', 'HOSTGAL_PHOTOZ', 'HOSTGAL_PHOTOZ_ERR', 'HOSTGAL_SPECZ', 'HOSTGAL_SPECZ_ERR', 'HOSTGAL_RA', 'HOSTGAL_DEC', 'HOSTGAL_SNSEP', 'HOSTGAL_ELLIPTICITY', 'HOSTGAL_MAG_u', 'HOSTGAL_MAG_g', 'HOSTGAL_MAG_r', 'HOSTGAL_MAG_i', 'HOSTGAL_MAG_z', 'HOSTGAL_MAG_Y']
 
 # Flag values for missing data of static feature according to elasticc
 missing_data_flags = [-9, -99, -999, -9999, 999]
@@ -25,6 +28,9 @@ def load(file_name):
 def augment_ts_length(X_ts, add_padding=True, fraction=None):
 
     augmented_list = []
+    
+    if fraction == None:
+        fractions = np.random.rand(len(X_ts))
 
     # Loop through all the data
     for ind in range(len(X_ts)):
@@ -33,7 +39,7 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
 
         # If no fraction is mentioned, pick a random number between 0 and 1
         if fraction == None:
-            fraction = np.random.rand()
+            fraction = fractions[ind]
 
         # Multiply the fraction by the original length of the time series to get the new length
         new_length = int(fraction * X_ts[ind].to_numpy().shape[0])
@@ -44,10 +50,10 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
         # Slice the data appropriately, Keep the first new_length number of observations and all columns
         augmented_list.append(X_ts[ind].to_numpy()[:new_length, :])
 
-        # Optionally - Pad for TF masking layer
-        if add_padding:
-            augmented_list[ind] = np.pad(augmented_list[ind], ((0, ts_length - augmented_list[ind].shape[0]), (0, 0)))
-        
+    # Optionally - Pad for TF masking layer
+    if add_padding:
+        augmented_list = keras.utils.pad_sequences(augmented_list, maxlen=ts_length,  dtype='float32', padding='post', value=ts_flag_value)
+
     return augmented_list
 
 def get_augmented_data(X_ts, X_static, Y, a_classes, fraction=None):
