@@ -89,8 +89,13 @@ TODO: build out object to tensor conversion. Build out pipelines to do this conv
 
 First at the root,
 
-![](gif/root_cf/root_cf.gif)
-![](gif/root_roc/root_roc.gif)
+![](gif/level_1_cf/level_1_cf.gif)
+![](gif/level_1_roc/level_1_roc.gif)
+
+At the next level in the hierarchy
+
+![](gif/level_2_cf/level_2_cf.gif)
+![](gif/level_2_roc/level_2_roc.gif)
 
 And finally, at the leaf...
 
