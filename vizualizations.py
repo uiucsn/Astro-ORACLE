@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve,
 
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
 
-    font = {'size'   : 17}
+    font = {'size'   : 25}
     plt.rc('font', **font)
     
     cm = confusion_matrix(y_true, y_pred, labels=labels, normalize='true')
@@ -20,9 +20,11 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     fig = disp.figure_
     plt.xticks(rotation=90)
     
-    
     fig.set_figwidth(18)
     fig.set_figheight(18)
+    
+    for labels in disp.text_.ravel():
+        labels.set_fontsize(10)
     
     if title:
         disp.ax_.set_title(title)
