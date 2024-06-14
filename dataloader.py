@@ -2,6 +2,7 @@ import pickle
 import numpy as np
 import polars as pl
 
+from tqdm import tqdm
 from tensorflow.keras.utils import pad_sequences
 
 from LSST_Source import LSST_Source
@@ -33,9 +34,7 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
         fractions = np.random.rand(len(X_ts))
 
     # Loop through all the data
-    for ind in range(len(X_ts)):
-
-        print(f"{(ind/len(X_ts) * 100):.3f} %", end="\r")
+    for ind in tqdm(range(len(X_ts))):
 
         # If no fraction is mentioned, pick a random number between 0 and 1
         if fraction == None:

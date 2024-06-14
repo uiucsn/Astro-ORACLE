@@ -107,7 +107,7 @@ class WHXE_Loss:
         # Compute the secondary weight term, which emphasizes different levels of the tree. See paper for more details.
         self.lambda_term = np.exp(-self.alpha * self.path_lengths)
 
-
+    @keras.saving.register_keras_serializable(package="my_package", name="custom_fn")
     def compute_loss(self, target_probabilities, y_pred, epsilon=1e-10):
 
         # Go through set of siblings
