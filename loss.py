@@ -141,12 +141,108 @@ class WHXE_Loss:
         v2 = -1 * tf.math.reduce_mean(v1)
             
         return v2
+    
+class HXE_Loss:
+
+    # Implementation of Weighted Hierarchical Cross Entropy loss function by Villar et. al. 2023 (https://arxiv.org/abs/2312.02266)
+
+    def __init__(self, tree, alpha = 0.5) -> None:
+
+        # Free parameter that determines how much weight is given to different levels in the hierarchy
+        self.alpha = alpha
+
+        # The taxonomy tree is used for computing soft max at different levels and computing the WHXE loss
+        self.tree = tree
+
+        # Do a level order traversal of the tree to get an ordering of the nodes
+        self.level_order_nodes = nx.bfs_tree(self.tree, source=source_node_label).nodes()
+
+        # Compute and store parents for each node, ordered by level order traversal of the tree
+        self.compute_parents()
+
+        # Compute and store the masks used for soft max
+        self.create_masks()
+
+        # Compute and store the path lengths from the root to each node in the tree, ordered by level order traversal of the tree
+        self.compute_path_lengths()
+
+    def compute_parents(self):
+
+        # Find the parent for each node in the tree, ordered using level order traversal
+        self.parents = [list(self.tree.predecessors(node)) for node in self.level_order_nodes]
+        for idx in range(len(self.parents)):
+
+            # Make sure the graph is a tree.
+            assert len(self.parents[idx]) == 0 or len(self.parents[idx]) == 1, 'Number of parents for each node should be 0 (for root) or 1.'
+            
+            if len(self.parents[idx]) == 0:
+                self.parents[idx] = ''
+            else:
+                self.parents[idx] = self.parents[idx][0]
+    
+    def create_masks(self):
+
+        # Finding unique parents for masking
+        unique_parents = list(set(self.parents))
+        unique_parents.sort()
+
+        # Create masks for applying soft max and calculating loss values.
+        self.masks = []
+        for parent in unique_parents:
+            self.masks.append(np.where(np.array(self.parents) == parent,1,0))
+
+    def compute_path_lengths(self):
+        
+        # Compute the shortest paths from the root node to each of the other nodes in the tree.
+        self.path_lengths = []
+
+        for node in self.level_order_nodes:
+            self.path_lengths.append(len(nx.shortest_path(self.tree, source_node_label, node)) - 1)
+
+        self.path_lengths = np.array(self.path_lengths)
+
+        # Compute the secondary weight term, which emphasizes different levels of the tree. See paper for more details.
+        self.lambda_term = np.exp(-self.alpha * self.path_lengths)
+
+    @keras.saving.register_keras_serializable(package="my_package", name="custom_fn")
+    def compute_loss(self, target_probabilities, y_pred, epsilon=1e-10):
+
+        # Go through set of siblings
+        for mask in self.masks:
+            
+            # Get the e^logits
+            exps = tf.math.exp(y_pred)
+
+            # Multiply (dot product) the e^logits with the mask to maintain just the e^logits values that belong to this mask. All other values will be zeros.
+            masked_exps = tf.math.multiply(exps, mask)
+
+            # Find the sum of the e^logits values that belong to the mask. Do this for each element in the batch separately. Add a small value to avoid numerical problems with floating point numbers.
+            masked_sums = tf.math.reduce_sum(masked_exps, axis=1, keepdims=True) + epsilon
+
+            # Compute the softmax by dividing the e^logits with the sume (e^logits)
+            softmax = masked_exps/masked_sums
+
+            # (1 - mask) * y_pred gets the logits for all the values not in this mask and zeros out the values in the mask. Add those back so that we can repeat the process for other masks.
+            y_pred =  softmax + ((1 - mask) * y_pred)
+        
+        # At this point we have the masked softmaxes i.e. the pseudo probabilities. We can take the log of these values
+        y_pred = tf.math.log(y_pred)
+
+        # Weight them by the level at which the corresponding node appears in the hierarchy
+        y_pred = y_pred * self.lambda_term
+
+        # Use the target_probabilities as indicators. Then sum them up for each batch
+        v1 = tf.math.reduce_sum(y_pred * target_probabilities, axis=1)
+
+        # Finally, find the mean over all batches. Since we are taking logs of numbers <1 (the pseudo probabilities), we have to multiply by -1 to get a +ve loss value.
+        v2 = -1 * tf.math.reduce_mean(v1)
+            
+        return v2
 
 if __name__=='__main__':
     
     tree = get_taxonomy_tree()
-    loss = WHXE_Loss(tree, list(tree.nodes))
-
+    
     ts_dim = 5
     static_dim = 15
     latent_size = 10
@@ -154,12 +250,18 @@ if __name__=='__main__':
 
     batch_size = 4
 
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size, "categorical_crossentropy")
+    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
 
     input_ts = np.random.randn(batch_size, ts_length, ts_dim)
     input_static = np.random.randn(batch_size, static_dim)
 
     outputs = model.predict([input_ts, input_static])
-    print(loss.compute_loss(outputs, outputs))
+    
+    weighted_loss = WHXE_Loss(tree, list(tree.nodes))
+    unweighted_loss = HXE_Loss(tree)
+
+    
+    print(weighted_loss.compute_loss(outputs, outputs))
+    print(unweighted_loss.compute_loss(outputs, outputs))
 
 
