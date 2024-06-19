@@ -34,7 +34,7 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
         fractions = np.random.rand(len(X_ts))
 
     # Loop through all the data
-    for ind in tqdm(range(len(X_ts))):
+    for ind in tqdm(range(len(X_ts)), desc ="TS Data Augmentation: "):
 
         # If no fraction is mentioned, pick a random number between 0 and 1
         if fraction == None:
