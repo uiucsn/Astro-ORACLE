@@ -9,7 +9,7 @@ from dataloader import ts_length, static_flag_value, ts_flag_value
 
 def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
 
-    input_1 = Input((ts_length, ts_dim), name='light curve') 
+    input_1 = Input((ts_length, ts_dim)) 
     masking_input1 = Masking(mask_value=ts_flag_value)(input_1)
 
     lstm1 = GRU(100, return_sequences=True, activation='tanh')(masking_input1)
@@ -17,7 +17,7 @@ def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
 
     dense1 = Dense(100, activation='tanh')(lstm2)
 
-    input_2 = Input(shape = (static_dim, ), name='static features') 
+    input_2 = Input(shape = (static_dim,)) 
     masking_input2 = Masking(mask_value=static_flag_value)(input_2)
 
     dense2 = Dense(10)(masking_input2)
@@ -26,11 +26,11 @@ def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
 
     dense3 = Dense(100, activation='relu')(merge1)
 
-    dense4 = Dense(latent_size, activation='relu', name='latent')(dense3)
+    dense4 = Dense(latent_size, activation='relu')(dense3)
 
     output = Dense(output_dim)(dense4)
 
-    model = keras.Model(inputs=[input_1, input_2], outputs=output, name="Hierarchical_RNN")
+    model = keras.Model(inputs=[input_1, input_2], outputs=output)
     
     return model
 
@@ -43,7 +43,8 @@ if __name__=='__main__':
 
     batch_size = 4
 
-    model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size,  "categorical_crossentropy")
+    model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size)
+    print(model.summary())
 
     input_ts = np.random.randn(batch_size, ts_length, ts_dim)
     input_static = np.random.randn(batch_size, static_dim)

@@ -184,6 +184,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     plt.xlabel("Epoch")
     plt.ylabel("Avg log loss for training")
     plt.savefig(f"{model_dir}/training_history.pdf")
+    plt.close()
  
 if __name__=='__main__':
     args = parse_args()
