@@ -7,7 +7,7 @@ from tensorflow.keras.layers import Input, LSTM, Dense, Masking, concatenate, GR
 
 from dataloader import ts_length, static_flag_value, ts_flag_value
 
-def get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size):
+def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
 
     input_1 = Input((ts_length, ts_dim), name='light curve') 
     masking_input1 = Masking(mask_value=ts_flag_value)(input_1)
@@ -43,7 +43,7 @@ if __name__=='__main__':
 
     batch_size = 4
 
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size,  "categorical_crossentropy")
+    model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size,  "categorical_crossentropy")
 
     input_ts = np.random.randn(batch_size, ts_length, ts_dim)
     input_static = np.random.randn(batch_size, static_dim)

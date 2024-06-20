@@ -5,7 +5,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 from taxonomy import source_node_label, get_taxonomy_tree
-from LSTM_model import get_LSTM_Classifier
+from RNN_model import get_RNN_model
 from dataloader import ts_length
 
 class WHXE_Loss:

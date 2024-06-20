@@ -15,7 +15,7 @@ from tensorflow import keras
 from tqdm import tqdm
 from pathlib import Path
 
-from LSTM_model import get_LSTM_Classifier
+from RNN_model import get_RNN_model
 from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, get_prediction_probs, get_highest_prob_path, plot_colored_tree
