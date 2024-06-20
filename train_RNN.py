@@ -8,19 +8,14 @@ import tensorflow as tf
 import random 
 
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.utils import plot_model
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
 from tensorflow import keras
 from tqdm import tqdm
 from pathlib import Path
 
 from RNN_model import get_RNN_model
-from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length
+from dataloader import load, get_augmented_data, get_static_features
 from loss import WHXE_Loss
-from taxonomy import get_taxonomy_tree, get_prediction_probs, get_highest_prob_path, plot_colored_tree
-from vizualizations import make_gif, plot_confusion_matrix, plot_roc_curves
-from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs
+from taxonomy import get_taxonomy_tree
 
 default_seed = 42
 default_val_fraction = 0.01
@@ -134,7 +129,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
 
     print(f"TS Input Dim: {ts_dim} | Static Input Dim: {static_dim} | Output Dim: {output_dim}")
 
-    model = get_LSTM_Classifier(ts_dim, static_dim, output_dim, latent_size)
+    model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size)
     model.compile(optimizer=optimizer, loss=criterion)
 
     keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)

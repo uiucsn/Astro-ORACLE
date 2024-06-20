@@ -30,7 +30,7 @@ def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
 
     output = Dense(output_dim)(dense4)
 
-    model = keras.Model(inputs=[input_1, input_2], outputs=output)
+    model = keras.Model(inputs=[input_1, input_2], outputs=output, name="Hierarchical_RNN")
     
     return model
 
