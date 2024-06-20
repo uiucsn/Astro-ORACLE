@@ -27,7 +27,7 @@ default_latent_size = 64
 default_alpha = 0.5
 
 default_train_dir = Path("processed/train")
-default_model_dir = Path("models/lsst_rate_agnostic")
+default_model_dir = Path("models/test")
 default_max_class_count = 30000
 
 
@@ -184,26 +184,6 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     plt.xlabel("Epoch")
     plt.ylabel("Avg log loss for training")
     plt.savefig(f"{model_dir}/training_history.pdf")
-    plt.show()
-
-def parse_args():
-    '''
-    Get commandline options
-    '''
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--num_epochs', type=int, default=default_num_epochs, help='Number of epochs to train the model for.')
-    parser.add_argument('--batch_size', type=int, default=default_batch_size, help='Batch size used for training.')
-    parser.add_argument('--lr', type=float, default=default_learning_rate, help='Learning rate used for training.')
-    parser.add_argument('--latent_size', type=int, default=default_latent_size, help='Dimension of the final latent layer of the neural net.')
-    parser.add_argument('--alpha', type=float, default=default_alpha, help='Alpha value used for the loss function. See Villar et al. (2024) for more information [https://arxiv.org/abs/2312.02266]')
-    parser.add_argument('--max_class_count', type=int, default=default_max_class_count, help='Maximum number of samples in each class.')
-    parser.add_argument('--train_dir', type=Path, default=default_train_dir, help='Directory which contains the training data.')
-    parser.add_argument('--model_dir', type=Path, default=default_model_dir, help='Directory for saving the models and best model during training.')
-
-    # TODO: Add argument for overlap between survey and ligo run
-    # duty factor motivation: https://dcc.ligo.org/public/0167/G2000497/002/G2000497_OpenLVEM_02Apr2020_kk_v2.pdf
-    args = parser.parse_args()
-    return args
  
 if __name__=='__main__':
     args = parse_args()
