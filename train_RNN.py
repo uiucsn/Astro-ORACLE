@@ -147,7 +147,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         # Array to keep tracking of the training loss
         train_loss_values = []
         
-        pbar = tqdm(desc="Training Model", leave=True, total=int(training_set_size/batch_size))
+        pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(training_set_size/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
             loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
