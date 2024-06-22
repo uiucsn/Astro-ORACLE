@@ -12,7 +12,7 @@ from tensorflow import keras
 from tqdm import tqdm
 from pathlib import Path
 
-from Ensemble_model import get_ensemble_model, EnsembleModel
+from Ensemble_model import get_ensemble_model
 from train_RNN import train_step
 from dataloader import load, get_augmented_data, get_static_features, ts_length
 from loss import WHXE_Loss
@@ -47,6 +47,17 @@ def parse_args():
 
     args = parser.parse_args()
     return args
+
+@tf.function
+def train_step(pretrained_outputs, y, model, criterion, optimizer):
+    with tf.GradientTape() as tape:
+        logits = model(pretrained_outputs, training=True)
+        loss_value = criterion(y, logits)
+    grads = tape.gradient(loss_value, model.trainable_weights)
+    optimizer.apply_gradients(zip(grads, model.trainable_weights))
+
+    return loss_value
+
 
 def train_ensemble_model(models, num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
 
@@ -116,8 +127,7 @@ def train_ensemble_model(models, num_epochs=default_num_epochs, batch_size=defau
     output_dim = len(Y_train[0])
 
     print(f"TS Input Dim: {ts_dim} | Static Input Dim: {static_dim} | Output Dim: {output_dim}")
-    model = EnsembleModel(models, output_dim)
-    model.build([(None,ts_length,ts_dim), (None, static_dim)])
+    model = get_ensemble_model(output_dim, models)
     model.compile(optimizer=optimizer, loss=criterion)
     print(model.summary())
 
@@ -139,7 +149,12 @@ def train_ensemble_model(models, num_epochs=default_num_epochs, batch_size=defau
         pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(training_set_size/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
-            loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
+            
+            pretrained_outputs = []
+            for m in models:
+                pretrained_outputs.append(m.predict([x_ts_batch_train, x_static_batch_train]))
+
+            loss_value = train_step(pretrained_outputs, y_batch_train, model, criterion, optimizer)
             train_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
@@ -151,25 +166,26 @@ def train_ensemble_model(models, num_epochs=default_num_epochs, batch_size=defau
         print(f"Avg training loss: {float(avg_train_loss):.4f}")
         
         print(f"Time taken: {time.time() - start_time:.2f}s")
-        model.save_weights(f"{model_dir}/lstm_epoch_{epoch}.h5")
+        model.save(f"{model_dir}/lstm_epoch_{epoch}.h5")
         
         # Save the model with the smallest training loss
         best_model_epoch = np.argmin(avg_train_losses)
         if best_model_epoch == epoch:
             print(f"Best model is at epoch {epoch} Saving")
-            model.save_weights(f"{model_dir}/best_model.h5")
+            model.save(f"{model_dir}/best_model.h5")
             
         print("==========")
 
     print(f'Running inference for validation...')
-    best_model = EnsembleModel(models, output_dim)
-    best_model.build([(None,ts_length,ts_dim), (None, static_dim)])
-    best_model.load_weights(f"{model_dir}/best_model.h5")
+    best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
 
     x1, x2, y_true, _ = get_augmented_data(X_ts_val, X_static_val, Y_val, astrophysical_classes_val, fraction=0.5)
     
     # Run inference on these
-    y_pred = best_model.predict([x1, x2])
+    pretrained_outputs = []
+    for m in models:
+        pretrained_outputs.append(m.predict([x_ts_batch_train, x_static_batch_train]))
+    y_pred = best_model.predict(pretrained_outputs)
 
     plt.plot(list(range(len(avg_train_losses))), avg_train_losses)
     plt.xlabel("Epoch")
