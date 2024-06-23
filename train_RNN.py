@@ -22,7 +22,7 @@ default_val_fraction = 0.01
 
 default_num_epochs = 50
 default_batch_size = 1024
-default_learning_rate=5e-4
+default_learning_rate=1e-6
 default_latent_size = 64
 default_alpha = 0.5
 
