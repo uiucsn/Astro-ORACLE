@@ -64,7 +64,7 @@ def train_ensemble_model(models_paths, num_epochs=default_num_epochs, batch_size
     os.mkdir(f"{model_dir}")
 
     models = []
-    for i, path in enumerate(args.model_paths):
+    for i, path in enumerate(models_paths):
 
         # Load the models
         print(f"Loading {path}")
