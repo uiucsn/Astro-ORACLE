@@ -165,10 +165,9 @@ def train_ensemble_model(models_paths, num_epochs=default_num_epochs, batch_size
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
             # Get outputs from pre trained models
-            print("Running inference on pretrained models")
             pretrained_outputs = []
             for i, m in enumerate(models):
-                pretrained_outputs.append(m.predict([x_ts_batch_train, x_static_batch_train], batch_size=batch_size))
+                pretrained_outputs.append(m.predict([x_ts_batch_train, x_static_batch_train], batch_size=batch_size, verbose=0))
 
             loss_value = train_step(pretrained_outputs, y_batch_train, model, criterion, optimizer)
             train_loss_values.append(float(loss_value))
