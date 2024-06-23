@@ -22,7 +22,7 @@ default_val_fraction = 0.01
 
 default_num_epochs = 50
 default_batch_size = 1024
-default_learning_rate=5e-4
+default_learning_rate=1e-6
 
 default_model_paths = []
 default_train_dir = Path("processed/train")
@@ -58,10 +58,24 @@ def train_step(pretrained_outputs, y, model, criterion, optimizer):
     return loss_value
 
 
-def train_ensemble_model(models, num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
+def train_ensemble_model(models_paths, num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
 
     random.seed(default_seed)
     os.mkdir(f"{model_dir}")
+
+    models = []
+    for i, path in enumerate(args.model_paths):
+
+        # Load the models
+        print(f"Loading {path}")
+        loaded_model = keras.models.load_model(path, compile=False)
+
+        # Rename them based on their path and save them in the dir for the ensemble
+        loaded_model._name = path
+        loaded_model.save(f"{model_dir}/input_model_{i}.h5")
+
+        # Create a list of models
+        models.append(loaded_model)
 
     # This step takes a while because it has load from disc to memory...
     print("Loading training data from disc...")
@@ -198,20 +212,8 @@ if __name__=='__main__':
     assert args.model_paths != default_model_paths, "Model list cannot be empty"
 
     # Loading all the models
-
-    models = []
-    for i, path in enumerate(args.model_paths):
-
-        print(f"Loading {path}")
-        loaded_model = keras.models.load_model(path, compile=False)
-        loaded_model._name = f"model_{i}"
-
-        for layer in loaded_model.layers:
-            layer._name = layer._name + str(f"_{i}")
-        models.append(loaded_model)
-
     train_ensemble_model(
-                models,
+                args.model_paths,
                 num_epochs=args.num_epochs,
                 batch_size=args.batch_size,
                 learning_rate=args.lr, 
