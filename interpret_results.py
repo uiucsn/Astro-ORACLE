@@ -1,4 +1,6 @@
+import os
 import numpy as np
+import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -67,7 +69,7 @@ def get_conditional_probabilites(y_pred, tree):
         
     return pseudo_probabilities, pseudo_conditional_probabilities
 
-def save_leaf_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
+def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
     
     # Find the indexes of the leaf nodes i.e. nodes with out degree = 0.
     level_order_nodes = list(nx.bfs_tree(tree, source=source_node_label).nodes())
@@ -79,14 +81,17 @@ def save_leaf_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
     y_pred_label = [leaf_labels[i] for i in np.argmax(y_pred[:, idx], axis=1)]
     y_true_label = [leaf_labels[i] for i in np.argmax(y_true[:, idx], axis=1)]
 
-    # Print the stats
-    report = classification_report(y_true_label, y_pred_label)
-    print(report)
-
     # Make plots
     plot_title = f"~{fraction * 100}% of each LC visible"
-    cf_plot_file = f"gif/leaf_cf/{fraction}.png"
-    roc_plot_file = f"gif/leaf_roc/{fraction}.png"
+
+    # Make the dirs to store results
+    os.makedirs(f"{model_dir}/gif/leaf_cf", exist_ok=True)
+    os.makedirs(f"{model_dir}/gif/leaf_roc", exist_ok=True)
+    os.makedirs(f"{model_dir}/gif/leaf_csv", exist_ok=True)
+
+    cf_plot_file = f"{model_dir}/gif/leaf_cf/{fraction}.png"
+    roc_plot_file = f"{model_dir}/gif/leaf_roc/{fraction}.png"
+    csv_plot_file = f"{model_dir}/gif/leaf_csv/{fraction}.csv"
     
     plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, cf_plot_file)
     plt.close()
@@ -94,7 +99,13 @@ def save_leaf_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
     plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, roc_plot_file)
     plt.close()
 
-def save_all_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
+    report = classification_report(y_true_label, y_pred_label)
+    print(report)
+    report = classification_report(y_true_label, y_pred_label, output_dict=True)
+    pd.DataFrame(report).transpose().to_csv(csv_plot_file)
+    print('===========')
+
+def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
     
     def get_path_length(tree, source, target):
         return len(nx.shortest_path(tree, source=source, target=target)) - 1
@@ -133,8 +144,15 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
                 pred_labels.append(mask_classes[predicted_class_idx])
             
             plot_title = f"~{fraction * 100}% of each LC visible"
-            cf_plot_file = f"gif/level_{depth}_cf/{fraction}.png"
-            roc_plot_file = f"gif/level_{depth}_roc/{fraction}.png"
+
+            # Create the dirs to save plots
+            os.makedirs(f"{model_dir}/gif/level_{depth}_cf", exist_ok=True)
+            os.makedirs(f"{model_dir}/gif/level_{depth}_roc", exist_ok=True)
+            os.makedirs(f"{model_dir}/gif/level_{depth}_csv", exist_ok=True)
+
+            cf_plot_file = f"{model_dir}/gif/level_{depth}_cf/{fraction}.png"
+            roc_plot_file = f"{model_dir}/gif/level_{depth}_roc/{fraction}.png"
+            csv_plot_file = f"{model_dir}/gif/level_{depth}_csv/{fraction}.csv"
 
             plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, cf_plot_file)
             plt.close()
@@ -144,4 +162,6 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, fraction="NA"):
             
             report = classification_report(true_labels, pred_labels)
             print(report)
+            report = classification_report(true_labels, pred_labels, output_dict=True)
+            pd.DataFrame(report).transpose().to_csv(csv_plot_file)
             print('===========')
