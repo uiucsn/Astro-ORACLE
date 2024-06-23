@@ -153,21 +153,27 @@ def train_ensemble_model(models_paths, num_epochs=default_num_epochs, batch_size
         start_time = time.time()
         
         # Create the augmented data set for training
-        X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
-        train_dataset =  tf.data.Dataset.from_tensor_slices((X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug)).batch(batch_size)
+        X_ts_train_aug, X_static_train_aug, Y_train_aug, _ = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
+
+        # Get outputs from pre trained models
+        print("Running inference on pretrained models")
+        pretrained_outputs = np.zeros((Y_train_aug.shape[0], len(models), output_dim))
+        for i, m in enumerate(models):
+            pretrained_outputs[:, i, :] = m.predict([X_ts_train_aug, X_static_train_aug], batch_size=batch_size)
+
+        train_dataset =  tf.data.Dataset.from_tensor_slices((pretrained_outputs, Y_train_aug)).batch(batch_size)
         
         # Array to keep tracking of the training loss
         train_loss_values = []
         
         pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(training_set_size/batch_size)))
         # Iterate over the batches of the dataset.
-        for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
+        for step, (pretrained_output, y_batch_train) in enumerate(train_dataset):
             
-            pretrained_outputs = []
-            for m in models:
-                pretrained_outputs.append(m.predict([x_ts_batch_train, x_static_batch_train]))
-
-            loss_value = train_step(pretrained_outputs, y_batch_train, model, criterion, optimizer)
+            temp_arr = []
+            for i in range(pretrained_output.shape[1]):
+                temp_arr.append(pretrained_output[:,i,:])
+            loss_value = train_step(temp_arr, y_batch_train, model, criterion, optimizer)
             train_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
