@@ -160,6 +160,11 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         avg_train_loss = np.mean(train_loss_values)
         avg_train_losses.append(avg_train_loss)
         print(f"Avg training loss: {float(avg_train_loss):.4f}")
+
+        if np.isnan(avg_train_loss) == True:
+
+            print("Training loss was nan. Exiting the loop.")
+            break
         
         print(f"Time taken: {time.time() - start_time:.2f}s")
         model.save(f"{model_dir}/lstm_epoch_{epoch}.h5")
