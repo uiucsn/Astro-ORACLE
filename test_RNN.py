@@ -38,7 +38,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     random.seed(default_seed)
 
     # This step takes a while because it has load from disc to memory...
-    print("Loading training data from disc...")
+    print("Loading testing data from disc...")
     X_ts = load(f"{test_dir}/x_ts.pkl")
     X_static = load(f"{test_dir}/x_static.pkl")
     Y = load(f"{test_dir}/y.pkl")
