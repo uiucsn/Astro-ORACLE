@@ -147,7 +147,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         # Array to keep tracking of the training loss
         train_loss_values = []
         
-        pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(training_set_size/batch_size)))
+        pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(astrophysical_classes_train/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
             loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
@@ -185,7 +185,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     # Run inference on these
     y_pred = best_model.predict([x1, x2])
 
-    plt.plot(list(range(len(avg_train_losses))), avg_train_losses)
+    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses))
     plt.xlabel("Epoch")
     plt.ylabel("Avg log loss for training")
     plt.savefig(f"{model_dir}/training_history.pdf")
