@@ -17,8 +17,8 @@ from dataloader import load, get_augmented_data, get_static_features
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
-default_seed = 42
-default_val_fraction = 0.01
+default_seed = 40
+default_val_fraction = 0.05
 
 default_num_epochs = 50
 default_batch_size = 1024
@@ -147,7 +147,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         # Array to keep tracking of the training loss
         train_loss_values = []
         
-        pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(astrophysical_classes_train/batch_size)))
+        pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(len(astrophysical_classes_train)/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
             loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
