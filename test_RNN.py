@@ -17,7 +17,7 @@ from vizualizations import make_gif
 from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs
 from train_RNN import default_batch_size
 
-default_seed = 42
+default_seed = 40
 
 default_test_dir = Path("processed/test")
 default_max_class_count = 1000
