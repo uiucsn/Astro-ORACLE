@@ -12,4 +12,4 @@
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
 
-python train_RNN.py
+python train_RNN.py -h
