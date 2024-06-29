@@ -144,7 +144,7 @@ def train_ensemble_model(models_paths, num_epochs=default_num_epochs, batch_size
     model.compile(optimizer=optimizer, loss=criterion)
     print(model.summary())
 
-    keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
+    #keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
 
     avg_train_losses = []
     for epoch in range(num_epochs):
