@@ -1,10 +1,8 @@
 #!/bin/bash
 #SBATCH --time=6-15:30:00
 #SBATCH --job-name="train_RNN"
-#SBATCH --mail-type=FAIL
+#SBATCH --mail-type=ALL
 #SBATCH --mail-user=vedgs2@illinois.edu
-#SBATCH --nodes=1
-#SBATCH --cpus-per-task=4
 #SBATCH --output=train_RNN.out
 #SBATCH --error=train_RNN.err
 #SBATCH --partition=caps-gpu
