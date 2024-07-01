@@ -6,6 +6,7 @@
 #SBATCH --output=train_RNN.out
 #SBATCH --error=train_RNN.err
 #SBATCH --partition=caps-gpu
+#SBATCH --mem-per-cpu=45G
 
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
