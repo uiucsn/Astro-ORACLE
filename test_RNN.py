@@ -83,7 +83,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
 
         print(f'Running inference for {int(f*100)}% light curves...')
 
-        x1, x2, y_true, _ = get_augmented_data(X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced, fraction=f)
+        x1, x2, y_true, _, _ = get_augmented_data(X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced, fraction=f)
         
         # Run inference on these
         y_pred = best_model.predict([x1, x2], batch_size=default_batch_size)
