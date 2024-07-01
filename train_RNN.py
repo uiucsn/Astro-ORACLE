@@ -14,7 +14,7 @@ from pathlib import Path
 
 from RNN_model import get_RNN_model
 from dataloader import load, get_augmented_data, get_static_features
-from loss import WHXE_Loss
+from loss import PAWHXE_Loss
 from taxonomy import get_taxonomy_tree
 
 default_seed = 40
@@ -22,9 +22,10 @@ default_val_fraction = 0.05
 
 default_num_epochs = 50
 default_batch_size = 1024
-default_learning_rate=1e-6
+default_learning_rate=1e-4
 default_latent_size = 64
 default_alpha = 0.5
+default_beta = 0.1
 
 default_train_dir = Path("processed/train")
 default_model_dir = Path("models/test")
@@ -42,6 +43,7 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=default_learning_rate, help='Learning rate used for training.')
     parser.add_argument('--latent_size', type=int, default=default_latent_size, help='Dimension of the final latent layer of the neural net.')
     parser.add_argument('--alpha', type=float, default=default_alpha, help='Alpha value used for the loss function. See Villar et al. (2024) for more information [https://arxiv.org/abs/2312.02266]')
+    parser.add_argument('--beta', type=float, default=default_beta, help='Beta value used for the loss function. See Shah et al. (2024 or 2025) for more information')
     parser.add_argument('--max_class_count', type=int, default=default_max_class_count, help='Maximum number of samples in each class.')
     parser.add_argument('--train_dir', type=Path, default=default_train_dir, help='Directory which contains the training data.')
     parser.add_argument('--model_dir', type=Path, default=default_model_dir, help='Directory for saving the models and best model during training.')
@@ -50,17 +52,17 @@ def parse_args():
     return args
 
 @tf.function
-def train_step(x_ts, x_static, y, model, criterion, optimizer):
+def train_step(x_ts, x_static, y, fractions, model, criterion, optimizer):
     with tf.GradientTape() as tape:
         logits = model((x_ts, x_static), training=True)
-        loss_value = criterion(y, logits)
+        loss_value = criterion(y, logits, fractions)
     grads = tape.gradient(loss_value, model.trainable_weights)
     optimizer.apply_gradients(zip(grads, model.trainable_weights))
 
     return loss_value
 
 
-def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
+def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, beta=default_beta, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
 
     random.seed(default_seed)
     os.mkdir(f"{model_dir}")
@@ -118,10 +120,10 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
 
 
     tree = get_taxonomy_tree()
-    loss_object = WHXE_Loss(tree, astrophysical_classes_train, alpha=alpha) 
+    loss_object = PAWHXE_Loss(tree, astrophysical_classes_train, alpha=alpha, beta=beta) 
     criterion = loss_object.compute_loss
 
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=10000, decay_rate=0.9)
+    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=1000, decay_rate=0.9)
     optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
 
     ts_dim = X_ts_train[0].shape[1]
@@ -142,16 +144,16 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         start_time = time.time()
         
         # Create the augmented data set for training
-        X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
-        train_dataset =  tf.data.Dataset.from_tensor_slices((X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug)).batch(batch_size)
+        X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_aug = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
+        train_dataset =  tf.data.Dataset.from_tensor_slices((X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_aug)).batch(batch_size)
         
         # Array to keep tracking of the training loss
         train_loss_values = []
         
         pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(len(astrophysical_classes_train)/batch_size)))
         # Iterate over the batches of the dataset.
-        for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train) in enumerate(train_dataset):
-            loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
+        for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train, fractions_batch_train) in enumerate(train_dataset):
+            loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, fractions_batch_train, model, criterion, optimizer)
             train_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
@@ -181,7 +183,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     print(f'Running inference for validation...')
     best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
 
-    x1, x2, y_true, _ = get_augmented_data(X_ts_val, X_static_val, Y_val, astrophysical_classes_val, fraction=0.5)
+    x1, x2, _, _, _ = get_augmented_data(X_ts_val, X_static_val, Y_val, astrophysical_classes_val, fraction=0.5)
     
     # Run inference on these
     y_pred = best_model.predict([x1, x2])
