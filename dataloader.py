@@ -32,6 +32,9 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
     
     if fraction == None:
         fractions = np.random.rand(len(X_ts))
+    else:
+        fractions = [fraction] * len(X_ts)
+        fractions = np.array([fractions])
 
     # Loop through all the data
     for ind in tqdm(range(len(X_ts)), desc ="TS Data Augmentation: "):
@@ -53,20 +56,21 @@ def augment_ts_length(X_ts, add_padding=True, fraction=None):
     if add_padding:
         augmented_list = pad_sequences(augmented_list, maxlen=ts_length,  dtype='float32', padding='post', value=ts_flag_value)
 
-    return augmented_list
+    return augmented_list, fractions
 
 def get_augmented_data(X_ts, X_static, Y, a_classes, fraction=None):
 
     # Augment the length of the ts data
-    X_ts = augment_ts_length(X_ts, fraction=fraction)
+    X_ts, fractions = augment_ts_length(X_ts, fraction=fraction)
 
     # Squeeze data into homogeneously shaped numpy arrays
     X_ts = np.squeeze(X_ts)
     X_static = np.squeeze(X_static)
     Y = np.squeeze(Y).astype(np.float32)
     astrophysical_classes = np.squeeze(a_classes)
+    fractions = np.squeeze(fractions).astype(np.float32)
 
-    return X_ts, X_static, Y, astrophysical_classes
+    return X_ts, X_static, Y, astrophysical_classes, fractions
 
 def get_static_features(y, feature_list=static_feature_list):
 
