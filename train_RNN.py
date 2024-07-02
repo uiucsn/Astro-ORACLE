@@ -19,6 +19,7 @@ from taxonomy import get_taxonomy_tree
 
 default_seed = 40
 default_val_fraction = 0.05
+val_fractions = [0.1, 0.4, 0.6, 1]
 
 default_num_epochs = 100
 default_batch_size = 1024
@@ -59,6 +60,12 @@ def train_step(x_ts, x_static, y, fractions, model, criterion, optimizer):
     grads = tape.gradient(loss_value, model.trainable_weights)
     optimizer.apply_gradients(zip(grads, model.trainable_weights))
 
+    return loss_value
+
+@tf.function
+def test_step(x_ts, x_static, y, fractions, model, criterion):
+    val_logits = model([x_ts, x_static], training=False)
+    loss_value = criterion(y, val_logits, fractions)
     return loss_value
 
 
@@ -137,18 +144,46 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
 
     #keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
 
+    # Create an augmented data set for validation
+    print("Creating augmented validation data set")
+    X_ts_val_aug, X_static_val_aug, Y_val_aug, astrophysical_classes_val_aug, fractions_val_aug = [], [], [], [], []
+
+    for f in val_fractions:    
+        x1_, x2_, y_, a_, f_ = get_augmented_data(X_ts_val, X_static_val, Y_val, astrophysical_classes_val, fraction=f)
+        X_ts_val_aug.append(x1_)
+        X_static_val_aug.append(x2_)
+        Y_val_aug.append(y_)
+        astrophysical_classes_val_aug.append(a_)
+        fractions_val_aug.append(f_)
+
+    del X_ts_val, X_static_val, Y_val, astrophysical_classes_val
+
+    X_ts_val_aug = np.concatenate(X_ts_val_aug)
+    X_static_val_aug = np.concatenate(X_static_val_aug)
+    Y_val_aug = np.concatenate(Y_val_aug)
+    astrophysical_classes_val_aug = np.concatenate(astrophysical_classes_val_aug)
+    fractions_val_aug = np.concatenate(fractions_val_aug)
+
+    val_dataset = tf.data.Dataset.from_tensor_slices((X_ts_val_aug, X_static_val_aug, Y_val_aug, astrophysical_classes_val_aug, fractions_val_aug)).batch(batch_size)
+    val_set_size = len(astrophysical_classes_val_aug)
+
+    del X_ts_val_aug, X_static_val_aug, Y_val_aug, astrophysical_classes_val_aug, fractions_val_aug
+
     avg_train_losses = []
+    avg_val_losses = []
+
     for epoch in range(num_epochs):
         
         print(f"\nStart of epoch {epoch}:\n")
         start_time = time.time()
         
         # Create the augmented data set for training
-        X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_aug = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
-        train_dataset =  tf.data.Dataset.from_tensor_slices((X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_aug)).batch(batch_size)
+        X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_train_aug = get_augmented_data(X_ts_train, X_static_train, Y_train, astrophysical_classes_train)
+        train_dataset =  tf.data.Dataset.from_tensor_slices((X_ts_train_aug, X_static_train_aug, Y_train_aug, astrophysical_classes_train_aug, fractions_train_aug)).batch(batch_size)
         
         # Array to keep tracking of the training loss
         train_loss_values = []
+        val_loss_values = []
         
         pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(len(astrophysical_classes_train)/batch_size)))
         # Iterate over the batches of the dataset.
@@ -157,12 +192,27 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
             train_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
+
+
+        pbar = tqdm(desc="Validate Model", leave=True, total=int(np.ceil(val_set_size/batch_size)))
+        # Iterate over the batches of the dataset.
+        for step, (x_ts_batch_val, x_static_batch_val, y_batch_val, a_class_batch_val, fractions_batch_val) in enumerate(val_dataset):
+            loss_value = test_step(x_ts_batch_val, x_static_batch_val, y_batch_val, fractions_batch_val, model, criterion)
+            val_loss_values.append(float(loss_value))
+            pbar.update()
+        pbar.close()
         
         
         # Log the avg train loss
         avg_train_loss = np.mean(train_loss_values)
         avg_train_losses.append(avg_train_loss)
         print(f"Avg training loss: {float(avg_train_loss):.4f}")
+
+
+        # Log the avg val loss
+        avg_val_loss = np.mean(val_loss_values)
+        avg_val_losses.append(avg_val_loss)
+        print(f"Avg val loss: {float(avg_val_loss):.4f}")
 
         if np.isnan(avg_train_loss) == True:
 
@@ -173,24 +223,21 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         model.save(f"{model_dir}/lstm_epoch_{epoch}.h5")
         
         # Save the model with the smallest training loss
-        best_model_epoch = np.argmin(avg_train_losses)
+        best_model_epoch = np.argmin(avg_val_losses)
         if best_model_epoch == epoch:
-            print(f"Best model is at epoch {epoch} Saving")
+            print(f"Best model is at epoch {epoch}. Saving...")
             model.save(f"{model_dir}/best_model.h5")
             
         print("==========")
 
-    print(f'Running inference for validation...')
-    best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
+    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Data')
+    plt.plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Data')
 
-    x1, x2, _, _, _ = get_augmented_data(X_ts_val, X_static_val, Y_val, astrophysical_classes_val, fraction=0.5)
-    
-    # Run inference on these
-    y_pred = best_model.predict([x1, x2])
-
-    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses))
     plt.xlabel("Epoch")
-    plt.ylabel("Avg log loss for training")
+    plt.ylabel("Avg log loss during training")
+
+    plt.legend()
+
     plt.savefig(f"{model_dir}/training_history.pdf")
     plt.close()
  
