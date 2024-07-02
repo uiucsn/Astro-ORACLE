@@ -7,6 +7,7 @@
 #SBATCH --error=train_RNN.err
 #SBATCH --partition=caps-gpu
 #SBATCH --mem-per-cpu=45G
+#SBATCH ‑‑gres=gpu:V100
 
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
