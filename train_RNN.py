@@ -22,7 +22,7 @@ default_val_fraction = 0.05
 
 default_num_epochs = 100
 default_batch_size = 1024
-default_learning_rate=5e-5
+default_learning_rate=1e-4
 default_latent_size = 64
 default_alpha = 0.5
 default_beta = 0.1
@@ -123,8 +123,8 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     loss_object = PAWHXE_Loss(tree, astrophysical_classes_train, alpha=alpha, beta=beta) 
     criterion = loss_object.compute_loss
 
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=500, decay_rate=0.9)
-    optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
+    #lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=500, decay_rate=0.9)
+    optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
 
     ts_dim = X_ts_train[0].shape[1]
     static_dim = len(X_static_train[0])
