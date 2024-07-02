@@ -13,4 +13,4 @@ module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
 
 nvidia-smi
-python train_RNN.py --model_dir test_models
+python train_RNN.py --model_dir test_models --num_epochs 200
