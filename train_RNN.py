@@ -130,8 +130,8 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     loss_object = PAWHXE_Loss(tree, astrophysical_classes_train, alpha=alpha, beta=beta) 
     criterion = loss_object.compute_loss
 
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=1000, decay_rate=0.9)
-    optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
+    #lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=1000, decay_rate=0.9)
+    optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
 
     ts_dim = X_ts_train[0].shape[1]
     static_dim = len(X_static_train[0])
