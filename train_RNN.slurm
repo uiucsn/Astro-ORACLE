@@ -7,7 +7,7 @@
 #SBATCH --error=train_RNN.err
 #SBATCH --partition=caps-gpu
 #SBATCH --mem-per-cpu=45G
-#SBATCH ‑‑gres=gpu
+#SBATCH ‑‑gres=gpu:TeslaM2090
 
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
