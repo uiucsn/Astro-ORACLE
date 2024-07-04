@@ -14,7 +14,7 @@ from pathlib import Path
 
 from RNN_model import get_RNN_model
 from dataloader import load, get_augmented_data, get_static_features
-from loss import PAWHXE_Loss
+from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 
 default_seed = 40
@@ -23,10 +23,9 @@ val_fractions = [0.1, 0.4, 0.6, 1]
 
 default_num_epochs = 100
 default_batch_size = 1024
-default_learning_rate=5e-6
+default_learning_rate=5e-4
 default_latent_size = 64
 default_alpha = 0.5
-default_beta = 0.1
 
 default_train_dir = Path("processed/train")
 default_model_dir = Path("models/test")
@@ -44,7 +43,6 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=default_learning_rate, help='Learning rate used for training.')
     parser.add_argument('--latent_size', type=int, default=default_latent_size, help='Dimension of the final latent layer of the neural net.')
     parser.add_argument('--alpha', type=float, default=default_alpha, help='Alpha value used for the loss function. See Villar et al. (2024) for more information [https://arxiv.org/abs/2312.02266]')
-    parser.add_argument('--beta', type=float, default=default_beta, help='Beta value used for the loss function. See Shah et al. (2024 or 2025) for more information')
     parser.add_argument('--max_class_count', type=int, default=default_max_class_count, help='Maximum number of samples in each class.')
     parser.add_argument('--train_dir', type=Path, default=default_train_dir, help='Directory which contains the training data.')
     parser.add_argument('--model_dir', type=Path, default=default_model_dir, help='Directory for saving the models and best model during training.')
@@ -127,10 +125,10 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
 
 
     tree = get_taxonomy_tree()
-    loss_object = PAWHXE_Loss(tree, astrophysical_classes_train, alpha=alpha, beta=beta) 
+    loss_object = WHXE_Loss(tree, astrophysical_classes_train, alpha=alpha) 
     criterion = loss_object.compute_loss
 
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=5000, decay_rate=0.9)
+    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=10000, decay_rate=0.9)
     optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
 
     ts_dim = X_ts_train[0].shape[1]

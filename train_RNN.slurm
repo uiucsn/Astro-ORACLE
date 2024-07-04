@@ -13,4 +13,4 @@ module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
 
 nvidia-smi
-python train_RNN.py --model_dir models/lsst_alpha_0.5_beta_0.1 --num_epochs 300
+python train_RNN.py --model_dir models/lsst_alpha_0.5 --num_epochs 300 -- alpha 0.5 
