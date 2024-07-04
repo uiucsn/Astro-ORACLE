@@ -51,23 +51,23 @@ def parse_args():
     return args
 
 @tf.function
-def train_step(x_ts, x_static, y, fractions, model, criterion, optimizer):
+def train_step(x_ts, x_static, y, model, criterion, optimizer):
     with tf.GradientTape() as tape:
         logits = model((x_ts, x_static), training=True)
-        loss_value = criterion(y, logits, fractions)
+        loss_value = criterion(y, logits)
     grads = tape.gradient(loss_value, model.trainable_weights)
     optimizer.apply_gradients(zip(grads, model.trainable_weights))
 
     return loss_value
 
 @tf.function
-def test_step(x_ts, x_static, y, fractions, model, criterion):
+def test_step(x_ts, x_static, y, model, criterion):
     val_logits = model([x_ts, x_static], training=False)
-    loss_value = criterion(y, val_logits, fractions)
+    loss_value = criterion(y, val_logits)
     return loss_value
 
 
-def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, beta=default_beta, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
+def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
 
     random.seed(default_seed)
     os.mkdir(f"{model_dir}")
@@ -186,7 +186,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         pbar = tqdm(desc="Training Model", leave=True, total=int(np.ceil(len(astrophysical_classes_train)/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_train, x_static_batch_train, y_batch_train, a_class_batch_train, fractions_batch_train) in enumerate(train_dataset):
-            loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, fractions_batch_train, model, criterion, optimizer)
+            loss_value = train_step(x_ts_batch_train, x_static_batch_train, y_batch_train, model, criterion, optimizer)
             train_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
@@ -195,7 +195,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         pbar = tqdm(desc="Validate Model", leave=True, total=int(np.ceil(val_set_size/batch_size)))
         # Iterate over the batches of the dataset.
         for step, (x_ts_batch_val, x_static_batch_val, y_batch_val, a_class_batch_val, fractions_batch_val) in enumerate(val_dataset):
-            loss_value = test_step(x_ts_batch_val, x_static_batch_val, y_batch_val, fractions_batch_val, model, criterion)
+            loss_value = test_step(x_ts_batch_val, x_static_batch_val, y_batch_val, model, criterion)
             val_loss_values.append(float(loss_value))
             pbar.update()
         pbar.close()
