@@ -89,15 +89,15 @@ TODO: build out object to tensor conversion. Build out pipelines to do this conv
 
 First at the root,
 
-![](gif/level_1_cf/level_1_cf.gif)
-![](gif/level_1_roc/level_1_roc.gif)
+![](models/lsst_alpha_0.5/gif/level_1_cf/level_1_cf.gif)
+![](models/lsst_alpha_0.5/gif/level_1_roc/level_1_roc.gif)
 
 At the next level in the hierarchy
 
-![](gif/level_2_cf/level_2_cf.gif)
-![](gif/level_2_roc/level_2_roc.gif)
+![](models/lsst_alpha_0.5/gif/level_2_cf/level_2_cf.gif)
+![](models/lsst_alpha_0.5/gif/level_2_roc/level_2_roc.gif)
 
 And finally, at the leaf...
 
-![](gif/leaf_cf/leaf_cf.gif)
-![](gif/leaf_roc/leaf_roc.gif)
+![](models/lsst_alpha_0.5/gif/leaf_cf/leaf_cf.gif)
+![](models/lsst_alpha_0.5/gif/leaf_roc/leaf_roc.gif)
