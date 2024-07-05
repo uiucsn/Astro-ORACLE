@@ -183,6 +183,8 @@ def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 
     plt.xlabel("Fraction of LC seen")
     plt.ylabel("Weighted avg F1 score")
 
+    plt.grid()
     plt.tight_layout()
     plt.legend()
     plt.savefig(f"{model_dir}/performance.pdf")
+    plt.savefig(f"{model_dir}/performance.jpg")
