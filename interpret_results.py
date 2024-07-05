@@ -165,3 +165,24 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
             report = classification_report(true_labels, pred_labels, output_dict=True)
             pd.DataFrame(report).transpose().to_csv(csv_plot_file)
             print('===========')
+
+def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], levels = ["level_1", "level_2", "leaf"]):
+
+    plt.style.use(['default'])
+    for level in levels:
+
+        arr = []
+        for f in fractions:
+
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            arr.append(df_alpha1['f1-score'].to_numpy()[-1])
+
+        plt.plot(fractions, arr, label=level, marker = 'o')
+
+    plt.title(f"Performance at different levels of hierarchy")
+    plt.xlabel("Fraction of LC seen")
+    plt.ylabel("Weighted avg F1 score")
+
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig(f"{model_dir}/performance.pdf")

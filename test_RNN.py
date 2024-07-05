@@ -14,7 +14,7 @@ from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_f
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
 from vizualizations import make_gif
-from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs
+from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs, save_all_phase_vs_accuracy_plot
 from train_RNN import default_batch_size
 
 default_seed = 40
@@ -83,7 +83,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
 
         print(f'Running inference for {int(f*100)}% light curves...')
 
-        x1, x2, y_true, _ = get_augmented_data(X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced, fraction=f)
+        x1, x2, y_true, _, _ = get_augmented_data(X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced, fraction=f)
         
         # Run inference on these
         y_pred = best_model.predict([x1, x2], batch_size=default_batch_size)
@@ -93,12 +93,13 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
         
         print(f'For {int(f*100)}% of the light curve, these are the statistics:')
         
-        # TODO: create dirs in the model directory
         # Print all the stats and make plots...
         save_all_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
         save_leaf_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
         
         plt.close()
+
+    save_all_phase_vs_accuracy_plot(model_dir, fractions=fractions)
     
     # Make the gifs at leaf nodes
     cf_files = [f"{model_dir}/gif/leaf_cf/{f}.png" for f in fractions]
