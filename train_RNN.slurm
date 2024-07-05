@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=1-15:30:00
+#SBATCH --time=5:30:00
 #SBATCH --job-name="train_RNN"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=vedgs2@illinois.edu
