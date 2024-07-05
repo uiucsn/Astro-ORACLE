@@ -87,6 +87,10 @@ TODO: build out object to tensor conversion. Build out pipelines to do this conv
 
 ## Some cool results:
 
+Overall model performance:
+
+![](models/lsst_alpha_0.5/performance.jpg)
+
 First at the root,
 
 ![](models/lsst_alpha_0.5/gif/level_1_cf/level_1_cf.gif)
