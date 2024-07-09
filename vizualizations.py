@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+from sklearn.calibration import calibration_curve
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, roc_auc_score
 
 
@@ -36,7 +37,7 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
 
 def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
-    chance = np.arange(0,1,0.01)
+    chance = np.arange(0,1.01,0.01)
     plt.figure(figsize=(12,14))
     plt.plot(chance, chance, '--', color='black', label='Random Chance (AUC = 0.5)')
 
@@ -57,6 +58,36 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
     if img_file:
         plt.savefig(img_file)
 
+def plot_reliability_diagram(y_true, y_pred, title=None, img_file=None, n_bins=10):
+
+    n_classes = y_true.shape[1]
+
+    bins = np.linspace(0,1,n_bins+1)
+    plt.plot(bins, bins, '--', color='black', label='Perfectly calibrated')
+    avg_true = np.zeros(n_bins)
+
+
+    for i in range(n_classes):
+
+        prob_true, prob_pred = calibration_curve(y_true[:, i], y_pred[:, i], n_bins=n_bins)
+        plt.scatter(prob_pred, prob_true)
+
+        avg_true += prob_true
+    
+    avg_true = avg_true/n_classes
+    plt.plot(prob_pred, avg_true, '--', color='blue', label='Average calibration')
+
+    plt.title(title)
+    plt.xlabel("Predicted")
+    plt.ylabel("Empirical")
+
+    plt.legend()
+    plt.tight_layout()
+
+    if img_file:
+        plt.savefig(img_file)
+
+    plt.close()
 
 def make_gif(files, gif_file=None):
 

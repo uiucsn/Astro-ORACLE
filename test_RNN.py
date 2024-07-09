@@ -13,7 +13,7 @@ from pathlib import Path
 from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
-from vizualizations import make_gif
+from vizualizations import make_gif, plot_reliability_diagram
 from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs, save_all_phase_vs_accuracy_plot
 from train_RNN import default_batch_size
 
@@ -78,6 +78,9 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     tree = get_taxonomy_tree()
     best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
 
+    all_predictions = []
+    all_trues = []
+
     fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
     for f in fractions:
 
@@ -96,11 +99,22 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
         # Print all the stats and make plots...
         save_all_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
         save_leaf_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
-        
+
+        all_predictions.append(pseudo_conditional_probabilities)
+        all_trues.append(y_true)
+
         plt.close()
 
     save_all_phase_vs_accuracy_plot(model_dir, fractions=fractions)
-    
+    plt.close()
+
+    all_predictions = np.concatenate(all_predictions)
+    all_trues = np.concatenate(all_trues)
+
+    plot_reliability_diagram(all_trues[:, 1:3], all_predictions[:, 1:3], title="Calibration at level 1", img_file=f"{model_dir}/level_1_cal.pdf")
+    plot_reliability_diagram(all_trues[:, 3:8], all_predictions[:, 3:8], title="Calibration at level 2", img_file=f"{model_dir}/level_2_cal.pdf")
+    plot_reliability_diagram(all_trues[:, -19:], all_predictions[:, -19:], title="Calibration at the leaves", img_file=f"{model_dir}/leaf_cal.pdf")
+
     # Make the gifs at leaf nodes
     cf_files = [f"{model_dir}/gif/leaf_cf/{f}.png" for f in fractions]
     make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf.gif')
