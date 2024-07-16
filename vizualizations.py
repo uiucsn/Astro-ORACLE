@@ -64,18 +64,11 @@ def plot_reliability_diagram(y_true, y_pred, title=None, img_file=None, n_bins=1
 
     bins = np.linspace(0,1,n_bins+1)
     plt.plot(bins, bins, '--', color='black', label='Perfectly calibrated')
-    avg_true = np.zeros(n_bins)
-
 
     for i in range(n_classes):
 
         prob_true, prob_pred = calibration_curve(y_true[:, i], y_pred[:, i], n_bins=n_bins)
         plt.scatter(prob_pred, prob_true)
-
-        avg_true += prob_true
-    
-    avg_true = avg_true/n_classes
-    plt.plot(prob_pred, avg_true, '--', color='blue', label='Average calibration')
 
     plt.title(title)
     plt.xlabel("Predicted")
