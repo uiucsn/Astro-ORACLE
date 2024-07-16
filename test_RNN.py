@@ -68,9 +68,10 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
         Y_balanced += [Y[i] for i in idx]
         astrophysical_classes_balanced += [astrophysical_classes[i] for i in idx]
 
-    # Print summary of the data set used for training and validation
+    # Print summary of the data set used for testing
     a, b = np.unique(astrophysical_classes_balanced, return_counts=True)
     data_summary = pd.DataFrame(data = {'Class': a, 'Count': b})
+    data_summary.to_csv(f"{model_dir}/test_sample.csv")
     print(data_summary)
 
     del X_ts, X_static, Y, astrophysical_classes
