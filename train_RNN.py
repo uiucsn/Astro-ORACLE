@@ -107,12 +107,6 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         Y_balanced += [Y[i] for i in idx]
         astrophysical_classes_balanced += [astrophysical_classes[i] for i in idx]
 
-    # Print summary of the data set used for training and validation
-    print("Summary of training data used")
-    a, b = np.unique(astrophysical_classes_balanced, return_counts=True)
-    data_summary = pd.DataFrame(data = {'Class': a, 'Count': b})
-    training_set_size = np.sum(b)
-    print(data_summary)
 
     # Free up some memory
     del X_ts, X_static, Y, astrophysical_classes
@@ -122,6 +116,19 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     
     # Free up some memory
     del X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced
+
+    # Print summary of the data set used for training and validation
+    print("Summary of training data used")
+    a, b = np.unique(astrophysical_classes_train, return_counts=True)
+    data_summary = pd.DataFrame(data = {'Class': a, 'Count': b})
+    data_summary.to_csv(f"{model_dir}/train_sample.csv")
+    print(data_summary)
+
+    print("Summary of validation data used")
+    a, b = np.unique(astrophysical_classes_val, return_counts=True)
+    data_summary = pd.DataFrame(data = {'Class': a, 'Count': b})
+    data_summary.to_csv(f"{model_dir}/validation_sample.csv")
+    print(data_summary)
 
 
     tree = get_taxonomy_tree()
@@ -218,7 +225,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
             break
         
         print(f"Time taken: {time.time() - start_time:.2f}s")
-        model.save(f"{model_dir}/lstm_epoch_{epoch}.h5")
+        model.save(f"{model_dir}/rnn_epoch_{epoch}.h5")
         
         # Save the model with the smallest training loss
         best_model_epoch = np.argmin(avg_val_losses)
