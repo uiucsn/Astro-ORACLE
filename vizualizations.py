@@ -1,5 +1,6 @@
 import imageio
 
+import networkx as nx
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,9 +9,10 @@ import matplotlib.animation as animation
 from sklearn.calibration import calibration_curve
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, roc_auc_score
 
+from taxonomy import source_node_label
 
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
-
+    
     font = {'size'   : 25}
     plt.rc('font', **font)
     
@@ -26,7 +28,7 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     fig.set_figheight(18)
     
     for labels in disp.text_.ravel():
-        labels.set_fontsize(10)
+        labels.set_fontsize(12)
     
     if title:
         disp.ax_.set_title(title)
@@ -35,6 +37,67 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
 
     if img_file:
         plt.savefig(img_file)
+
+def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
+
+    column_names = list(nx.bfs_tree(tree, source=source_node_label).nodes())
+    leaf_names = column_names[-19:]
+    df_master = pd.read_csv(f"{model_dir}/days_since_trigger/combined.csv")
+
+    # Plotting code
+    for i, c in enumerate(leaf_names):
+
+        df = df_master.loc[df_master['true_class'].eq(c)]
+
+        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
+        fig.subplots_adjust(hspace=0.05)  # adjust space between Axes
+
+        # plot the same data on both Axes
+        for c_ in leaf_names:
+            if c_ == c:
+                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3)
+                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3)
+            else:
+                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
+                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
+
+            if show_uncertainties:
+                ax1.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
+                ax2.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
+        # High probability stuff - linear scale
+        ax1.set_ylim(.2, 1.05)  # outliers only
+
+        # Low probability stuff - log scale
+        ax2.set_ylim(-0.05, .20)  # most of the data
+        #ax2.set_yscale('log')
+
+        # hide the spines between ax and ax2
+        ax1.spines.bottom.set_visible(False)
+        ax2.spines.top.set_visible(False)
+        ax1.xaxis.tick_top()
+        ax1.tick_params(labeltop=False)  # don't put tick labels at the top
+        ax2.xaxis.tick_bottom()
+
+        # Now, let's turn towards the cut-out slanted lines.
+        # We create line objects in axes coordinates, in which (0,0), (0,1),
+        # (1,0), and (1,1) are the four corners of the Axes.
+        # The slanted lines themselves are markers at those locations, such that the
+        # lines keep their angle and position, independent of the Axes size or scale
+        # Finally, we need to disable clipping.
+
+        d = .5  # proportion of vertical to horizontal extent of the slanted line
+        kwargs = dict(marker=[(-1, -d), (1, d)], markersize=12,
+                    linestyle="none", color='k', mec='k', mew=1, clip_on=False)
+        ax1.plot([0, 1], [0, 0], transform=ax1.transAxes, **kwargs)
+        ax2.plot([0, 1], [1, 1], transform=ax2.transAxes, **kwargs)
+
+        ax2.set_xlabel('Time since trigger (in days)', fontsize='large')
+        ax1.set_ylabel('Mean Class score', fontsize='large')
+        ax1.set_title(f"True Class: {c}", fontsize='large')
+
+        plt.tight_layout()
+        plt.savefig(f"{model_dir}/days_since_trigger/{i}.pdf")
+        plt.close()
 
 def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
@@ -51,7 +114,7 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
 
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), fancybox=True, shadow=False, ncol=3, fontsize = 14)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), fancybox=True, shadow=False, ncol=3, fontsize = 16)
     plt.title(title)
     plt.tight_layout()
     plt.gca().set_aspect('equal')
