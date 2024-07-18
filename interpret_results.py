@@ -89,14 +89,18 @@ def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
     os.makedirs(f"{model_dir}/gif/leaf_roc", exist_ok=True)
     os.makedirs(f"{model_dir}/gif/leaf_csv", exist_ok=True)
 
-    cf_plot_file = f"{model_dir}/gif/leaf_cf/{fraction}.png"
-    roc_plot_file = f"{model_dir}/gif/leaf_roc/{fraction}.png"
     csv_plot_file = f"{model_dir}/gif/leaf_csv/{fraction}.csv"
     
-    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, cf_plot_file)
+    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{fraction}.png")
+    plt.close()
+
+    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{fraction}.pdf")
     plt.close()
     
-    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, roc_plot_file)
+    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{fraction}.png")
+    plt.close()
+
+    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{fraction}.pdf")
     plt.close()
 
     report = classification_report(y_true_label, y_pred_label)
@@ -150,14 +154,18 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
             os.makedirs(f"{model_dir}/gif/level_{depth}_roc", exist_ok=True)
             os.makedirs(f"{model_dir}/gif/level_{depth}_csv", exist_ok=True)
 
-            cf_plot_file = f"{model_dir}/gif/level_{depth}_cf/{fraction}.png"
-            roc_plot_file = f"{model_dir}/gif/level_{depth}_roc/{fraction}.png"
             csv_plot_file = f"{model_dir}/gif/level_{depth}_csv/{fraction}.csv"
 
-            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, cf_plot_file)
+            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{fraction}.png")
             plt.close()
 
-            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, roc_plot_file)
+            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{fraction}.pdf")
+            plt.close()
+
+            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{fraction}.png")
+            plt.close()
+
+            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{fraction}.pdf")
             plt.close()
             
             report = classification_report(true_labels, pred_labels)
