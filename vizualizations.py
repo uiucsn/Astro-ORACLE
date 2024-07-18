@@ -1,5 +1,6 @@
 import imageio
 
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -81,6 +82,25 @@ def plot_reliability_diagram(y_true, y_pred, title=None, img_file=None, n_bins=1
         plt.savefig(img_file)
 
     plt.close()
+
+def plot_data_set_composition(model_dir):
+
+    sets = ["test_sample", "train_sample", "validation_sample"]
+    colors = ['tab:blue', 'tab:orange', 'tab:green']
+    
+    for s, c in zip(sets, colors):
+
+        df = pd.read_csv(f"{model_dir}/{s}.csv")
+
+        plt.bar(df['Class'].to_numpy(), df['Count'].to_numpy(), color=c)
+
+        plt.ylabel("Count")
+
+        plt.xticks(rotation=90)
+
+        plt.tight_layout()
+        plt.savefig(f"{model_dir}/{s}.pdf")
+        plt.close()
 
 def make_gif(files, gif_file=None):
 
