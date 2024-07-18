@@ -24,6 +24,32 @@ ts_flag_value = 0.
 def load(file_name):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
+    
+def get_ts_upto_days_since_trigger(X_ts, days, add_padding=True):
+
+    augmented_list = []
+
+    # Loop through all the data
+    for ind in tqdm(range(len(X_ts)), desc ="TS Augmentation: ", disable=True):
+
+        times = X_ts[ind]['scaled_time_since_first_obs'].to_numpy()
+
+        # Get the idx of the first detection
+        first_detection_idx = np.where(X_ts[ind]['detection_flag'].to_numpy() == 1)[0][0]
+        first_detection_t = times[first_detection_idx]
+
+        # Get the index of the the last observation between the mjd(first detection) and  mjd(first detection)
+        last_observation_idx = np.where((times - first_detection_t) * 100 <= days)[0][-1]
+        
+        # Slice the data appropriately, Keep the first new_length number of observations and all columns
+        augmented_list.append(X_ts[ind].to_numpy()[:(last_observation_idx + 1), :])
+
+    # Optionally - Pad for TF masking layer
+    if add_padding:
+        augmented_list = pad_sequences(augmented_list, maxlen=ts_length,  dtype='float32', padding='post', value=ts_flag_value)
+
+    return augmented_list
+
 
 
 def augment_ts_length(X_ts, add_padding=True, fraction=None):
