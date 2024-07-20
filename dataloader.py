@@ -38,11 +38,14 @@ def get_ts_upto_days_since_trigger(X_ts, days, add_padding=True):
         first_detection_idx = np.where(X_ts[ind]['detection_flag'].to_numpy() == 1)[0][0]
         first_detection_t = times[first_detection_idx]
 
-        # Get the index of the the last observation between the mjd(first detection) and  mjd(first detection)
-        last_observation_idx = np.where((times - first_detection_t) * 100 <= days)[0][-1]
-        
-        # Slice the data appropriately, Keep the first new_length number of observations and all columns
-        augmented_list.append(X_ts[ind].to_numpy()[:(last_observation_idx + 1), :])
+        if len(np.where((times - first_detection_t) * 100 <= days)[0]) == 0:
+            augmented_list.append(np.zeros_like(X_ts[ind].to_numpy())g)
+        else:
+            # Get the index of the the last observation between the mjd(first detection) and  mjd(first detection)
+            last_observation_idx = np.where((times - first_detection_t) * 100 <= days)[0][-1]
+            
+            # Slice the data appropriately, Keep the first new_length number of observations and all columns
+            augmented_list.append(X_ts[ind].to_numpy()[:(last_observation_idx + 1), :])
 
     # Optionally - Pad for TF masking layer
     if add_padding:
