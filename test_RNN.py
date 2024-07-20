@@ -65,7 +65,7 @@ def run_class_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
         # Number of days between first and last detection + 1
         t_delta = last_detection_days - first_detection_days + 1
         max_ts_days = max(t_delta)
-        day_range = np.arange(0, max_ts_days, min(3, max_ts_days/100))
+        day_range = np.arange(-20, max_ts_days, min(3, max_ts_days/100))
 
         print('Class: ', c, 'Days: ', max_ts_days)
 
