@@ -29,7 +29,7 @@ default_alpha = 0.5
 
 default_train_dir = Path("processed/train")
 default_model_dir = Path("models/test")
-default_max_class_count = 30000
+default_max_class_count = 40000
 
 
 
@@ -135,7 +135,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
     loss_object = WHXE_Loss(tree, astrophysical_classes_train, alpha=alpha) 
     criterion = loss_object.compute_loss
 
-    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=10000, decay_rate=0.9)
+    lr_schedule = keras.optimizers.schedules.ExponentialDecay(initial_learning_rate=learning_rate, decay_steps=7000, decay_rate=0.9)
     optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
 
     ts_dim = X_ts_train[0].shape[1]
