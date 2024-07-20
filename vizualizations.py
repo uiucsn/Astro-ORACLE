@@ -13,25 +13,36 @@ from taxonomy import source_node_label
 
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     
+    n_class = len(labels)
     font = {'size'   : 25}
     plt.rc('font', **font)
     
-    cm = confusion_matrix(y_true, y_pred, labels=labels, normalize='true')
+    cm = np.round(confusion_matrix(y_true, y_pred, labels=labels, normalize='true'),2)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
     disp.plot(cmap=plt.cm.Blues)
     disp.im_.colorbar.remove()
     
     fig = disp.figure_
-    plt.xticks(rotation=90)
+    if n_class > 10:
+        plt.xticks(rotation=90)
+    else:
+        plt.yticks(rotation=90)
     
     fig.set_figwidth(18)
     fig.set_figheight(18)
     
-    for labels in disp.text_.ravel():
-        labels.set_fontsize(12)
+    for label in disp.text_.ravel():
+        if n_class > 10:
+            label.set_fontsize(12)
+        elif n_class <= 10 and n_class > 3:
+            label.set_fontsize(25)
+        else:
+            label.set_fontsize(40)
     
     if title:
-        disp.ax_.set_title(title)
+        disp.ax_.set_xlabel("Predicted Label", fontsize='x-large')
+        disp.ax_.set_ylabel("True Label", fontsize='x-large')
+        disp.ax_.set_title(title, fontsize='x-large')
     
     plt.tight_layout()
 
@@ -52,6 +63,9 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
         fig.subplots_adjust(hspace=0.05)  # adjust space between Axes
 
+        ax1.axvspan(-20, 0, color='gray', alpha=0.15)
+        ax2.axvspan(-20, 0, color='gray', alpha=0.15)
+
         # plot the same data on both Axes
         for c_ in leaf_names:
             if c_ == c:
@@ -65,10 +79,10 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
                 ax1.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
                 ax2.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
         # High probability stuff - linear scale
-        ax1.set_ylim(.2, 1.05)  # outliers only
+        ax1.set_ylim(.2, 1.01)  # outliers only
 
         # Low probability stuff - log scale
-        ax2.set_ylim(-0.05, .20)  # most of the data
+        ax2.set_ylim(-0.01, .20)  # most of the data
         #ax2.set_yscale('log')
 
         # hide the spines between ax and ax2
@@ -91,9 +105,9 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         ax1.plot([0, 1], [0, 0], transform=ax1.transAxes, **kwargs)
         ax2.plot([0, 1], [1, 1], transform=ax2.transAxes, **kwargs)
 
-        ax2.set_xlabel('Time since trigger (in days)', fontsize='large')
-        ax1.set_ylabel('Mean Class score', fontsize='large')
-        ax1.set_title(f"True Class: {c}", fontsize='large')
+        ax2.set_xlabel('Time since first detection (in days)', fontsize='x-large')
+        ax1.set_ylabel('Mean Class score', fontsize='x-large')
+        ax1.set_title(f"True Class: {c}", fontsize='x-large')
 
         plt.tight_layout()
         plt.savefig(f"{model_dir}/days_since_trigger/{i}.pdf")
@@ -102,7 +116,7 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
 def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
     chance = np.arange(0,1.01,0.01)
-    plt.figure(figsize=(12,14))
+    plt.figure(figsize=(12,12))
     plt.plot(chance, chance, '--', color='black', label='Random Chance (AUC = 0.5)')
 
     for i, label in enumerate(labels):
