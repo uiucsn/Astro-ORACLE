@@ -39,7 +39,7 @@ def get_ts_upto_days_since_trigger(X_ts, days, add_padding=True):
         first_detection_t = times[first_detection_idx]
 
         if len(np.where((times - first_detection_t) * 100 <= days)[0]) == 0:
-            augmented_list.append(np.zeros_like(X_ts[ind].to_numpy())g)
+            augmented_list.append(np.zeros_like(X_ts[ind].to_numpy()))
         else:
             # Get the index of the the last observation between the mjd(first detection) and  mjd(first detection)
             last_observation_idx = np.where((times - first_detection_t) * 100 <= days)[0][-1]
