@@ -225,7 +225,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
             break
         
         print(f"Time taken: {time.time() - start_time:.2f}s")
-        model.save(f"{model_dir}/rnn_epoch_{epoch}.h5")
+        #model.save(f"{model_dir}/rnn_epoch_{epoch}.h5")
         
         # Save the model with the smallest training loss
         best_model_epoch = np.argmin(avg_val_losses)
