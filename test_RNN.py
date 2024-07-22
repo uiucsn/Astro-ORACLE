@@ -187,10 +187,9 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
 
     # Run all the analysis code
     run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
-
-    # Make plots of the scores
     plot_day_vs_class_score(tree, model_dir)
 
+    # Make plots of the scores
     run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # plot the make up of all the data sets
