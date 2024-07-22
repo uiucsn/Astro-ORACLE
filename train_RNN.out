@@ -1,0 +1,7189 @@
+Sun Jul 21 07:38:12 2024       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.08              Driver Version: 545.23.08    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA H100 80GB HBM3          Off | 00000000:4E:00.0 Off |                    0 |
+| N/A   34C    P0             111W / 700W |  42008MiB / 81559MiB |      0%      Default |
+|                                         |                      |             Disabled |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|    0   N/A  N/A     69135      C   python                                    41994MiB |
++---------------------------------------------------------------------------------------+
+Loading training data from disc...
+Summary of all training data
+Total sample count = 1081614
+            Class   Count
+0             AGN   76258
+1            CART    8207
+2         Cepheid   13771
+3     Delta Scuti   20650
+4     Dwarf Novae    8025
+5              EB   66454
+6            ILOT    7461
+7              KN    4426
+8   M-dwarf Flare    1859
+9            PISN   63586
+10       RR Lyrae   14033
+11           SLSN   66088
+12        SNI91bg   28637
+13           SNII  301544
+14           SNIa  120739
+15          SNIax   28030
+16         SNIb/c  168254
+17            TDE   66000
+18          uLens   17592
+Summary of training data used
+            Class  Count
+0             AGN  38113
+1            CART   7807
+2         Cepheid  13088
+3     Delta Scuti  19611
+4     Dwarf Novae   7608
+5              EB  38036
+6            ILOT   7090
+7              KN   4211
+8   M-dwarf Flare   1780
+9            PISN  37996
+10       RR Lyrae  13278
+11           SLSN  37993
+12        SNI91bg  27207
+13           SNII  38018
+14           SNIa  38000
+15          SNIax  26610
+16         SNIb/c  37935
+17            TDE  38023
+18          uLens  16652
+Summary of validation data used
+            Class  Count
+0             AGN   1887
+1            CART    400
+2         Cepheid    683
+3     Delta Scuti   1039
+4     Dwarf Novae    417
+5              EB   1964
+6            ILOT    371
+7              KN    215
+8   M-dwarf Flare     79
+9            PISN   2004
+10       RR Lyrae    755
+11           SLSN   2007
+12        SNI91bg   1430
+13           SNII   1982
+14           SNIa   2000
+15          SNIax   1420
+16         SNIb/c   2065
+17            TDE   1977
+18          uLens    940
+TS Input Dim: 5 | Static Input Dim: 23 | Output Dim: 26
+Creating augmented validation data set
+
+Start of epoch 0:
+
+Avg training loss: 0.2720
+Avg val loss: 0.2390
+Time taken: 72.68s
+Best model is at epoch 0. Saving...
+==========
+
+Start of epoch 1:
+
+Avg training loss: 0.2113
+Avg val loss: 0.2197
+Time taken: 40.68s
+Best model is at epoch 1. Saving...
+==========
+
+Start of epoch 2:
+
+Avg training loss: 0.1849
+Avg val loss: 0.2378
+Time taken: 44.17s
+==========
+
+Start of epoch 3:
+
+Avg training loss: 0.2234
+Avg val loss: 0.3215
+Time taken: 32.86s
+==========
+
+Start of epoch 4:
+
+Avg training loss: 0.1860
+Avg val loss: 0.1919
+Time taken: 37.87s
+Best model is at epoch 4. Saving...
+==========
+
+Start of epoch 5:
+
+Avg training loss: 0.1904
+Avg val loss: 0.2285
+Time taken: 35.08s
+==========
+
+Start of epoch 6:
+
+Avg training loss: 0.1742
+Avg val loss: 0.1803
+Time taken: 35.39s
+Best model is at epoch 6. Saving...
+==========
+
+Start of epoch 7:
+
+Avg training loss: 0.1694
+Avg val loss: 0.1826
+Time taken: 36.08s
+==========
+
+Start of epoch 8:
+
+Avg training loss: 0.1449
+Avg val loss: 0.1689
+Time taken: 39.90s
+Best model is at epoch 8. Saving...
+==========
+
+Start of epoch 9:
+
+Avg training loss: 0.2099
+Avg val loss: 0.2642
+Time taken: 32.52s
+==========
+
+Start of epoch 10:
+
+Avg training loss: 0.1898
+Avg val loss: 0.2102
+Time taken: 31.80s
+==========
+
+Start of epoch 11:
+
+Avg training loss: 0.1486
+Avg val loss: 0.1792
+Time taken: 43.15s
+==========
+
+Start of epoch 12:
+
+Avg training loss: 0.1712
+Avg val loss: 0.2009
+Time taken: 33.84s
+==========
+
+Start of epoch 13:
+
+Avg training loss: 0.1765
+Avg val loss: 0.2532
+Time taken: 33.76s
+==========
+
+Start of epoch 14:
+
+Avg training loss: 0.1420
+Avg val loss: 0.1551
+Time taken: 37.47s
+Best model is at epoch 14. Saving...
+==========
+
+Start of epoch 15:
+
+Avg training loss: 0.1834
+Avg val loss: 0.2246
+Time taken: 33.30s
+==========
+
+Start of epoch 16:
+
+Avg training loss: 0.1480
+Avg val loss: 0.1560
+Time taken: 35.12s
+==========
+
+Start of epoch 17:
+
+Avg training loss: 0.1789
+Avg val loss: 0.2480
+Time taken: 33.38s
+==========
+
+Start of epoch 18:
+
+Avg training loss: 0.1974
+Avg val loss: 0.3223
+Time taken: 31.03s
+==========
+
+Start of epoch 19:
+
+Avg training loss: 0.1766
+Avg val loss: 0.2735
+Time taken: 33.20s
+==========
+
+Start of epoch 20:
+
+Avg training loss: 0.1477
+Avg val loss: 0.1542
+Time taken: 34.89s
+Best model is at epoch 20. Saving...
+==========
+
+Start of epoch 21:
+
+Avg training loss: 0.1279
+Avg val loss: 0.1445
+Time taken: 39.65s
+Best model is at epoch 21. Saving...
+==========
+
+Start of epoch 22:
+
+Avg training loss: 0.1113
+Avg val loss: 0.1481
+Time taken: 43.00s
+==========
+
+Start of epoch 23:
+
+Avg training loss: 0.1098
+Avg val loss: 0.1443
+Time taken: 43.27s
+Best model is at epoch 23. Saving...
+==========
+
+Start of epoch 24:
+
+Avg training loss: 0.1718
+Avg val loss: 0.2061
+Time taken: 32.25s
+==========
+
+Start of epoch 25:
+
+Avg training loss: 0.1420
+Avg val loss: 0.1473
+Time taken: 35.79s
+==========
+
+Start of epoch 26:
+
+Avg training loss: 0.1157
+Avg val loss: 0.1365
+Time taken: 39.12s
+Best model is at epoch 26. Saving...
+==========
+
+Start of epoch 27:
+
+Avg training loss: 0.1229
+Avg val loss: 0.1354
+Time taken: 38.50s
+Best model is at epoch 27. Saving...
+==========
+
+Start of epoch 28:
+
+Avg training loss: 0.1234
+Avg val loss: 0.1343
+Time taken: 36.68s
+Best model is at epoch 28. Saving...
+==========
+
+Start of epoch 29:
+
+Avg training loss: 0.1308
+Avg val loss: 0.1380
+Time taken: 36.72s
+==========
+
+Start of epoch 30:
+
+Avg training loss: 0.1534
+Avg val loss: 0.1757
+Time taken: 32.95s
+==========
+
+Start of epoch 31:
+
+Avg training loss: 0.1862
+Avg val loss: 0.2802
+Time taken: 32.50s
+==========
+
+Start of epoch 32:
+
+Avg training loss: 0.1039
+Avg val loss: 0.1343
+Time taken: 42.39s
+Best model is at epoch 32. Saving...
+==========
+
+Start of epoch 33:
+
+Avg training loss: 0.2047
+Avg val loss: 0.2256
+Time taken: 32.28s
+==========
+
+Start of epoch 34:
+
+Avg training loss: 0.1972
+Avg val loss: 0.1929
+Time taken: 30.73s
+==========
+
+Start of epoch 35:
+
+Avg training loss: 0.1493
+Avg val loss: 0.1628
+Time taken: 34.49s
+==========
+
+Start of epoch 36:
+
+Avg training loss: 0.0964
+Avg val loss: 0.1315
+Time taken: 42.91s
+Best model is at epoch 36. Saving...
+==========
+
+Start of epoch 37:
+
+Avg training loss: 0.1143
+Avg val loss: 0.1266
+Time taken: 38.52s
+Best model is at epoch 37. Saving...
+==========
+
+Start of epoch 38:
+
+Avg training loss: 0.1047
+Avg val loss: 0.1264
+Time taken: 38.93s
+Best model is at epoch 38. Saving...
+==========
+
+Start of epoch 39:
+
+Avg training loss: 0.0908
+Avg val loss: 0.1286
+Time taken: 43.73s
+==========
+
+Start of epoch 40:
+
+Avg training loss: 0.1746
+Avg val loss: 0.1707
+Time taken: 31.58s
+==========
+
+Start of epoch 41:
+
+Avg training loss: 0.0907
+Avg val loss: 0.1263
+Time taken: 43.81s
+Best model is at epoch 41. Saving...
+==========
+
+Start of epoch 42:
+
+Avg training loss: 0.1141
+Avg val loss: 0.1242
+Time taken: 36.73s
+Best model is at epoch 42. Saving...
+==========
+
+Start of epoch 43:
+
+Avg training loss: 0.0989
+Avg val loss: 0.1228
+Time taken: 40.58s
+Best model is at epoch 43. Saving...
+==========
+
+Start of epoch 44:
+
+Avg training loss: 0.1058
+Avg val loss: 0.1220
+Time taken: 37.74s
+Best model is at epoch 44. Saving...
+==========
+
+Start of epoch 45:
+
+Avg training loss: 0.1197
+Avg val loss: 0.1244
+Time taken: 36.72s
+==========
+
+Start of epoch 46:
+
+Avg training loss: 0.1745
+Avg val loss: 0.1915
+Time taken: 31.39s
+==========
+
+Start of epoch 47:
+
+Avg training loss: 0.1436
+Avg val loss: 0.1501
+Time taken: 34.23s
+==========
+
+Start of epoch 48:
+
+Avg training loss: 0.0910
+Avg val loss: 0.1218
+Time taken: 41.20s
+Best model is at epoch 48. Saving...
+==========
+
+Start of epoch 49:
+
+Avg training loss: 0.0890
+Avg val loss: 0.1216
+Time taken: 42.36s
+Best model is at epoch 49. Saving...
+==========
+
+Start of epoch 50:
+
+Avg training loss: 0.1026
+Avg val loss: 0.1193
+Time taken: 37.75s
+Best model is at epoch 50. Saving...
+==========
+
+Start of epoch 51:
+
+Avg training loss: 0.1366
+Avg val loss: 0.1318
+Time taken: 34.59s
+==========
+
+Start of epoch 52:
+
+Avg training loss: 0.1173
+Avg val loss: 0.1250
+Time taken: 35.19s
+==========
+
+Start of epoch 53:
+
+Avg training loss: 0.1042
+Avg val loss: 0.1182
+Time taken: 38.50s
+Best model is at epoch 53. Saving...
+==========
+
+Start of epoch 54:
+
+Avg training loss: 0.0844
+Avg val loss: 0.1195
+Time taken: 41.78s
+==========
+
+Start of epoch 55:
+
+Avg training loss: 0.0899
+Avg val loss: 0.1187
+Time taken: 41.29s
+==========
+
+Start of epoch 56:
+
+Avg training loss: 0.1101
+Avg val loss: 0.1168
+Time taken: 36.04s
+Best model is at epoch 56. Saving...
+==========
+
+Start of epoch 57:
+
+Avg training loss: 0.1232
+Avg val loss: 0.1212
+Time taken: 35.57s
+==========
+
+Start of epoch 58:
+
+Avg training loss: 0.1244
+Avg val loss: 0.1246
+Time taken: 33.98s
+==========
+
+Start of epoch 59:
+
+Avg training loss: 0.1246
+Avg val loss: 0.1316
+Time taken: 35.37s
+==========
+
+Start of epoch 60:
+
+Avg training loss: 0.1807
+Avg val loss: 0.2819
+Time taken: 31.05s
+==========
+
+Start of epoch 61:
+
+Avg training loss: 0.1672
+Avg val loss: 0.2442
+Time taken: 32.82s
+==========
+
+Start of epoch 62:
+
+Avg training loss: 0.1006
+Avg val loss: 0.1147
+Time taken: 37.77s
+Best model is at epoch 62. Saving...
+==========
+
+Start of epoch 63:
+
+Avg training loss: 0.0809
+Avg val loss: 0.1160
+Time taken: 43.20s
+==========
+
+Start of epoch 64:
+
+Avg training loss: 0.0940
+Avg val loss: 0.1138
+Time taken: 38.24s
+Best model is at epoch 64. Saving...
+==========
+
+Start of epoch 65:
+
+Avg training loss: 0.1653
+Avg val loss: 0.1562
+Time taken: 32.79s
+==========
+
+Start of epoch 66:
+
+Avg training loss: 0.1061
+Avg val loss: 0.1131
+Time taken: 36.17s
+Best model is at epoch 66. Saving...
+==========
+
+Start of epoch 67:
+
+Avg training loss: 0.0781
+Avg val loss: 0.1145
+Time taken: 43.28s
+==========
+
+Start of epoch 68:
+
+Avg training loss: 0.0843
+Avg val loss: 0.1138
+Time taken: 40.22s
+==========
+
+Start of epoch 69:
+
+Avg training loss: 0.0828
+Avg val loss: 0.1142
+Time taken: 41.47s
+==========
+
+Start of epoch 70:
+
+Avg training loss: 0.0843
+Avg val loss: 0.1139
+Time taken: 39.95s
+==========
+
+Start of epoch 71:
+
+Avg training loss: 0.1172
+Avg val loss: 0.1140
+Time taken: 35.77s
+==========
+
+Start of epoch 72:
+
+Avg training loss: 0.1356
+Avg val loss: 0.1309
+Time taken: 33.01s
+==========
+
+Start of epoch 73:
+
+Avg training loss: 0.1166
+Avg val loss: 0.1169
+Time taken: 35.70s
+==========
+
+Start of epoch 74:
+
+Avg training loss: 0.0814
+Avg val loss: 0.1125
+Time taken: 40.36s
+Best model is at epoch 74. Saving...
+==========
+
+Start of epoch 75:
+
+Avg training loss: 0.0739
+Avg val loss: 0.1144
+Time taken: 43.50s
+==========
+
+Start of epoch 76:
+
+Avg training loss: 0.0948
+Avg val loss: 0.1103
+Time taken: 37.80s
+Best model is at epoch 76. Saving...
+==========
+
+Start of epoch 77:
+
+Avg training loss: 0.0696
+Avg val loss: 0.1140
+Time taken: 44.54s
+==========
+
+Start of epoch 78:
+
+Avg training loss: 0.0761
+Avg val loss: 0.1125
+Time taken: 41.46s
+==========
+
+Start of epoch 79:
+
+Avg training loss: 0.1134
+Avg val loss: 0.1141
+Time taken: 35.89s
+==========
+
+Start of epoch 80:
+
+Avg training loss: 0.1980
+Avg val loss: 0.1840
+Time taken: 30.79s
+==========
+
+Start of epoch 81:
+
+Avg training loss: 0.0860
+Avg val loss: 0.1089
+Time taken: 40.39s
+Best model is at epoch 81. Saving...
+==========
+
+Start of epoch 82:
+
+Avg training loss: 0.1078
+Avg val loss: 0.1107
+Time taken: 35.36s
+==========
+
+Start of epoch 83:
+
+Avg training loss: 0.0747
+Avg val loss: 0.1104
+Time taken: 42.61s
+==========
+
+Start of epoch 84:
+
+Avg training loss: 0.0771
+Avg val loss: 0.1101
+Time taken: 40.68s
+==========
+
+Start of epoch 85:
+
+Avg training loss: 0.0722
+Avg val loss: 0.1114
+Time taken: 42.96s
+==========
+
+Start of epoch 86:
+
+Avg training loss: 0.1705
+Avg val loss: 0.1829
+Time taken: 31.45s
+==========
+
+Start of epoch 87:
+
+Avg training loss: 0.0896
+Avg val loss: 0.1079
+Time taken: 39.15s
+Best model is at epoch 87. Saving...
+==========
+
+Start of epoch 88:
+
+Avg training loss: 0.1623
+Avg val loss: 0.1488
+Time taken: 31.57s
+==========
+
+Start of epoch 89:
+
+Avg training loss: 0.0679
+Avg val loss: 0.1096
+Time taken: 44.76s
+==========
+
+Start of epoch 90:
+
+Avg training loss: 0.1441
+Avg val loss: 0.1231
+Time taken: 32.46s
+==========
+
+Start of epoch 91:
+
+Avg training loss: 0.0760
+Avg val loss: 0.1074
+Time taken: 41.95s
+Best model is at epoch 91. Saving...
+==========
+
+Start of epoch 92:
+
+Avg training loss: 0.1216
+Avg val loss: 0.1123
+Time taken: 33.84s
+==========
+
+Start of epoch 93:
+
+Avg training loss: 0.0922
+Avg val loss: 0.1061
+Time taken: 38.46s
+Best model is at epoch 93. Saving...
+==========
+
+Start of epoch 94:
+
+Avg training loss: 0.0812
+Avg val loss: 0.1065
+Time taken: 39.25s
+==========
+
+Start of epoch 95:
+
+Avg training loss: 0.0650
+Avg val loss: 0.1094
+Time taken: 44.90s
+==========
+
+Start of epoch 96:
+
+Avg training loss: 0.0775
+Avg val loss: 0.1075
+Time taken: 39.90s
+==========
+
+Start of epoch 97:
+
+Avg training loss: 0.1552
+Avg val loss: 0.1358
+Time taken: 33.08s
+==========
+
+Start of epoch 98:
+
+Avg training loss: 0.0824
+Avg val loss: 0.1056
+Time taken: 39.12s
+Best model is at epoch 98. Saving...
+==========
+
+Start of epoch 99:
+
+Avg training loss: 0.0737
+Avg val loss: 0.1068
+Time taken: 41.93s
+==========
+
+Start of epoch 100:
+
+Avg training loss: 0.1055
+Avg val loss: 0.1062
+Time taken: 35.29s
+==========
+
+Start of epoch 101:
+
+Avg training loss: 0.0690
+Avg val loss: 0.1068
+Time taken: 43.02s
+==========
+
+Start of epoch 102:
+
+Avg training loss: 0.1169
+Avg val loss: 0.1100
+Time taken: 34.03s
+==========
+
+Start of epoch 103:
+
+Avg training loss: 0.0694
+Avg val loss: 0.1063
+Time taken: 42.82s
+==========
+
+Start of epoch 104:
+
+Avg training loss: 0.1539
+Avg val loss: 0.1342
+Time taken: 31.77s
+==========
+
+Start of epoch 105:
+
+Avg training loss: 0.0894
+Avg val loss: 0.1040
+Time taken: 38.69s
+Best model is at epoch 105. Saving...
+==========
+
+Start of epoch 106:
+
+Avg training loss: 0.0963
+Avg val loss: 0.1047
+Time taken: 36.19s
+==========
+
+Start of epoch 107:
+
+Avg training loss: 0.0728
+Avg val loss: 0.1048
+Time taken: 41.87s
+==========
+
+Start of epoch 108:
+
+Avg training loss: 0.1121
+Avg val loss: 0.1073
+Time taken: 34.39s
+==========
+
+Start of epoch 109:
+
+Avg training loss: 0.0766
+Avg val loss: 0.1046
+Time taken: 40.94s
+==========
+
+Start of epoch 110:
+
+Avg training loss: 0.0660
+Avg val loss: 0.1059
+Time taken: 42.17s
+==========
+
+Start of epoch 111:
+
+Avg training loss: 0.1178
+Avg val loss: 0.1084
+Time taken: 34.92s
+==========
+
+Start of epoch 112:
+
+Avg training loss: 0.1396
+Avg val loss: 0.1278
+Time taken: 32.55s
+==========
+
+Start of epoch 113:
+
+Avg training loss: 0.0874
+Avg val loss: 0.1026
+Time taken: 38.56s
+Best model is at epoch 113. Saving...
+==========
+
+Start of epoch 114:
+
+Avg training loss: 0.0896
+Avg val loss: 0.1028
+Time taken: 37.22s
+==========
+
+Start of epoch 115:
+
+Avg training loss: 0.0957
+Avg val loss: 0.1038
+Time taken: 37.28s
+==========
+
+Start of epoch 116:
+
+Avg training loss: 0.0899
+Avg val loss: 0.1029
+Time taken: 36.74s
+==========
+
+Start of epoch 117:
+
+Avg training loss: 0.0901
+Avg val loss: 0.1028
+Time taken: 38.11s
+==========
+
+Start of epoch 118:
+
+Avg training loss: 0.0854
+Avg val loss: 0.1025
+Time taken: 37.52s
+Best model is at epoch 118. Saving...
+==========
+
+Start of epoch 119:
+
+Avg training loss: 0.0887
+Avg val loss: 0.1023
+Time taken: 38.33s
+Best model is at epoch 119. Saving...
+==========
+
+Start of epoch 120:
+
+Avg training loss: 0.0653
+Avg val loss: 0.1039
+Time taken: 42.62s
+==========
+
+Start of epoch 121:
+
+Avg training loss: 0.0797
+Avg val loss: 0.1018
+Time taken: 39.76s
+Best model is at epoch 121. Saving...
+==========
+
+Start of epoch 122:
+
+Avg training loss: 0.0688
+Avg val loss: 0.1033
+Time taken: 40.95s
+==========
+
+Start of epoch 123:
+
+Avg training loss: 0.0897
+Avg val loss: 0.1023
+Time taken: 37.89s
+==========
+
+Start of epoch 124:
+
+Avg training loss: 0.1551
+Avg val loss: 0.1403
+Time taken: 31.82s
+==========
+
+Start of epoch 125:
+
+Avg training loss: 0.1437
+Avg val loss: 0.1309
+Time taken: 33.18s
+==========
+
+Start of epoch 126:
+
+Avg training loss: 0.1010
+Avg val loss: 0.1028
+Time taken: 35.19s
+==========
+
+Start of epoch 127:
+
+Avg training loss: 0.1280
+Avg val loss: 0.1201
+Time taken: 34.23s
+==========
+
+Start of epoch 128:
+
+Avg training loss: 0.0693
+Avg val loss: 0.1017
+Time taken: 40.81s
+Best model is at epoch 128. Saving...
+==========
+
+Start of epoch 129:
+
+Avg training loss: 0.0605
+Avg val loss: 0.1033
+Time taken: 44.45s
+==========
+
+Start of epoch 130:
+
+Avg training loss: 0.1347
+Avg val loss: 0.1126
+Time taken: 32.77s
+==========
+
+Start of epoch 131:
+
+Avg training loss: 0.0913
+Avg val loss: 0.1003
+Time taken: 37.51s
+Best model is at epoch 131. Saving...
+==========
+
+Start of epoch 132:
+
+Avg training loss: 0.1012
+Avg val loss: 0.1028
+Time taken: 35.22s
+==========
+
+Start of epoch 133:
+
+Avg training loss: 0.1074
+Avg val loss: 0.1058
+Time taken: 35.56s
+==========
+
+Start of epoch 134:
+
+Avg training loss: 0.0899
+Avg val loss: 0.1010
+Time taken: 36.57s
+==========
+
+Start of epoch 135:
+
+Avg training loss: 0.1555
+Avg val loss: 0.1562
+Time taken: 32.84s
+==========
+
+Start of epoch 136:
+
+Avg training loss: 0.0744
+Avg val loss: 0.0998
+Time taken: 39.55s
+Best model is at epoch 136. Saving...
+==========
+
+Start of epoch 137:
+
+Avg training loss: 0.1269
+Avg val loss: 0.1102
+Time taken: 34.19s
+==========
+
+Start of epoch 138:
+
+Avg training loss: 0.1422
+Avg val loss: 0.1277
+Time taken: 31.92s
+==========
+
+Start of epoch 139:
+
+Avg training loss: 0.1431
+Avg val loss: 0.1344
+Time taken: 33.15s
+==========
+
+Start of epoch 140:
+
+Avg training loss: 0.0811
+Avg val loss: 0.0986
+Time taken: 38.06s
+Best model is at epoch 140. Saving...
+==========
+
+Start of epoch 141:
+
+Avg training loss: 0.0702
+Avg val loss: 0.0998
+Time taken: 41.42s
+==========
+
+Start of epoch 142:
+
+Avg training loss: 0.1474
+Avg val loss: 0.1198
+Time taken: 31.87s
+==========
+
+Start of epoch 143:
+
+Avg training loss: 0.1067
+Avg val loss: 0.1023
+Time taken: 35.86s
+==========
+
+Start of epoch 144:
+
+Avg training loss: 0.0656
+Avg val loss: 0.1001
+Time taken: 41.35s
+==========
+
+Start of epoch 145:
+
+Avg training loss: 0.0610
+Avg val loss: 0.1004
+Time taken: 43.77s
+==========
+
+Start of epoch 146:
+
+Avg training loss: 0.1973
+Avg val loss: 0.1237
+Time taken: 30.76s
+==========
+
+Start of epoch 147:
+
+Avg training loss: 0.0703
+Avg val loss: 0.0981
+Time taken: 41.45s
+Best model is at epoch 147. Saving...
+==========
+
+Start of epoch 148:
+
+Avg training loss: 0.1534
+Avg val loss: 0.1267
+Time taken: 31.74s
+==========
+
+Start of epoch 149:
+
+Avg training loss: 0.1398
+Avg val loss: 0.1175
+Time taken: 33.36s
+==========
+
+Start of epoch 150:
+
+Avg training loss: 0.0683
+Avg val loss: 0.0978
+Time taken: 40.47s
+Best model is at epoch 150. Saving...
+==========
+
+Start of epoch 151:
+
+Avg training loss: 0.0698
+Avg val loss: 0.0983
+Time taken: 41.56s
+==========
+
+Start of epoch 152:
+
+Avg training loss: 0.0678
+Avg val loss: 0.0985
+Time taken: 40.30s
+==========
+
+Start of epoch 153:
+
+Avg training loss: 0.0601
+Avg val loss: 0.0994
+Time taken: 43.70s
+==========
+
+Start of epoch 154:
+
+Avg training loss: 0.0991
+Avg val loss: 0.0988
+Time taken: 35.12s
+==========
+
+Start of epoch 155:
+
+Avg training loss: 0.1277
+Avg val loss: 0.1112
+Time taken: 33.77s
+==========
+
+Start of epoch 156:
+
+Avg training loss: 0.1166
+Avg val loss: 0.1070
+Time taken: 33.22s
+==========
+
+Start of epoch 157:
+
+Avg training loss: 0.0647
+Avg val loss: 0.0982
+Time taken: 42.58s
+==========
+
+Start of epoch 158:
+
+Avg training loss: 0.1575
+Avg val loss: 0.1270
+Time taken: 31.62s
+==========
+
+Start of epoch 159:
+
+Avg training loss: 0.0847
+Avg val loss: 0.0961
+Time taken: 38.21s
+Best model is at epoch 159. Saving...
+==========
+
+Start of epoch 160:
+
+Avg training loss: 0.1043
+Avg val loss: 0.1008
+Time taken: 34.45s
+==========
+
+Start of epoch 161:
+
+Avg training loss: 0.0820
+Avg val loss: 0.0959
+Time taken: 38.61s
+Best model is at epoch 161. Saving...
+==========
+
+Start of epoch 162:
+
+Avg training loss: 0.0676
+Avg val loss: 0.0970
+Time taken: 40.16s
+==========
+
+Start of epoch 163:
+
+Avg training loss: 0.1006
+Avg val loss: 0.0995
+Time taken: 35.96s
+==========
+
+Start of epoch 164:
+
+Avg training loss: 0.0761
+Avg val loss: 0.0961
+Time taken: 38.25s
+==========
+
+Start of epoch 165:
+
+Avg training loss: 0.1443
+Avg val loss: 0.1173
+Time taken: 33.21s
+==========
+
+Start of epoch 166:
+
+Avg training loss: 0.0749
+Avg val loss: 0.0959
+Time taken: 38.48s
+==========
+
+Start of epoch 167:
+
+Avg training loss: 0.1894
+Avg val loss: 0.1542
+Time taken: 32.17s
+==========
+
+Start of epoch 168:
+
+Avg training loss: 0.1121
+Avg val loss: 0.1030
+Time taken: 33.65s
+==========
+
+Start of epoch 169:
+
+Avg training loss: 0.1137
+Avg val loss: 0.1059
+Time taken: 34.80s
+==========
+
+Start of epoch 170:
+
+Avg training loss: 0.1049
+Avg val loss: 0.1025
+Time taken: 34.23s
+==========
+
+Start of epoch 171:
+
+Avg training loss: 0.1386
+Avg val loss: 0.1276
+Time taken: 33.41s
+==========
+
+Start of epoch 172:
+
+Avg training loss: 0.0903
+Avg val loss: 0.0974
+Time taken: 35.90s
+==========
+
+Start of epoch 173:
+
+Avg training loss: 0.0609
+Avg val loss: 0.0959
+Time taken: 43.34s
+Best model is at epoch 173. Saving...
+==========
+
+Start of epoch 174:
+
+Avg training loss: 0.0959
+Avg val loss: 0.0973
+Time taken: 35.45s
+==========
+
+Start of epoch 175:
+
+Avg training loss: 0.0767
+Avg val loss: 0.0954
+Time taken: 39.16s
+Best model is at epoch 175. Saving...
+==========
+
+Start of epoch 176:
+
+Avg training loss: 0.1035
+Avg val loss: 0.0994
+Time taken: 34.26s
+==========
+
+Start of epoch 177:
+
+Avg training loss: 0.1559
+Avg val loss: 0.1539
+Time taken: 32.87s
+==========
+
+Start of epoch 178:
+
+Avg training loss: 0.0742
+Avg val loss: 0.0949
+Time taken: 38.72s
+Best model is at epoch 178. Saving...
+==========
+
+Start of epoch 179:
+
+Avg training loss: 0.0681
+Avg val loss: 0.0951
+Time taken: 41.05s
+==========
+
+Start of epoch 180:
+
+Avg training loss: 0.0732
+Avg val loss: 0.0949
+Time taken: 38.54s
+Best model is at epoch 180. Saving...
+==========
+
+Start of epoch 181:
+
+Avg training loss: 0.0791
+Avg val loss: 0.0945
+Time taken: 38.59s
+Best model is at epoch 181. Saving...
+==========
+
+Start of epoch 182:
+
+Avg training loss: 0.0643
+Avg val loss: 0.0951
+Time taken: 40.60s
+==========
+
+Start of epoch 183:
+
+Avg training loss: 0.0634
+Avg val loss: 0.0956
+Time taken: 41.95s
+==========
+
+Start of epoch 184:
+
+Avg training loss: 0.0721
+Avg val loss: 0.0953
+Time taken: 38.67s
+==========
+
+Start of epoch 185:
+
+Avg training loss: 0.0737
+Avg val loss: 0.0947
+Time taken: 39.37s
+==========
+
+Start of epoch 186:
+
+Avg training loss: 0.0783
+Avg val loss: 0.0942
+Time taken: 37.33s
+Best model is at epoch 186. Saving...
+==========
+
+Start of epoch 187:
+
+Avg training loss: 0.0694
+Avg val loss: 0.0954
+Time taken: 40.36s
+==========
+
+Start of epoch 188:
+
+Avg training loss: 0.1424
+Avg val loss: 0.1119
+Time taken: 32.15s
+==========
+
+Start of epoch 189:
+
+Avg training loss: 0.0621
+Avg val loss: 0.0941
+Time taken: 42.51s
+Best model is at epoch 189. Saving...
+==========
+
+Start of epoch 190:
+
+Avg training loss: 0.0584
+Avg val loss: 0.0950
+Time taken: 41.98s
+==========
+
+Start of epoch 191:
+
+Avg training loss: 0.0544
+Avg val loss: 0.0956
+Time taken: 44.36s
+==========
+
+Start of epoch 192:
+
+Avg training loss: 0.1236
+Avg val loss: 0.0973
+Time taken: 33.02s
+==========
+
+Start of epoch 193:
+
+Avg training loss: 0.0795
+Avg val loss: 0.0931
+Time taken: 38.24s
+Best model is at epoch 193. Saving...
+==========
+
+Start of epoch 194:
+
+Avg training loss: 0.0637
+Avg val loss: 0.0940
+Time taken: 40.30s
+==========
+
+Start of epoch 195:
+
+Avg training loss: 0.0770
+Avg val loss: 0.0933
+Time taken: 38.72s
+==========
+
+Start of epoch 196:
+
+Avg training loss: 0.1496
+Avg val loss: 0.1197
+Time taken: 31.82s
+==========
+
+Start of epoch 197:
+
+Avg training loss: 0.0567
+Avg val loss: 0.0932
+Time taken: 43.81s
+==========
+
+Start of epoch 198:
+
+Avg training loss: 0.0790
+Avg val loss: 0.0926
+Time taken: 37.28s
+Best model is at epoch 198. Saving...
+==========
+
+Start of epoch 199:
+
+Avg training loss: 0.1323
+Avg val loss: 0.1041
+Time taken: 33.50s
+==========
+
+Start of epoch 200:
+
+Avg training loss: 0.0724
+Avg val loss: 0.0927
+Time taken: 38.22s
+==========
+
+Start of epoch 201:
+
+Avg training loss: 0.0686
+Avg val loss: 0.0934
+Time taken: 40.25s
+==========
+
+Start of epoch 202:
+
+Avg training loss: 0.0570
+Avg val loss: 0.0943
+Time taken: 42.08s
+==========
+
+Start of epoch 203:
+
+Avg training loss: 0.0587
+Avg val loss: 0.0945
+Time taken: 42.62s
+==========
+
+Start of epoch 204:
+
+Avg training loss: 0.0639
+Avg val loss: 0.0939
+Time taken: 40.12s
+==========
+
+Start of epoch 205:
+
+Avg training loss: 0.0543
+Avg val loss: 0.0954
+Time taken: 43.75s
+==========
+
+Start of epoch 206:
+
+Avg training loss: 0.0571
+Avg val loss: 0.0953
+Time taken: 42.09s
+==========
+
+Start of epoch 207:
+
+Avg training loss: 0.0686
+Avg val loss: 0.0940
+Time taken: 39.94s
+==========
+
+Start of epoch 208:
+
+Avg training loss: 0.0689
+Avg val loss: 0.0939
+Time taken: 39.15s
+==========
+
+Start of epoch 209:
+
+Avg training loss: 0.0717
+Avg val loss: 0.0929
+Time taken: 39.07s
+==========
+
+Start of epoch 210:
+
+Avg training loss: 0.0728
+Avg val loss: 0.0931
+Time taken: 38.37s
+==========
+
+Start of epoch 211:
+
+Avg training loss: 0.0548
+Avg val loss: 0.0947
+Time taken: 43.30s
+==========
+
+Start of epoch 212:
+
+Avg training loss: 0.1170
+Avg val loss: 0.0955
+Time taken: 33.50s
+==========
+
+Start of epoch 213:
+
+Avg training loss: 0.0921
+Avg val loss: 0.0925
+Time taken: 35.96s
+Best model is at epoch 213. Saving...
+==========
+
+Start of epoch 214:
+
+Avg training loss: 0.1221
+Avg val loss: 0.1010
+Time taken: 32.92s
+==========
+
+Start of epoch 215:
+
+Avg training loss: 0.1399
+Avg val loss: 0.1183
+Time taken: 33.09s
+==========
+
+Start of epoch 216:
+
+Avg training loss: 0.1445
+Avg val loss: 0.1289
+Time taken: 31.68s
+==========
+
+Start of epoch 217:
+
+Avg training loss: 0.1106
+Avg val loss: 0.0980
+Time taken: 34.62s
+==========
+
+Start of epoch 218:
+
+Avg training loss: 0.0649
+Avg val loss: 0.0941
+Time taken: 39.71s
+==========
+
+Start of epoch 219:
+
+Avg training loss: 0.1174
+Avg val loss: 0.0975
+Time taken: 34.32s
+==========
+
+Start of epoch 220:
+
+Avg training loss: 0.1495
+Avg val loss: 0.1334
+Time taken: 31.41s
+==========
+
+Start of epoch 221:
+
+Avg training loss: 0.0568
+Avg val loss: 0.0921
+Time taken: 43.54s
+Best model is at epoch 221. Saving...
+==========
+
+Start of epoch 222:
+
+Avg training loss: 0.0898
+Avg val loss: 0.0913
+Time taken: 35.60s
+Best model is at epoch 222. Saving...
+==========
+
+Start of epoch 223:
+
+Avg training loss: 0.0532
+Avg val loss: 0.0915
+Time taken: 44.27s
+==========
+
+Start of epoch 224:
+
+Avg training loss: 0.0721
+Avg val loss: 0.0908
+Time taken: 37.98s
+Best model is at epoch 224. Saving...
+==========
+
+Start of epoch 225:
+
+Avg training loss: 0.0783
+Avg val loss: 0.0908
+Time taken: 38.07s
+==========
+
+Start of epoch 226:
+
+Avg training loss: 0.0882
+Avg val loss: 0.0922
+Time taken: 35.45s
+==========
+
+Start of epoch 227:
+
+Avg training loss: 0.1011
+Avg val loss: 0.0949
+Time taken: 35.27s
+==========
+
+Start of epoch 228:
+
+Avg training loss: 0.0542
+Avg val loss: 0.0919
+Time taken: 42.51s
+==========
+
+Start of epoch 229:
+
+Avg training loss: 0.0978
+Avg val loss: 0.0922
+Time taken: 35.65s
+==========
+
+Start of epoch 230:
+
+Avg training loss: 0.1172
+Avg val loss: 0.0982
+Time taken: 32.95s
+==========
+
+Start of epoch 231:
+
+Avg training loss: 0.0864
+Avg val loss: 0.0919
+Time taken: 36.97s
+==========
+
+Start of epoch 232:
+
+Avg training loss: 0.1202
+Avg val loss: 0.1008
+Time taken: 32.80s
+==========
+
+Start of epoch 233:
+
+Avg training loss: 0.0861
+Avg val loss: 0.0917
+Time taken: 36.98s
+==========
+
+Start of epoch 234:
+
+Avg training loss: 0.0724
+Avg val loss: 0.0906
+Time taken: 37.86s
+Best model is at epoch 234. Saving...
+==========
+
+Start of epoch 235:
+
+Avg training loss: 0.1708
+Avg val loss: 0.1478
+Time taken: 32.37s
+==========
+
+Start of epoch 236:
+
+Avg training loss: 0.1398
+Avg val loss: 0.1103
+Time taken: 31.86s
+==========
+
+Start of epoch 237:
+
+Avg training loss: 0.1045
+Avg val loss: 0.0946
+Time taken: 34.91s
+==========
+
+Start of epoch 238:
+
+Avg training loss: 0.1460
+Avg val loss: 0.1304
+Time taken: 31.71s
+==========
+
+Start of epoch 239:
+
+Avg training loss: 0.1278
+Avg val loss: 0.1064
+Time taken: 33.62s
+==========
+
+Start of epoch 240:
+
+Avg training loss: 0.0700
+Avg val loss: 0.0905
+Time taken: 38.58s
+Best model is at epoch 240. Saving...
+==========
+
+Start of epoch 241:
+
+Avg training loss: 0.0729
+Avg val loss: 0.0902
+Time taken: 39.03s
+Best model is at epoch 241. Saving...
+==========
+
+Start of epoch 242:
+
+Avg training loss: 0.0515
+Avg val loss: 0.0910
+Time taken: 43.54s
+==========
+
+Start of epoch 243:
+
+Avg training loss: 0.0520
+Avg val loss: 0.0915
+Time taken: 44.27s
+==========
+
+Start of epoch 244:
+
+Avg training loss: 0.0603
+Avg val loss: 0.0908
+Time taken: 40.55s
+==========
+
+Start of epoch 245:
+
+Avg training loss: 0.0659
+Avg val loss: 0.0912
+Time taken: 40.15s
+==========
+
+Start of epoch 246:
+
+Avg training loss: 0.0734
+Avg val loss: 0.0901
+Time taken: 37.68s
+Best model is at epoch 246. Saving...
+==========
+
+Start of epoch 247:
+
+Avg training loss: 0.0793
+Avg val loss: 0.0897
+Time taken: 37.52s
+Best model is at epoch 247. Saving...
+==========
+
+Start of epoch 248:
+
+Avg training loss: 0.0567
+Avg val loss: 0.0911
+Time taken: 41.72s
+==========
+
+Start of epoch 249:
+
+Avg training loss: 0.1297
+Avg val loss: 0.0988
+Time taken: 33.45s
+==========
+
+Start of epoch 250:
+
+Avg training loss: 0.0570
+Avg val loss: 0.0901
+Time taken: 41.45s
+==========
+
+Start of epoch 251:
+
+Avg training loss: 0.0514
+Avg val loss: 0.0910
+Time taken: 44.06s
+==========
+
+Start of epoch 252:
+
+Avg training loss: 0.0756
+Avg val loss: 0.0894
+Time taken: 37.34s
+Best model is at epoch 252. Saving...
+==========
+
+Start of epoch 253:
+
+Avg training loss: 0.0654
+Avg val loss: 0.0904
+Time taken: 40.00s
+==========
+
+Start of epoch 254:
+
+Avg training loss: 0.1263
+Avg val loss: 0.0969
+Time taken: 32.67s
+==========
+
+Start of epoch 255:
+
+Avg training loss: 0.0638
+Avg val loss: 0.0898
+Time taken: 40.38s
+==========
+
+Start of epoch 256:
+
+Avg training loss: 0.1481
+Avg val loss: 0.1103
+Time taken: 31.64s
+==========
+
+Start of epoch 257:
+
+Avg training loss: 0.1001
+Avg val loss: 0.0906
+Time taken: 35.18s
+==========
+
+Start of epoch 258:
+
+Avg training loss: 0.0666
+Avg val loss: 0.0893
+Time taken: 38.67s
+Best model is at epoch 258. Saving...
+==========
+
+Start of epoch 259:
+
+Avg training loss: 0.0745
+Avg val loss: 0.0892
+Time taken: 38.55s
+Best model is at epoch 259. Saving...
+==========
+
+Start of epoch 260:
+
+Avg training loss: 0.1127
+Avg val loss: 0.0937
+Time taken: 33.06s
+==========
+
+Start of epoch 261:
+
+Avg training loss: 0.0507
+Avg val loss: 0.0894
+Time taken: 44.75s
+==========
+
+Start of epoch 262:
+
+Avg training loss: 0.0498
+Avg val loss: 0.0901
+Time taken: 43.53s
+==========
+
+Start of epoch 263:
+
+Avg training loss: 0.0613
+Avg val loss: 0.0897
+Time taken: 40.93s
+==========
+
+Start of epoch 264:
+
+Avg training loss: 0.0493
+Avg val loss: 0.0909
+Time taken: 43.67s
+==========
+
+Start of epoch 265:
+
+Avg training loss: 0.1086
+Avg val loss: 0.0903
+Time taken: 34.38s
+==========
+
+Start of epoch 266:
+
+Avg training loss: 0.0580
+Avg val loss: 0.0898
+Time taken: 40.87s
+==========
+
+Start of epoch 267:
+
+Avg training loss: 0.0505
+Avg val loss: 0.0909
+Time taken: 44.03s
+==========
+
+Start of epoch 268:
+
+Avg training loss: 0.0659
+Avg val loss: 0.0898
+Time taken: 39.07s
+==========
+
+Start of epoch 269:
+
+Avg training loss: 0.1479
+Avg val loss: 0.1082
+Time taken: 32.71s
+==========
+
+Start of epoch 270:
+
+Avg training loss: 0.0808
+Avg val loss: 0.0884
+Time taken: 36.27s
+Best model is at epoch 270. Saving...
+==========
+
+Start of epoch 271:
+
+Avg training loss: 0.0555
+Avg val loss: 0.0892
+Time taken: 42.61s
+==========
+
+Start of epoch 272:
+
+Avg training loss: 0.0853
+Avg val loss: 0.0887
+Time taken: 35.61s
+==========
+
+Start of epoch 273:
+
+Avg training loss: 0.0587
+Avg val loss: 0.0890
+Time taken: 41.72s
+==========
+
+Start of epoch 274:
+
+Avg training loss: 0.0764
+Avg val loss: 0.0887
+Time taken: 36.98s
+==========
+
+Start of epoch 275:
+
+Avg training loss: 0.1552
+Avg val loss: 0.1175
+Time taken: 32.53s
+==========
+
+Start of epoch 276:
+
+Avg training loss: 0.1937
+Avg val loss: 0.1610
+Time taken: 30.52s
+==========
+
+Start of epoch 277:
+
+Avg training loss: 0.0660
+Avg val loss: 0.0879
+Time taken: 40.17s
+Best model is at epoch 277. Saving...
+==========
+
+Start of epoch 278:
+
+Avg training loss: 0.0767
+Avg val loss: 0.0881
+Time taken: 37.02s
+==========
+
+Start of epoch 279:
+
+Avg training loss: 0.0985
+Avg val loss: 0.0907
+Time taken: 35.38s
+==========
+
+Start of epoch 280:
+
+Avg training loss: 0.0886
+Avg val loss: 0.0898
+Time taken: 34.95s
+==========
+
+Start of epoch 281:
+
+Avg training loss: 0.0788
+Avg val loss: 0.0885
+Time taken: 37.68s
+==========
+
+Start of epoch 282:
+
+Avg training loss: 0.0634
+Avg val loss: 0.0888
+Time taken: 39.22s
+==========
+
+Start of epoch 283:
+
+Avg training loss: 0.0912
+Avg val loss: 0.0897
+Time taken: 35.93s
+==========
+
+Start of epoch 284:
+
+Avg training loss: 0.1106
+Avg val loss: 0.0944
+Time taken: 33.22s
+==========
+
+Start of epoch 285:
+
+Avg training loss: 0.0755
+Avg val loss: 0.0881
+Time taken: 38.20s
+==========
+
+Start of epoch 286:
+
+Avg training loss: 0.0513
+Avg val loss: 0.0895
+Time taken: 42.61s
+==========
+
+Start of epoch 287:
+
+Avg training loss: 0.0701
+Avg val loss: 0.0884
+Time taken: 39.01s
+==========
+
+Start of epoch 288:
+
+Avg training loss: 0.0605
+Avg val loss: 0.0890
+Time taken: 39.95s
+==========
+
+Start of epoch 289:
+
+Avg training loss: 0.0494
+Avg val loss: 0.0902
+Time taken: 44.30s
+==========
+
+Start of epoch 290:
+
+Avg training loss: 0.0900
+Avg val loss: 0.0883
+Time taken: 35.22s
+==========
+
+Start of epoch 291:
+
+Avg training loss: 0.1137
+Avg val loss: 0.0930
+Time taken: 34.01s
+==========
+
+Start of epoch 292:
+
+Avg training loss: 0.1553
+Avg val loss: 0.1357
+Time taken: 31.43s
+==========
+
+Start of epoch 293:
+
+Avg training loss: 0.1035
+Avg val loss: 0.0912
+Time taken: 34.99s
+==========
+
+Start of epoch 294:
+
+Avg training loss: 0.0591
+Avg val loss: 0.0884
+Time taken: 40.30s
+==========
+
+Start of epoch 295:
+
+Avg training loss: 0.0578
+Avg val loss: 0.0888
+Time taken: 41.97s
+==========
+
+Start of epoch 296:
+
+Avg training loss: 0.0925
+Avg val loss: 0.0889
+Time taken: 34.79s
+==========
+
+Start of epoch 297:
+
+Avg training loss: 0.0997
+Avg val loss: 0.0905
+Time taken: 35.00s
+==========
+
+Start of epoch 298:
+
+Avg training loss: 0.0737
+Avg val loss: 0.0878
+Time taken: 36.93s
+Best model is at epoch 298. Saving...
+==========
+
+Start of epoch 299:
+
+Avg training loss: 0.1165
+Avg val loss: 0.0940
+Time taken: 34.06s
+==========
+
+Start of epoch 300:
+
+Avg training loss: 0.0673
+Avg val loss: 0.0879
+Time taken: 38.21s
+==========
+
+Start of epoch 301:
+
+Avg training loss: 0.0718
+Avg val loss: 0.0880
+Time taken: 38.68s
+==========
+
+Start of epoch 302:
+
+Avg training loss: 0.0511
+Avg val loss: 0.0894
+Time taken: 42.63s
+==========
+
+Start of epoch 303:
+
+Avg training loss: 0.0986
+Avg val loss: 0.0883
+Time taken: 35.12s
+==========
+
+Start of epoch 304:
+
+Avg training loss: 0.0811
+Avg val loss: 0.0876
+Time taken: 35.84s
+Best model is at epoch 304. Saving...
+==========
+
+Start of epoch 305:
+
+Avg training loss: 0.0783
+Avg val loss: 0.0879
+Time taken: 37.58s
+==========
+
+Start of epoch 306:
+
+Avg training loss: 0.0532
+Avg val loss: 0.0893
+Time taken: 41.89s
+==========
+
+Start of epoch 307:
+
+Avg training loss: 0.0503
+Avg val loss: 0.0900
+Time taken: 43.82s
+==========
+
+Start of epoch 308:
+
+Avg training loss: 0.1104
+Avg val loss: 0.0894
+Time taken: 33.34s
+==========
+
+Start of epoch 309:
+
+Avg training loss: 0.0518
+Avg val loss: 0.0888
+Time taken: 43.29s
+==========
+
+Start of epoch 310:
+
+Avg training loss: 0.0606
+Avg val loss: 0.0880
+Time taken: 39.64s
+==========
+
+Start of epoch 311:
+
+Avg training loss: 0.0959
+Avg val loss: 0.0883
+Time taken: 35.42s
+==========
+
+Start of epoch 312:
+
+Avg training loss: 0.0653
+Avg val loss: 0.0879
+Time taken: 38.56s
+==========
+
+Start of epoch 313:
+
+Avg training loss: 0.0623
+Avg val loss: 0.0883
+Time taken: 40.40s
+==========
+
+Start of epoch 314:
+
+Avg training loss: 0.1198
+Avg val loss: 0.0922
+Time taken: 32.71s
+==========
+
+Start of epoch 315:
+
+Avg training loss: 0.0667
+Avg val loss: 0.0873
+Time taken: 39.52s
+Best model is at epoch 315. Saving...
+==========
+
+Start of epoch 316:
+
+Avg training loss: 0.1747
+Avg val loss: 0.1346
+Time taken: 31.16s
+==========
+
+Start of epoch 317:
+
+Avg training loss: 0.0821
+Avg val loss: 0.0870
+Time taken: 37.05s
+Best model is at epoch 317. Saving...
+==========
+
+Start of epoch 318:
+
+Avg training loss: 0.0748
+Avg val loss: 0.0868
+Time taken: 36.78s
+Best model is at epoch 318. Saving...
+==========
+
+Start of epoch 319:
+
+Avg training loss: 0.0594
+Avg val loss: 0.0870
+Time taken: 41.09s
+==========
+
+Start of epoch 320:
+
+Avg training loss: 0.1586
+Avg val loss: 0.1142
+Time taken: 31.34s
+==========
+
+Start of epoch 321:
+
+Avg training loss: 0.0560
+Avg val loss: 0.0879
+Time taken: 42.27s
+==========
+
+Start of epoch 322:
+
+Avg training loss: 0.1460
+Avg val loss: 0.1006
+Time taken: 31.63s
+==========
+
+Start of epoch 323:
+
+Avg training loss: 0.0823
+Avg val loss: 0.0867
+Time taken: 37.01s
+Best model is at epoch 323. Saving...
+==========
+
+Start of epoch 324:
+
+Avg training loss: 0.0484
+Avg val loss: 0.0867
+Time taken: 43.47s
+Best model is at epoch 324. Saving...
+==========
+
+Start of epoch 325:
+
+Avg training loss: 0.0982
+Avg val loss: 0.0870
+Time taken: 35.20s
+==========
+
+Start of epoch 326:
+
+Avg training loss: 0.0495
+Avg val loss: 0.0874
+Time taken: 42.77s
+==========
+
+Start of epoch 327:
+
+Avg training loss: 0.0631
+Avg val loss: 0.0868
+Time taken: 40.10s
+==========
+
+Start of epoch 328:
+
+Avg training loss: 0.0808
+Avg val loss: 0.0867
+Time taken: 36.03s
+==========
+
+Start of epoch 329:
+
+Avg training loss: 0.1459
+Avg val loss: 0.1061
+Time taken: 32.86s
+==========
+
+Start of epoch 330:
+
+Avg training loss: 0.0938
+Avg val loss: 0.0884
+Time taken: 34.24s
+==========
+
+Start of epoch 331:
+
+Avg training loss: 0.0910
+Avg val loss: 0.0886
+Time taken: 35.78s
+==========
+
+Start of epoch 332:
+
+Avg training loss: 0.1099
+Avg val loss: 0.0930
+Time taken: 33.19s
+==========
+
+Start of epoch 333:
+
+Avg training loss: 0.0521
+Avg val loss: 0.0875
+Time taken: 43.36s
+==========
+
+Start of epoch 334:
+
+Avg training loss: 0.0485
+Avg val loss: 0.0881
+Time taken: 43.31s
+==========
+
+Start of epoch 335:
+
+Avg training loss: 0.1060
+Avg val loss: 0.0873
+Time taken: 34.54s
+==========
+
+Start of epoch 336:
+
+Avg training loss: 0.0504
+Avg val loss: 0.0876
+Time taken: 42.40s
+==========
+
+Start of epoch 337:
+
+Avg training loss: 0.0807
+Avg val loss: 0.0862
+Time taken: 37.06s
+Best model is at epoch 337. Saving...
+==========
+
+Start of epoch 338:
+
+Avg training loss: 0.0502
+Avg val loss: 0.0877
+Time taken: 42.42s
+==========
+
+Start of epoch 339:
+
+Avg training loss: 0.0662
+Avg val loss: 0.0866
+Time taken: 39.29s
+==========
+
+Start of epoch 340:
+
+Avg training loss: 0.0597
+Avg val loss: 0.0870
+Time taken: 39.68s
+==========
+
+Start of epoch 341:
+
+Avg training loss: 0.0909
+Avg val loss: 0.0873
+Time taken: 35.98s
+==========
+
+Start of epoch 342:
+
+Avg training loss: 0.1022
+Avg val loss: 0.0892
+Time taken: 33.53s
+==========
+
+Start of epoch 343:
+
+Avg training loss: 0.0501
+Avg val loss: 0.0878
+Time taken: 43.59s
+==========
+
+Start of epoch 344:
+
+Avg training loss: 0.0775
+Avg val loss: 0.0863
+Time taken: 36.43s
+==========
+
+Start of epoch 345:
+
+Avg training loss: 0.0505
+Avg val loss: 0.0877
+Time taken: 43.47s
+==========
+
+Start of epoch 346:
+
+Avg training loss: 0.0485
+Avg val loss: 0.0883
+Time taken: 43.11s
+==========
+
+Start of epoch 347:
+
+Avg training loss: 0.0468
+Avg val loss: 0.0890
+Time taken: 44.61s
+==========
+
+Start of epoch 348:
+
+Avg training loss: 0.0634
+Avg val loss: 0.0868
+Time taken: 39.02s
+==========
+
+Start of epoch 349:
+
+Avg training loss: 0.0532
+Avg val loss: 0.0881
+Time taken: 42.23s
+==========
+
+Start of epoch 350:
+
+Avg training loss: 0.1301
+Avg val loss: 0.0937
+Time taken: 32.70s
+==========
+
+Start of epoch 351:
+
+Avg training loss: 0.0635
+Avg val loss: 0.0860
+Time taken: 39.71s
+Best model is at epoch 351. Saving...
+==========
+
+Start of epoch 352:
+
+Avg training loss: 0.0662
+Avg val loss: 0.0862
+Time taken: 38.31s
+==========
+
+Start of epoch 353:
+
+Avg training loss: 0.0626
+Avg val loss: 0.0865
+Time taken: 39.91s
+==========
+
+Start of epoch 354:
+
+Avg training loss: 0.0890
+Avg val loss: 0.0870
+Time taken: 34.86s
+==========
+
+Start of epoch 355:
+
+Avg training loss: 0.0467
+Avg val loss: 0.0870
+Time taken: 44.84s
+==========
+
+Start of epoch 356:
+
+Avg training loss: 0.0990
+Avg val loss: 0.0862
+Time taken: 34.13s
+==========
+
+Start of epoch 357:
+
+Avg training loss: 0.0833
+Avg val loss: 0.0860
+Time taken: 36.52s
+==========
+
+Start of epoch 358:
+
+Avg training loss: 0.1452
+Avg val loss: 0.1070
+Time taken: 31.80s
+==========
+
+Start of epoch 359:
+
+Avg training loss: 0.0841
+Avg val loss: 0.0860
+Time taken: 36.55s
+==========
+
+Start of epoch 360:
+
+Avg training loss: 0.0554
+Avg val loss: 0.0865
+Time taken: 40.64s
+==========
+
+Start of epoch 361:
+
+Avg training loss: 0.0465
+Avg val loss: 0.0876
+Time taken: 44.87s
+==========
+
+Start of epoch 362:
+
+Avg training loss: 0.0699
+Avg val loss: 0.0857
+Time taken: 37.63s
+Best model is at epoch 362. Saving...
+==========
+
+Start of epoch 363:
+
+Avg training loss: 0.1426
+Avg val loss: 0.1007
+Time taken: 33.02s
+==========
+
+Start of epoch 364:
+
+Avg training loss: 0.1230
+Avg val loss: 0.0920
+Time taken: 32.52s
+==========
+
+Start of epoch 365:
+
+Avg training loss: 0.0684
+Avg val loss: 0.0856
+Time taken: 38.98s
+Best model is at epoch 365. Saving...
+==========
+
+Start of epoch 366:
+
+Avg training loss: 0.0611
+Avg val loss: 0.0859
+Time taken: 39.22s
+==========
+
+Start of epoch 367:
+
+Avg training loss: 0.0557
+Avg val loss: 0.0864
+Time taken: 41.85s
+==========
+
+Start of epoch 368:
+
+Avg training loss: 0.0471
+Avg val loss: 0.0877
+Time taken: 43.24s
+==========
+
+Start of epoch 369:
+
+Avg training loss: 0.0958
+Avg val loss: 0.0856
+Time taken: 35.41s
+Best model is at epoch 369. Saving...
+==========
+
+Start of epoch 370:
+
+Avg training loss: 0.0566
+Avg val loss: 0.0864
+Time taken: 40.25s
+==========
+
+Start of epoch 371:
+
+Avg training loss: 0.0616
+Avg val loss: 0.0863
+Time taken: 40.18s
+==========
+
+Start of epoch 372:
+
+Avg training loss: 0.0788
+Avg val loss: 0.0859
+Time taken: 36.02s
+==========
+
+Start of epoch 373:
+
+Avg training loss: 0.0711
+Avg val loss: 0.0859
+Time taken: 38.41s
+==========
+
+Start of epoch 374:
+
+Avg training loss: 0.0989
+Avg val loss: 0.0878
+Time taken: 33.76s
+==========
+
+Start of epoch 375:
+
+Avg training loss: 0.1375
+Avg val loss: 0.1041
+Time taken: 32.95s
+==========
+
+Start of epoch 376:
+
+Avg training loss: 0.0920
+Avg val loss: 0.0872
+Time taken: 34.35s
+==========
+
+Start of epoch 377:
+
+Avg training loss: 0.0518
+Avg val loss: 0.0865
+Time taken: 43.01s
+==========
+
+Start of epoch 378:
+
+Avg training loss: 0.0737
+Avg val loss: 0.0855
+Time taken: 36.78s
+Best model is at epoch 378. Saving...
+==========
+
+Start of epoch 379:
+
+Avg training loss: 0.0625
+Avg val loss: 0.0858
+Time taken: 40.04s
+==========
+
+Start of epoch 380:
+
+Avg training loss: 0.0961
+Avg val loss: 0.0868
+Time taken: 33.97s
+==========
+
+Start of epoch 381:
+
+Avg training loss: 0.0594
+Avg val loss: 0.0860
+Time taken: 40.54s
+==========
+
+Start of epoch 382:
+
+Avg training loss: 0.0562
+Avg val loss: 0.0866
+Time taken: 40.25s
+==========
+
+Start of epoch 383:
+
+Avg training loss: 0.0494
+Avg val loss: 0.0876
+Time taken: 43.56s
+==========
+
+Start of epoch 384:
+
+Avg training loss: 0.0940
+Avg val loss: 0.0857
+Time taken: 34.39s
+==========
+
+Start of epoch 385:
+
+Avg training loss: 0.1057
+Avg val loss: 0.0878
+Time taken: 34.33s
+==========
+
+Start of epoch 386:
+
+Avg training loss: 0.1049
+Avg val loss: 0.0884
+Time taken: 33.19s
+==========
+
+Start of epoch 387:
+
+Avg training loss: 0.0506
+Avg val loss: 0.0867
+Time taken: 43.24s
+==========
+
+Start of epoch 388:
+
+Avg training loss: 0.0519
+Avg val loss: 0.0873
+Time taken: 41.50s
+==========
+
+Start of epoch 389:
+
+Avg training loss: 0.0461
+Avg val loss: 0.0881
+Time taken: 44.80s
+==========
+
+Start of epoch 390:
+
+Avg training loss: 0.0572
+Avg val loss: 0.0863
+Time taken: 40.08s
+==========
+
+Start of epoch 391:
+
+Avg training loss: 0.0459
+Avg val loss: 0.0878
+Time taken: 44.67s
+==========
+
+Start of epoch 392:
+
+Avg training loss: 0.0524
+Avg val loss: 0.0873
+Time taken: 41.44s
+==========
+
+Start of epoch 393:
+
+Avg training loss: 0.1951
+Avg val loss: 0.1099
+Time taken: 31.65s
+==========
+
+Start of epoch 394:
+
+Avg training loss: 0.0637
+Avg val loss: 0.0844
+Time taken: 38.68s
+Best model is at epoch 394. Saving...
+==========
+
+Start of epoch 395:
+
+Avg training loss: 0.0969
+Avg val loss: 0.0862
+Time taken: 35.27s
+==========
+
+Start of epoch 396:
+
+Avg training loss: 0.0633
+Avg val loss: 0.0849
+Time taken: 38.64s
+==========
+
+Start of epoch 397:
+
+Avg training loss: 0.0730
+Avg val loss: 0.0851
+Time taken: 37.94s
+==========
+
+Start of epoch 398:
+
+Avg training loss: 0.0664
+Avg val loss: 0.0852
+Time taken: 37.77s
+==========
+
+Start of epoch 399:
+
+Avg training loss: 0.0651
+Avg val loss: 0.0853
+Time taken: 39.15s
+==========
+
+Start of epoch 400:
+
+Avg training loss: 0.0776
+Avg val loss: 0.0856
+Time taken: 36.08s
+==========
+
+Start of epoch 401:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0863
+Time taken: 43.77s
+==========
+
+Start of epoch 402:
+
+Avg training loss: 0.1012
+Avg val loss: 0.0858
+Time taken: 33.66s
+==========
+
+Start of epoch 403:
+
+Avg training loss: 0.1392
+Avg val loss: 0.1048
+Time taken: 32.96s
+==========
+
+Start of epoch 404:
+
+Avg training loss: 0.0492
+Avg val loss: 0.0854
+Time taken: 42.41s
+==========
+
+Start of epoch 405:
+
+Avg training loss: 0.0547
+Avg val loss: 0.0853
+Time taken: 41.82s
+==========
+
+Start of epoch 406:
+
+Avg training loss: 0.0811
+Avg val loss: 0.0850
+Time taken: 35.66s
+==========
+
+Start of epoch 407:
+
+Avg training loss: 0.0996
+Avg val loss: 0.0871
+Time taken: 34.76s
+==========
+
+Start of epoch 408:
+
+Avg training loss: 0.1330
+Avg val loss: 0.1002
+Time taken: 31.77s
+==========
+
+Start of epoch 409:
+
+Avg training loss: 0.0875
+Avg val loss: 0.0861
+Time taken: 35.94s
+==========
+
+Start of epoch 410:
+
+Avg training loss: 0.0617
+Avg val loss: 0.0850
+Time taken: 38.82s
+==========
+
+Start of epoch 411:
+
+Avg training loss: 0.0473
+Avg val loss: 0.0863
+Time taken: 44.22s
+==========
+
+Start of epoch 412:
+
+Avg training loss: 0.0838
+Avg val loss: 0.0847
+Time taken: 35.41s
+==========
+
+Start of epoch 413:
+
+Avg training loss: 0.1937
+Avg val loss: 0.1025
+Time taken: 31.78s
+==========
+
+Start of epoch 414:
+
+Avg training loss: 0.0670
+Avg val loss: 0.0842
+Time taken: 37.65s
+Best model is at epoch 414. Saving...
+==========
+
+Start of epoch 415:
+
+Avg training loss: 0.1369
+Avg val loss: 0.0979
+Time taken: 33.12s
+==========
+
+Start of epoch 416:
+
+Avg training loss: 0.0677
+Avg val loss: 0.0842
+Time taken: 37.44s
+==========
+
+Start of epoch 417:
+
+Avg training loss: 0.1450
+Avg val loss: 0.1029
+Time taken: 32.94s
+==========
+
+Start of epoch 418:
+
+Avg training loss: 0.1630
+Avg val loss: 0.1653
+Time taken: 31.09s
+==========
+
+Start of epoch 419:
+
+Avg training loss: 0.0601
+Avg val loss: 0.0841
+Time taken: 40.76s
+Best model is at epoch 419. Saving...
+==========
+
+Start of epoch 420:
+
+Avg training loss: 0.0469
+Avg val loss: 0.0848
+Time taken: 43.14s
+==========
+
+Start of epoch 421:
+
+Avg training loss: 0.0530
+Avg val loss: 0.0847
+Time taken: 42.35s
+==========
+
+Start of epoch 422:
+
+Avg training loss: 0.0540
+Avg val loss: 0.0847
+Time taken: 40.65s
+==========
+
+Start of epoch 423:
+
+Avg training loss: 0.0654
+Avg val loss: 0.0842
+Time taken: 39.10s
+==========
+
+Start of epoch 424:
+
+Avg training loss: 0.0600
+Avg val loss: 0.0844
+Time taken: 39.06s
+==========
+
+Start of epoch 425:
+
+Avg training loss: 0.0582
+Avg val loss: 0.0846
+Time taken: 40.70s
+==========
+
+Start of epoch 426:
+
+Avg training loss: 0.0552
+Avg val loss: 0.0852
+Time taken: 40.23s
+==========
+
+Start of epoch 427:
+
+Avg training loss: 0.0855
+Avg val loss: 0.0850
+Time taken: 36.03s
+==========
+
+Start of epoch 428:
+
+Avg training loss: 0.1198
+Avg val loss: 0.0905
+Time taken: 32.57s
+==========
+
+Start of epoch 429:
+
+Avg training loss: 0.0486
+Avg val loss: 0.0850
+Time taken: 43.63s
+==========
+
+Start of epoch 430:
+
+Avg training loss: 0.0996
+Avg val loss: 0.0848
+Time taken: 33.62s
+==========
+
+Start of epoch 431:
+
+Avg training loss: 0.0455
+Avg val loss: 0.0847
+Time taken: 44.79s
+==========
+
+Start of epoch 432:
+
+Avg training loss: 0.0893
+Avg val loss: 0.0841
+Time taken: 34.60s
+==========
+
+Start of epoch 433:
+
+Avg training loss: 0.0453
+Avg val loss: 0.0848
+Time taken: 44.82s
+==========
+
+Start of epoch 434:
+
+Avg training loss: 0.0671
+Avg val loss: 0.0843
+Time taken: 37.71s
+==========
+
+Start of epoch 435:
+
+Avg training loss: 0.0654
+Avg val loss: 0.0844
+Time taken: 38.90s
+==========
+
+Start of epoch 436:
+
+Avg training loss: 0.1248
+Avg val loss: 0.0894
+Time taken: 32.33s
+==========
+
+Start of epoch 437:
+
+Avg training loss: 0.0586
+Avg val loss: 0.0843
+Time taken: 40.56s
+==========
+
+Start of epoch 438:
+
+Avg training loss: 0.0502
+Avg val loss: 0.0852
+Time taken: 41.60s
+==========
+
+Start of epoch 439:
+
+Avg training loss: 0.0542
+Avg val loss: 0.0851
+Time taken: 41.57s
+==========
+
+Start of epoch 440:
+
+Avg training loss: 0.0818
+Avg val loss: 0.0844
+Time taken: 35.55s
+==========
+
+Start of epoch 441:
+
+Avg training loss: 0.0676
+Avg val loss: 0.0844
+Time taken: 38.58s
+==========
+
+Start of epoch 442:
+
+Avg training loss: 0.0525
+Avg val loss: 0.0852
+Time taken: 40.90s
+==========
+
+Start of epoch 443:
+
+Avg training loss: 0.1017
+Avg val loss: 0.0851
+Time taken: 34.60s
+==========
+
+Start of epoch 444:
+
+Avg training loss: 0.0937
+Avg val loss: 0.0852
+Time taken: 34.03s
+==========
+
+Start of epoch 445:
+
+Avg training loss: 0.0905
+Avg val loss: 0.0855
+Time taken: 35.49s
+==========
+
+Start of epoch 446:
+
+Avg training loss: 0.0694
+Avg val loss: 0.0847
+Time taken: 37.28s
+==========
+
+Start of epoch 447:
+
+Avg training loss: 0.0493
+Avg val loss: 0.0856
+Time taken: 43.24s
+==========
+
+Start of epoch 448:
+
+Avg training loss: 0.0686
+Avg val loss: 0.0846
+Time taken: 37.28s
+==========
+
+Start of epoch 449:
+
+Avg training loss: 0.0763
+Avg val loss: 0.0847
+Time taken: 37.29s
+==========
+
+Start of epoch 450:
+
+Avg training loss: 0.0576
+Avg val loss: 0.0849
+Time taken: 39.57s
+==========
+
+Start of epoch 451:
+
+Avg training loss: 0.0917
+Avg val loss: 0.0853
+Time taken: 35.43s
+==========
+
+Start of epoch 452:
+
+Avg training loss: 0.0455
+Avg val loss: 0.0848
+Time taken: 43.33s
+==========
+
+Start of epoch 453:
+
+Avg training loss: 0.0705
+Avg val loss: 0.0841
+Time taken: 38.12s
+==========
+
+Start of epoch 454:
+
+Avg training loss: 0.1418
+Avg val loss: 0.0981
+Time taken: 31.56s
+==========
+
+Start of epoch 455:
+
+Avg training loss: 0.1092
+Avg val loss: 0.0865
+Time taken: 34.20s
+==========
+
+Start of epoch 456:
+
+Avg training loss: 0.0495
+Avg val loss: 0.0846
+Time taken: 41.78s
+==========
+
+Start of epoch 457:
+
+Avg training loss: 0.0850
+Avg val loss: 0.0841
+Time taken: 36.25s
+==========
+
+Start of epoch 458:
+
+Avg training loss: 0.0543
+Avg val loss: 0.0848
+Time taken: 40.30s
+==========
+
+Start of epoch 459:
+
+Avg training loss: 0.0466
+Avg val loss: 0.0854
+Time taken: 44.01s
+==========
+
+Start of epoch 460:
+
+Avg training loss: 0.1472
+Avg val loss: 0.1031
+Time taken: 31.64s
+==========
+
+Start of epoch 461:
+
+Avg training loss: 0.0887
+Avg val loss: 0.0838
+Time taken: 35.80s
+Best model is at epoch 461. Saving...
+==========
+
+Start of epoch 462:
+
+Avg training loss: 0.1601
+Avg val loss: 0.1348
+Time taken: 31.13s
+==========
+
+Start of epoch 463:
+
+Avg training loss: 0.0561
+Avg val loss: 0.0835
+Time taken: 41.37s
+Best model is at epoch 463. Saving...
+==========
+
+Start of epoch 464:
+
+Avg training loss: 0.0540
+Avg val loss: 0.0838
+Time taken: 40.57s
+==========
+
+Start of epoch 465:
+
+Avg training loss: 0.1657
+Avg val loss: 0.1134
+Time taken: 32.29s
+==========
+
+Start of epoch 466:
+
+Avg training loss: 0.0477
+Avg val loss: 0.0829
+Time taken: 42.60s
+Best model is at epoch 466. Saving...
+==========
+
+Start of epoch 467:
+
+Avg training loss: 0.0654
+Avg val loss: 0.0830
+Time taken: 39.22s
+==========
+
+Start of epoch 468:
+
+Avg training loss: 0.0739
+Avg val loss: 0.0836
+Time taken: 36.45s
+==========
+
+Start of epoch 469:
+
+Avg training loss: 0.0732
+Avg val loss: 0.0838
+Time taken: 37.68s
+==========
+
+Start of epoch 470:
+
+Avg training loss: 0.0473
+Avg val loss: 0.0840
+Time taken: 42.41s
+==========
+
+Start of epoch 471:
+
+Avg training loss: 0.0475
+Avg val loss: 0.0844
+Time taken: 43.58s
+==========
+
+Start of epoch 472:
+
+Avg training loss: 0.0467
+Avg val loss: 0.0848
+Time taken: 42.73s
+==========
+
+Start of epoch 473:
+
+Avg training loss: 0.1827
+Avg val loss: 0.1086
+Time taken: 31.98s
+==========
+
+Start of epoch 474:
+
+Avg training loss: 0.0455
+Avg val loss: 0.0830
+Time taken: 43.48s
+==========
+
+Start of epoch 475:
+
+Avg training loss: 0.0453
+Avg val loss: 0.0827
+Time taken: 44.41s
+Best model is at epoch 475. Saving...
+==========
+
+Start of epoch 476:
+
+Avg training loss: 0.0651
+Avg val loss: 0.0827
+Time taken: 38.28s
+==========
+
+Start of epoch 477:
+
+Avg training loss: 0.0732
+Avg val loss: 0.0834
+Time taken: 37.45s
+==========
+
+Start of epoch 478:
+
+Avg training loss: 0.1927
+Avg val loss: 0.0996
+Time taken: 30.82s
+==========
+
+Start of epoch 479:
+
+Avg training loss: 0.0635
+Avg val loss: 0.0827
+Time taken: 39.28s
+==========
+
+Start of epoch 480:
+
+Avg training loss: 0.0538
+Avg val loss: 0.0830
+Time taken: 40.40s
+==========
+
+Start of epoch 481:
+
+Avg training loss: 0.0713
+Avg val loss: 0.0833
+Time taken: 37.88s
+==========
+
+Start of epoch 482:
+
+Avg training loss: 0.0508
+Avg val loss: 0.0835
+Time taken: 41.27s
+==========
+
+Start of epoch 483:
+
+Avg training loss: 0.0830
+Avg val loss: 0.0838
+Time taken: 36.34s
+==========
+
+Start of epoch 484:
+
+Avg training loss: 0.0531
+Avg val loss: 0.0835
+Time taken: 40.56s
+==========
+
+Start of epoch 485:
+
+Avg training loss: 0.0990
+Avg val loss: 0.0847
+Time taken: 34.85s
+==========
+
+Start of epoch 486:
+
+Avg training loss: 0.0515
+Avg val loss: 0.0838
+Time taken: 41.25s
+==========
+
+Start of epoch 487:
+
+Avg training loss: 0.0656
+Avg val loss: 0.0834
+Time taken: 38.90s
+==========
+
+Start of epoch 488:
+
+Avg training loss: 0.0808
+Avg val loss: 0.0840
+Time taken: 35.65s
+==========
+
+Start of epoch 489:
+
+Avg training loss: 0.0578
+Avg val loss: 0.0837
+Time taken: 40.57s
+==========
+
+Start of epoch 490:
+
+Avg training loss: 0.1293
+Avg val loss: 0.0896
+Time taken: 32.09s
+==========
+
+Start of epoch 491:
+
+Avg training loss: 0.0761
+Avg val loss: 0.0835
+Time taken: 37.25s
+==========
+
+Start of epoch 492:
+
+Avg training loss: 0.1439
+Avg val loss: 0.0993
+Time taken: 31.46s
+==========
+
+Start of epoch 493:
+
+Avg training loss: 0.0636
+Avg val loss: 0.0832
+Time taken: 39.37s
+==========
+
+Start of epoch 494:
+
+Avg training loss: 0.0791
+Avg val loss: 0.0838
+Time taken: 35.66s
+==========
+
+Start of epoch 495:
+
+Avg training loss: 0.0728
+Avg val loss: 0.0837
+Time taken: 37.75s
+==========
+
+Start of epoch 496:
+
+Avg training loss: 0.0594
+Avg val loss: 0.0835
+Time taken: 38.81s
+==========
+
+Start of epoch 497:
+
+Avg training loss: 0.0620
+Avg val loss: 0.0835
+Time taken: 39.54s
+==========
+
+Start of epoch 498:
+
+Avg training loss: 0.0573
+Avg val loss: 0.0837
+Time taken: 39.43s
+==========
+
+Start of epoch 499:
+
+Avg training loss: 0.0531
+Avg val loss: 0.0842
+Time taken: 41.68s
+==========
+
+Start of epoch 500:
+
+Avg training loss: 0.0541
+Avg val loss: 0.0844
+Time taken: 40.19s
+==========
+
+Start of epoch 501:
+
+Avg training loss: 0.0525
+Avg val loss: 0.0845
+Time taken: 41.72s
+==========
+
+Start of epoch 502:
+
+Avg training loss: 0.1667
+Avg val loss: 0.1270
+Time taken: 31.11s
+==========
+
+Start of epoch 503:
+
+Avg training loss: 0.0799
+Avg val loss: 0.0833
+Time taken: 36.73s
+==========
+
+Start of epoch 504:
+
+Avg training loss: 0.1243
+Avg val loss: 0.0892
+Time taken: 32.18s
+==========
+
+Start of epoch 505:
+
+Avg training loss: 0.0839
+Avg val loss: 0.0843
+Time taken: 36.08s
+==========
+
+Start of epoch 506:
+
+Avg training loss: 0.0489
+Avg val loss: 0.0836
+Time taken: 41.78s
+==========
+
+Start of epoch 507:
+
+Avg training loss: 0.0564
+Avg val loss: 0.0833
+Time taken: 40.95s
+==========
+
+Start of epoch 508:
+
+Avg training loss: 0.0970
+Avg val loss: 0.0843
+Time taken: 33.81s
+==========
+
+Start of epoch 509:
+
+Avg training loss: 0.0504
+Avg val loss: 0.0837
+Time taken: 42.49s
+==========
+
+Start of epoch 510:
+
+Avg training loss: 0.0874
+Avg val loss: 0.0835
+Time taken: 34.65s
+==========
+
+Start of epoch 511:
+
+Avg training loss: 0.0696
+Avg val loss: 0.0833
+Time taken: 38.08s
+==========
+
+Start of epoch 512:
+
+Avg training loss: 0.0668
+Avg val loss: 0.0835
+Time taken: 37.43s
+==========
+
+Start of epoch 513:
+
+Avg training loss: 0.0474
+Avg val loss: 0.0843
+Time taken: 43.47s
+==========
+
+Start of epoch 514:
+
+Avg training loss: 0.1507
+Avg val loss: 0.0997
+Time taken: 31.51s
+==========
+
+Start of epoch 515:
+
+Avg training loss: 0.0757
+Avg val loss: 0.0828
+Time taken: 37.22s
+==========
+
+Start of epoch 516:
+
+Avg training loss: 0.1812
+Avg val loss: 0.1053
+Time taken: 30.88s
+==========
+
+Start of epoch 517:
+
+Avg training loss: 0.0514
+Avg val loss: 0.0821
+Time taken: 42.37s
+Best model is at epoch 517. Saving...
+==========
+
+Start of epoch 518:
+
+Avg training loss: 0.0962
+Avg val loss: 0.0838
+Time taken: 33.93s
+==========
+
+Start of epoch 519:
+
+Avg training loss: 0.1560
+Avg val loss: 0.1150
+Time taken: 32.47s
+==========
+
+Start of epoch 520:
+
+Avg training loss: 0.0818
+Avg val loss: 0.0832
+Time taken: 35.17s
+==========
+
+Start of epoch 521:
+
+Avg training loss: 0.0720
+Avg val loss: 0.0830
+Time taken: 37.78s
+==========
+
+Start of epoch 522:
+
+Avg training loss: 0.0674
+Avg val loss: 0.0830
+Time taken: 37.28s
+==========
+
+Start of epoch 523:
+
+Avg training loss: 0.1402
+Avg val loss: 0.0924
+Time taken: 32.93s
+==========
+
+Start of epoch 524:
+
+Avg training loss: 0.0559
+Avg val loss: 0.0826
+Time taken: 39.76s
+==========
+
+Start of epoch 525:
+
+Avg training loss: 0.1652
+Avg val loss: 0.1137
+Time taken: 32.44s
+==========
+
+Start of epoch 526:
+
+Avg training loss: 0.0582
+Avg val loss: 0.0821
+Time taken: 39.23s
+==========
+
+Start of epoch 527:
+
+Avg training loss: 0.0609
+Avg val loss: 0.0824
+Time taken: 39.83s
+==========
+
+Start of epoch 528:
+
+Avg training loss: 0.1280
+Avg val loss: 0.0869
+Time taken: 32.16s
+==========
+
+Start of epoch 529:
+
+Avg training loss: 0.0515
+Avg val loss: 0.0826
+Time taken: 42.17s
+==========
+
+Start of epoch 530:
+
+Avg training loss: 0.1001
+Avg val loss: 0.0835
+Time taken: 33.63s
+==========
+
+Start of epoch 531:
+
+Avg training loss: 0.0543
+Avg val loss: 0.0830
+Time taken: 41.30s
+==========
+
+Start of epoch 532:
+
+Avg training loss: 0.0882
+Avg val loss: 0.0833
+Time taken: 34.54s
+==========
+
+Start of epoch 533:
+
+Avg training loss: 0.0588
+Avg val loss: 0.0828
+Time taken: 40.10s
+==========
+
+Start of epoch 534:
+
+Avg training loss: 0.0925
+Avg val loss: 0.0836
+Time taken: 34.13s
+==========
+
+Start of epoch 535:
+
+Avg training loss: 0.0810
+Avg val loss: 0.0834
+Time taken: 36.46s
+==========
+
+Start of epoch 536:
+
+Avg training loss: 0.0643
+Avg val loss: 0.0830
+Time taken: 37.71s
+==========
+
+Start of epoch 537:
+
+Avg training loss: 0.0544
+Avg val loss: 0.0835
+Time taken: 41.37s
+==========
+
+Start of epoch 538:
+
+Avg training loss: 0.0948
+Avg val loss: 0.0838
+Time taken: 34.02s
+==========
+
+Start of epoch 539:
+
+Avg training loss: 0.0561
+Avg val loss: 0.0831
+Time taken: 40.81s
+==========
+
+Start of epoch 540:
+
+Avg training loss: 0.0606
+Avg val loss: 0.0832
+Time taken: 38.48s
+==========
+
+Start of epoch 541:
+
+Avg training loss: 0.0549
+Avg val loss: 0.0835
+Time taken: 41.28s
+==========
+
+Start of epoch 542:
+
+Avg training loss: 0.0615
+Avg val loss: 0.0833
+Time taken: 38.33s
+==========
+
+Start of epoch 543:
+
+Avg training loss: 0.0852
+Avg val loss: 0.0837
+Time taken: 35.97s
+==========
+
+Start of epoch 544:
+
+Avg training loss: 0.1208
+Avg val loss: 0.0881
+Time taken: 32.34s
+==========
+
+Start of epoch 545:
+
+Avg training loss: 0.0736
+Avg val loss: 0.0832
+Time taken: 37.59s
+==========
+
+Start of epoch 546:
+
+Avg training loss: 0.0458
+Avg val loss: 0.0834
+Time taken: 43.01s
+==========
+
+Start of epoch 547:
+
+Avg training loss: 0.1836
+Avg val loss: 0.1005
+Time taken: 32.05s
+==========
+
+Start of epoch 548:
+
+Avg training loss: 0.1500
+Avg val loss: 0.0934
+Time taken: 31.21s
+==========
+
+Start of epoch 549:
+
+Avg training loss: 0.0549
+Avg val loss: 0.0824
+Time taken: 41.11s
+==========
+
+Start of epoch 550:
+
+Avg training loss: 0.0464
+Avg val loss: 0.0828
+Time taken: 42.68s
+==========
+
+Start of epoch 551:
+
+Avg training loss: 0.0745
+Avg val loss: 0.0824
+Time taken: 37.53s
+==========
+
+Start of epoch 552:
+
+Avg training loss: 0.1661
+Avg val loss: 0.1168
+Time taken: 30.97s
+==========
+
+Start of epoch 553:
+
+Avg training loss: 0.1047
+Avg val loss: 0.0841
+Time taken: 34.55s
+==========
+
+Start of epoch 554:
+
+Avg training loss: 0.0450
+Avg val loss: 0.0823
+Time taken: 43.24s
+==========
+
+Start of epoch 555:
+
+Avg training loss: 0.1542
+Avg val loss: 0.0952
+Time taken: 32.58s
+==========
+
+Start of epoch 556:
+
+Avg training loss: 0.0825
+Avg val loss: 0.0822
+Time taken: 35.01s
+==========
+
+Start of epoch 557:
+
+Avg training loss: 0.0775
+Avg val loss: 0.0825
+Time taken: 36.96s
+==========
+
+Start of epoch 558:
+
+Avg training loss: 0.0525
+Avg val loss: 0.0826
+Time taken: 40.54s
+==========
+
+Start of epoch 559:
+
+Avg training loss: 0.1711
+Avg val loss: 0.1059
+Time taken: 32.63s
+==========
+
+Start of epoch 560:
+
+Avg training loss: 0.1156
+Avg val loss: 0.0838
+Time taken: 32.55s
+==========
+
+Start of epoch 561:
+
+Avg training loss: 0.1200
+Avg val loss: 0.0861
+Time taken: 33.77s
+==========
+
+Start of epoch 562:
+
+Avg training loss: 0.0725
+Avg val loss: 0.0826
+Time taken: 36.60s
+==========
+
+Start of epoch 563:
+
+Avg training loss: 0.0976
+Avg val loss: 0.0841
+Time taken: 34.96s
+==========
+
+Start of epoch 564:
+
+Avg training loss: 0.1076
+Avg val loss: 0.0857
+Time taken: 33.02s
+==========
+
+Start of epoch 565:
+
+Avg training loss: 0.1489
+Avg val loss: 0.1072
+Time taken: 32.59s
+==========
+
+Start of epoch 566:
+
+Avg training loss: 0.0540
+Avg val loss: 0.0825
+Time taken: 40.36s
+==========
+
+Start of epoch 567:
+
+Avg training loss: 0.0646
+Avg val loss: 0.0825
+Time taken: 39.19s
+==========
+
+Start of epoch 568:
+
+Avg training loss: 0.0495
+Avg val loss: 0.0829
+Time taken: 41.47s
+==========
+
+Start of epoch 569:
+
+Avg training loss: 0.0556
+Avg val loss: 0.0827
+Time taken: 40.88s
+==========
+
+Start of epoch 570:
+
+Avg training loss: 0.0762
+Avg val loss: 0.0826
+Time taken: 36.07s
+==========
+
+Start of epoch 571:
+
+Avg training loss: 0.0629
+Avg val loss: 0.0828
+Time taken: 39.21s
+==========
+
+Start of epoch 572:
+
+Avg training loss: 0.1307
+Avg val loss: 0.0876
+Time taken: 32.15s
+==========
+
+Start of epoch 573:
+
+Avg training loss: 0.0717
+Avg val loss: 0.0825
+Time taken: 37.80s
+==========
+
+Start of epoch 574:
+
+Avg training loss: 0.1044
+Avg val loss: 0.0846
+Time taken: 33.17s
+==========
+
+Start of epoch 575:
+
+Avg training loss: 0.0961
+Avg val loss: 0.0845
+Time taken: 34.89s
+==========
+
+Start of epoch 576:
+
+Avg training loss: 0.1120
+Avg val loss: 0.0869
+Time taken: 32.76s
+==========
+
+Start of epoch 577:
+
+Avg training loss: 0.0639
+Avg val loss: 0.0829
+Time taken: 39.15s
+==========
+
+Start of epoch 578:
+
+Avg training loss: 0.1410
+Avg val loss: 0.0921
+Time taken: 31.76s
+==========
+
+Start of epoch 579:
+
+Avg training loss: 0.1812
+Avg val loss: 0.1318
+Time taken: 32.07s
+==========
+
+Start of epoch 580:
+
+Avg training loss: 0.0569
+Avg val loss: 0.0816
+Time taken: 39.69s
+Best model is at epoch 580. Saving...
+==========
+
+Start of epoch 581:
+
+Avg training loss: 0.0627
+Avg val loss: 0.0820
+Time taken: 39.49s
+==========
+
+Start of epoch 582:
+
+Avg training loss: 0.0812
+Avg val loss: 0.0828
+Time taken: 35.27s
+==========
+
+Start of epoch 583:
+
+Avg training loss: 0.0446
+Avg val loss: 0.0820
+Time taken: 44.73s
+==========
+
+Start of epoch 584:
+
+Avg training loss: 0.0537
+Avg val loss: 0.0823
+Time taken: 40.37s
+==========
+
+Start of epoch 585:
+
+Avg training loss: 0.1051
+Avg val loss: 0.0831
+Time taken: 34.25s
+==========
+
+Start of epoch 586:
+
+Avg training loss: 0.0941
+Avg val loss: 0.0832
+Time taken: 33.90s
+==========
+
+Start of epoch 587:
+
+Avg training loss: 0.0822
+Avg val loss: 0.0829
+Time taken: 36.20s
+==========
+
+Start of epoch 588:
+
+Avg training loss: 0.0699
+Avg val loss: 0.0827
+Time taken: 36.78s
+==========
+
+Start of epoch 589:
+
+Avg training loss: 0.0456
+Avg val loss: 0.0829
+Time taken: 44.15s
+==========
+
+Start of epoch 590:
+
+Avg training loss: 0.0561
+Avg val loss: 0.0826
+Time taken: 39.74s
+==========
+
+Start of epoch 591:
+
+Avg training loss: 0.1359
+Avg val loss: 0.0883
+Time taken: 32.91s
+==========
+
+Start of epoch 592:
+
+Avg training loss: 0.0504
+Avg val loss: 0.0821
+Time taken: 41.18s
+==========
+
+Start of epoch 593:
+
+Avg training loss: 0.0937
+Avg val loss: 0.0824
+Time taken: 35.30s
+==========
+
+Start of epoch 594:
+
+Avg training loss: 0.1007
+Avg val loss: 0.0833
+Time taken: 33.32s
+==========
+
+Start of epoch 595:
+
+Avg training loss: 0.0637
+Avg val loss: 0.0825
+Time taken: 39.06s
+==========
+
+Start of epoch 596:
+
+Avg training loss: 0.0657
+Avg val loss: 0.0826
+Time taken: 37.58s
+==========
+
+Start of epoch 597:
+
+Avg training loss: 0.0781
+Avg val loss: 0.0828
+Time taken: 36.80s
+==========
+
+Start of epoch 598:
+
+Avg training loss: 0.0442
+Avg val loss: 0.0825
+Time taken: 43.61s
+==========
+
+Start of epoch 599:
+
+Avg training loss: 0.0499
+Avg val loss: 0.0830
+Time taken: 42.67s
+==========
+
+Start of epoch 600:
+
+Avg training loss: 0.0765
+Avg val loss: 0.0822
+Time taken: 35.93s
+==========
+
+Start of epoch 601:
+
+Avg training loss: 0.0803
+Avg val loss: 0.0826
+Time taken: 36.37s
+==========
+
+Start of epoch 602:
+
+Avg training loss: 0.0464
+Avg val loss: 0.0829
+Time taken: 42.49s
+==========
+
+Start of epoch 603:
+
+Avg training loss: 0.0637
+Avg val loss: 0.0825
+Time taken: 38.97s
+==========
+
+Start of epoch 604:
+
+Avg training loss: 0.0722
+Avg val loss: 0.0824
+Time taken: 36.37s
+==========
+
+Start of epoch 605:
+
+Avg training loss: 0.0974
+Avg val loss: 0.0836
+Time taken: 34.95s
+==========
+
+Start of epoch 606:
+
+Avg training loss: 0.1271
+Avg val loss: 0.0892
+Time taken: 31.95s
+==========
+
+Start of epoch 607:
+
+Avg training loss: 0.0969
+Avg val loss: 0.0842
+Time taken: 34.84s
+==========
+
+Start of epoch 608:
+
+Avg training loss: 0.0810
+Avg val loss: 0.0832
+Time taken: 35.17s
+==========
+
+Start of epoch 609:
+
+Avg training loss: 0.0968
+Avg val loss: 0.0845
+Time taken: 35.00s
+==========
+
+Start of epoch 610:
+
+Avg training loss: 0.0937
+Avg val loss: 0.0845
+Time taken: 33.84s
+==========
+
+Start of epoch 611:
+
+Avg training loss: 0.1499
+Avg val loss: 0.1109
+Time taken: 32.93s
+==========
+
+Start of epoch 612:
+
+Avg training loss: 0.0478
+Avg val loss: 0.0819
+Time taken: 42.44s
+==========
+
+Start of epoch 613:
+
+Avg training loss: 0.1127
+Avg val loss: 0.0830
+Time taken: 34.08s
+==========
+
+Start of epoch 614:
+
+Avg training loss: 0.0717
+Avg val loss: 0.0822
+Time taken: 36.71s
+==========
+
+Start of epoch 615:
+
+Avg training loss: 0.0725
+Avg val loss: 0.0823
+Time taken: 37.66s
+==========
+
+Start of epoch 616:
+
+Avg training loss: 0.0466
+Avg val loss: 0.0827
+Time taken: 42.40s
+==========
+
+Start of epoch 617:
+
+Avg training loss: 0.0512
+Avg val loss: 0.0829
+Time taken: 42.05s
+==========
+
+Start of epoch 618:
+
+Avg training loss: 0.0779
+Avg val loss: 0.0823
+Time taken: 35.62s
+==========
+
+Start of epoch 619:
+
+Avg training loss: 0.1472
+Avg val loss: 0.0964
+Time taken: 32.54s
+==========
+
+Start of epoch 620:
+
+Avg training loss: 0.0694
+Avg val loss: 0.0820
+Time taken: 36.83s
+==========
+
+Start of epoch 621:
+
+Avg training loss: 0.0460
+Avg val loss: 0.0823
+Time taken: 43.95s
+==========
+
+Start of epoch 622:
+
+Avg training loss: 0.0648
+Avg val loss: 0.0821
+Time taken: 37.91s
+==========
+
+Start of epoch 623:
+
+Avg training loss: 0.1502
+Avg val loss: 0.0954
+Time taken: 32.66s
+==========
+
+Start of epoch 624:
+
+Avg training loss: 0.0774
+Avg val loss: 0.0819
+Time taken: 35.82s
+==========
+
+Start of epoch 625:
+
+Avg training loss: 0.0562
+Avg val loss: 0.0819
+Time taken: 40.82s
+==========
+
+Start of epoch 626:
+
+Avg training loss: 0.1716
+Avg val loss: 0.1013
+Time taken: 31.06s
+==========
+
+Start of epoch 627:
+
+Avg training loss: 0.0453
+Avg val loss: 0.0809
+Time taken: 44.47s
+Best model is at epoch 627. Saving...
+==========
+
+Start of epoch 628:
+
+Avg training loss: 0.0549
+Avg val loss: 0.0812
+Time taken: 40.00s
+==========
+
+Start of epoch 629:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0816
+Time taken: 43.16s
+==========
+
+Start of epoch 630:
+
+Avg training loss: 0.1406
+Avg val loss: 0.0853
+Time taken: 31.73s
+==========
+
+Start of epoch 631:
+
+Avg training loss: 0.0477
+Avg val loss: 0.0813
+Time taken: 43.09s
+==========
+
+Start of epoch 632:
+
+Avg training loss: 0.0949
+Avg val loss: 0.0818
+Time taken: 33.97s
+==========
+
+Start of epoch 633:
+
+Avg training loss: 0.0693
+Avg val loss: 0.0817
+Time taken: 38.13s
+==========
+
+Start of epoch 634:
+
+Avg training loss: 0.0559
+Avg val loss: 0.0817
+Time taken: 40.01s
+==========
+
+Start of epoch 635:
+
+Avg training loss: 0.0587
+Avg val loss: 0.0819
+Time taken: 40.19s
+==========
+
+Start of epoch 636:
+
+Avg training loss: 0.0544
+Avg val loss: 0.0821
+Time taken: 39.98s
+==========
+
+Start of epoch 637:
+
+Avg training loss: 0.0436
+Avg val loss: 0.0824
+Time taken: 44.90s
+==========
+
+Start of epoch 638:
+
+Avg training loss: 0.0515
+Avg val loss: 0.0824
+Time taken: 40.97s
+==========
+
+Start of epoch 639:
+
+Avg training loss: 0.1149
+Avg val loss: 0.0828
+Time taken: 33.74s
+==========
+
+Start of epoch 640:
+
+Avg training loss: 0.0478
+Avg val loss: 0.0819
+Time taken: 42.02s
+==========
+
+Start of epoch 641:
+
+Avg training loss: 0.0530
+Avg val loss: 0.0822
+Time taken: 41.40s
+==========
+
+Start of epoch 642:
+
+Avg training loss: 0.0601
+Avg val loss: 0.0820
+Time taken: 38.67s
+==========
+
+Start of epoch 643:
+
+Avg training loss: 0.0869
+Avg val loss: 0.0822
+Time taken: 35.75s
+==========
+
+Start of epoch 644:
+
+Avg training loss: 0.0738
+Avg val loss: 0.0822
+Time taken: 36.24s
+==========
+
+Start of epoch 645:
+
+Avg training loss: 0.0766
+Avg val loss: 0.0825
+Time taken: 36.85s
+==========
+
+Start of epoch 646:
+
+Avg training loss: 0.0520
+Avg val loss: 0.0824
+Time taken: 40.71s
+==========
+
+Start of epoch 647:
+
+Avg training loss: 0.1344
+Avg val loss: 0.0863
+Time taken: 32.99s
+==========
+
+Start of epoch 648:
+
+Avg training loss: 0.0729
+Avg val loss: 0.0818
+Time taken: 36.31s
+==========
+
+Start of epoch 649:
+
+Avg training loss: 0.0854
+Avg val loss: 0.0825
+Time taken: 35.99s
+==========
+
+Start of epoch 650:
+
+Avg training loss: 0.0458
+Avg val loss: 0.0820
+Time taken: 42.76s
+==========
+
+Start of epoch 651:
+
+Avg training loss: 0.0515
+Avg val loss: 0.0822
+Time taken: 41.90s
+==========
+
+Start of epoch 652:
+
+Avg training loss: 0.0518
+Avg val loss: 0.0824
+Time taken: 40.65s
+==========
+
+Start of epoch 653:
+
+Avg training loss: 0.0450
+Avg val loss: 0.0827
+Time taken: 43.98s
+==========
+
+Start of epoch 654:
+
+Avg training loss: 0.0595
+Avg val loss: 0.0821
+Time taken: 38.94s
+==========
+
+Start of epoch 655:
+
+Avg training loss: 0.1162
+Avg val loss: 0.0832
+Time taken: 33.55s
+==========
+
+Start of epoch 656:
+
+Avg training loss: 0.1576
+Avg val loss: 0.1132
+Time taken: 31.31s
+==========
+
+Start of epoch 657:
+
+Avg training loss: 0.1196
+Avg val loss: 0.0842
+Time taken: 33.58s
+==========
+
+Start of epoch 658:
+
+Avg training loss: 0.0646
+Avg val loss: 0.0819
+Time taken: 37.54s
+==========
+
+Start of epoch 659:
+
+Avg training loss: 0.1361
+Avg val loss: 0.0874
+Time taken: 33.11s
+==========
+
+Start of epoch 660:
+
+Avg training loss: 0.0612
+Avg val loss: 0.0816
+Time taken: 38.33s
+==========
+
+Start of epoch 661:
+
+Avg training loss: 0.0486
+Avg val loss: 0.0818
+Time taken: 42.81s
+==========
+
+Start of epoch 662:
+
+Avg training loss: 0.0915
+Avg val loss: 0.0817
+Time taken: 34.39s
+==========
+
+Start of epoch 663:
+
+Avg training loss: 0.0473
+Avg val loss: 0.0819
+Time taken: 43.09s
+==========
+
+Start of epoch 664:
+
+Avg training loss: 0.0784
+Avg val loss: 0.0816
+Time taken: 35.68s
+==========
+
+Start of epoch 665:
+
+Avg training loss: 0.0981
+Avg val loss: 0.0825
+Time taken: 34.74s
+==========
+
+Start of epoch 666:
+
+Avg training loss: 0.1276
+Avg val loss: 0.0872
+Time taken: 32.05s
+==========
+
+Start of epoch 667:
+
+Avg training loss: 0.0980
+Avg val loss: 0.0831
+Time taken: 34.73s
+==========
+
+Start of epoch 668:
+
+Avg training loss: 0.0490
+Avg val loss: 0.0821
+Time taken: 41.62s
+==========
+
+Start of epoch 669:
+
+Avg training loss: 0.0523
+Avg val loss: 0.0823
+Time taken: 41.84s
+==========
+
+Start of epoch 670:
+
+Avg training loss: 0.0560
+Avg val loss: 0.0823
+Time taken: 39.64s
+==========
+
+Start of epoch 671:
+
+Avg training loss: 0.0757
+Avg val loss: 0.0820
+Time taken: 37.09s
+==========
+
+Start of epoch 672:
+
+Avg training loss: 0.1578
+Avg val loss: 0.1057
+Time taken: 31.26s
+==========
+
+Start of epoch 673:
+
+Avg training loss: 0.0464
+Avg val loss: 0.0807
+Time taken: 43.88s
+Best model is at epoch 673. Saving...
+==========
+
+Start of epoch 674:
+
+Avg training loss: 0.1019
+Avg val loss: 0.0814
+Time taken: 33.58s
+==========
+
+Start of epoch 675:
+
+Avg training loss: 0.0475
+Avg val loss: 0.0814
+Time taken: 43.14s
+==========
+
+Start of epoch 676:
+
+Avg training loss: 0.0635
+Avg val loss: 0.0815
+Time taken: 37.98s
+==========
+
+Start of epoch 677:
+
+Avg training loss: 0.0436
+Avg val loss: 0.0818
+Time taken: 44.75s
+==========
+
+Start of epoch 678:
+
+Avg training loss: 0.0510
+Avg val loss: 0.0819
+Time taken: 41.02s
+==========
+
+Start of epoch 679:
+
+Avg training loss: 0.0670
+Avg val loss: 0.0816
+Time taken: 38.35s
+==========
+
+Start of epoch 680:
+
+Avg training loss: 0.1951
+Avg val loss: 0.0970
+Time taken: 30.82s
+==========
+
+Start of epoch 681:
+
+Avg training loss: 0.0505
+Avg val loss: 0.0810
+Time taken: 42.31s
+==========
+
+Start of epoch 682:
+
+Avg training loss: 0.0809
+Avg val loss: 0.0814
+Time taken: 35.34s
+==========
+
+Start of epoch 683:
+
+Avg training loss: 0.0525
+Avg val loss: 0.0811
+Time taken: 41.51s
+==========
+
+Start of epoch 684:
+
+Avg training loss: 0.0721
+Avg val loss: 0.0814
+Time taken: 36.51s
+==========
+
+Start of epoch 685:
+
+Avg training loss: 0.0522
+Avg val loss: 0.0814
+Time taken: 41.87s
+==========
+
+Start of epoch 686:
+
+Avg training loss: 0.0541
+Avg val loss: 0.0816
+Time taken: 40.02s
+==========
+
+Start of epoch 687:
+
+Avg training loss: 0.0578
+Avg val loss: 0.0816
+Time taken: 40.11s
+==========
+
+Start of epoch 688:
+
+Avg training loss: 0.0472
+Avg val loss: 0.0819
+Time taken: 42.09s
+==========
+
+Start of epoch 689:
+
+Avg training loss: 0.0914
+Avg val loss: 0.0816
+Time taken: 35.19s
+==========
+
+Start of epoch 690:
+
+Avg training loss: 0.1091
+Avg val loss: 0.0829
+Time taken: 33.03s
+==========
+
+Start of epoch 691:
+
+Avg training loss: 0.0686
+Avg val loss: 0.0816
+Time taken: 38.15s
+==========
+
+Start of epoch 692:
+
+Avg training loss: 0.0511
+Avg val loss: 0.0819
+Time taken: 40.72s
+==========
+
+Start of epoch 693:
+
+Avg training loss: 0.0996
+Avg val loss: 0.0820
+Time taken: 34.72s
+==========
+
+Start of epoch 694:
+
+Avg training loss: 0.0959
+Avg val loss: 0.0823
+Time taken: 33.65s
+==========
+
+Start of epoch 695:
+
+Avg training loss: 0.0443
+Avg val loss: 0.0817
+Time taken: 44.60s
+==========
+
+Start of epoch 696:
+
+Avg training loss: 0.0469
+Avg val loss: 0.0820
+Time taken: 42.14s
+==========
+
+Start of epoch 697:
+
+Avg training loss: 0.1443
+Avg val loss: 0.0889
+Time taken: 32.90s
+==========
+
+Start of epoch 698:
+
+Avg training loss: 0.1453
+Avg val loss: 0.0933
+Time taken: 31.46s
+==========
+
+Start of epoch 699:
+
+Avg training loss: 0.0635
+Avg val loss: 0.0812
+Time taken: 39.19s
+==========
+
+Start of epoch 700:
+
+Avg training loss: 0.0512
+Avg val loss: 0.0815
+Time taken: 40.92s
+==========
+
+Start of epoch 701:
+
+Avg training loss: 0.0697
+Avg val loss: 0.0814
+Time taken: 38.03s
+==========
+
+Start of epoch 702:
+
+Avg training loss: 0.0440
+Avg val loss: 0.0817
+Time taken: 43.39s
+==========
+
+Start of epoch 703:
+
+Avg training loss: 0.1447
+Avg val loss: 0.0874
+Time taken: 32.71s
+==========
+
+Start of epoch 704:
+
+Avg training loss: 0.0922
+Avg val loss: 0.0811
+Time taken: 34.09s
+==========
+
+Start of epoch 705:
+
+Avg training loss: 0.0456
+Avg val loss: 0.0813
+Time taken: 43.83s
+==========
+
+Start of epoch 706:
+
+Avg training loss: 0.0631
+Avg val loss: 0.0813
+Time taken: 38.17s
+==========
+
+Start of epoch 707:
+
+Avg training loss: 0.1045
+Avg val loss: 0.0819
+Time taken: 34.46s
+==========
+
+Start of epoch 708:
+
+Avg training loss: 0.0436
+Avg val loss: 0.0812
+Time taken: 43.61s
+==========
+
+Start of epoch 709:
+
+Avg training loss: 0.0679
+Avg val loss: 0.0812
+Time taken: 38.33s
+==========
+
+Start of epoch 710:
+
+Avg training loss: 0.0876
+Avg val loss: 0.0815
+Time taken: 34.59s
+==========
+
+Start of epoch 711:
+
+Avg training loss: 0.1366
+Avg val loss: 0.0884
+Time taken: 32.97s
+==========
+
+Start of epoch 712:
+
+Avg training loss: 0.1386
+Avg val loss: 0.0912
+Time taken: 31.70s
+==========
+
+Start of epoch 713:
+
+Avg training loss: 0.0761
+Avg val loss: 0.0813
+Time taken: 37.05s
+==========
+
+Start of epoch 714:
+
+Avg training loss: 0.0838
+Avg val loss: 0.0819
+Time taken: 34.86s
+==========
+
+Start of epoch 715:
+
+Avg training loss: 0.1077
+Avg val loss: 0.0832
+Time taken: 34.23s
+==========
+
+Start of epoch 716:
+
+Avg training loss: 0.0531
+Avg val loss: 0.0816
+Time taken: 40.25s
+==========
+
+Start of epoch 717:
+
+Avg training loss: 0.0507
+Avg val loss: 0.0819
+Time taken: 42.28s
+==========
+
+Start of epoch 718:
+
+Avg training loss: 0.0563
+Avg val loss: 0.0819
+Time taken: 39.43s
+==========
+
+Start of epoch 719:
+
+Avg training loss: 0.0682
+Avg val loss: 0.0816
+Time taken: 38.02s
+==========
+
+Start of epoch 720:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0820
+Time taken: 41.77s
+==========
+
+Start of epoch 721:
+
+Avg training loss: 0.0504
+Avg val loss: 0.0822
+Time taken: 42.15s
+==========
+
+Start of epoch 722:
+
+Avg training loss: 0.0460
+Avg val loss: 0.0824
+Time taken: 42.65s
+==========
+
+Start of epoch 723:
+
+Avg training loss: 0.0452
+Avg val loss: 0.0826
+Time taken: 43.67s
+==========
+
+Start of epoch 724:
+
+Avg training loss: 0.0554
+Avg val loss: 0.0821
+Time taken: 40.16s
+==========
+
+Start of epoch 725:
+
+Avg training loss: 0.1019
+Avg val loss: 0.0818
+Time taken: 34.18s
+==========
+
+Start of epoch 726:
+
+Avg training loss: 0.0727
+Avg val loss: 0.0815
+Time taken: 36.53s
+==========
+
+Start of epoch 727:
+
+Avg training loss: 0.0559
+Avg val loss: 0.0819
+Time taken: 40.43s
+==========
+
+Start of epoch 728:
+
+Avg training loss: 0.1389
+Avg val loss: 0.0872
+Time taken: 31.92s
+==========
+
+Start of epoch 729:
+
+Avg training loss: 0.0452
+Avg val loss: 0.0808
+Time taken: 43.96s
+==========
+
+Start of epoch 730:
+
+Avg training loss: 0.1485
+Avg val loss: 0.0888
+Time taken: 31.58s
+==========
+
+Start of epoch 731:
+
+Avg training loss: 0.0452
+Avg val loss: 0.0804
+Time taken: 44.08s
+Best model is at epoch 731. Saving...
+==========
+
+Start of epoch 732:
+
+Avg training loss: 0.0566
+Avg val loss: 0.0808
+Time taken: 39.41s
+==========
+
+Start of epoch 733:
+
+Avg training loss: 0.0573
+Avg val loss: 0.0811
+Time taken: 40.12s
+==========
+
+Start of epoch 734:
+
+Avg training loss: 0.0776
+Avg val loss: 0.0812
+Time taken: 35.71s
+==========
+
+Start of epoch 735:
+
+Avg training loss: 0.0748
+Avg val loss: 0.0814
+Time taken: 37.14s
+==========
+
+Start of epoch 736:
+
+Avg training loss: 0.0486
+Avg val loss: 0.0814
+Time taken: 41.49s
+==========
+
+Start of epoch 737:
+
+Avg training loss: 0.1311
+Avg val loss: 0.0836
+Time taken: 33.17s
+==========
+
+Start of epoch 738:
+
+Avg training loss: 0.0502
+Avg val loss: 0.0809
+Time taken: 41.04s
+==========
+
+Start of epoch 739:
+
+Avg training loss: 0.0571
+Avg val loss: 0.0812
+Time taken: 40.38s
+==========
+
+Start of epoch 740:
+
+Avg training loss: 0.0858
+Avg val loss: 0.0813
+Time taken: 34.77s
+==========
+
+Start of epoch 741:
+
+Avg training loss: 0.0989
+Avg val loss: 0.0820
+Time taken: 34.63s
+==========
+
+Start of epoch 742:
+
+Avg training loss: 0.0631
+Avg val loss: 0.0814
+Time taken: 37.74s
+==========
+
+Start of epoch 743:
+
+Avg training loss: 0.0817
+Avg val loss: 0.0816
+Time taken: 36.36s
+==========
+
+Start of epoch 744:
+
+Avg training loss: 0.0790
+Avg val loss: 0.0818
+Time taken: 35.39s
+==========
+
+Start of epoch 745:
+
+Avg training loss: 0.0568
+Avg val loss: 0.0817
+Time taken: 40.37s
+==========
+
+Start of epoch 746:
+
+Avg training loss: 0.0659
+Avg val loss: 0.0816
+Time taken: 37.57s
+==========
+
+Start of epoch 747:
+
+Avg training loss: 0.0695
+Avg val loss: 0.0816
+Time taken: 37.94s
+==========
+
+Start of epoch 748:
+
+Avg training loss: 0.0612
+Avg val loss: 0.0817
+Time taken: 38.20s
+==========
+
+Start of epoch 749:
+
+Avg training loss: 0.1253
+Avg val loss: 0.0842
+Time taken: 33.39s
+==========
+
+Start of epoch 750:
+
+Avg training loss: 0.0878
+Avg val loss: 0.0819
+Time taken: 34.39s
+==========
+
+Start of epoch 751:
+
+Avg training loss: 0.0730
+Avg val loss: 0.0817
+Time taken: 37.47s
+==========
+
+Start of epoch 752:
+
+Avg training loss: 0.1045
+Avg val loss: 0.0830
+Time taken: 33.16s
+==========
+
+Start of epoch 753:
+
+Avg training loss: 0.0649
+Avg val loss: 0.0816
+Time taken: 38.70s
+==========
+
+Start of epoch 754:
+
+Avg training loss: 0.1000
+Avg val loss: 0.0824
+Time taken: 33.38s
+==========
+
+Start of epoch 755:
+
+Avg training loss: 0.1431
+Avg val loss: 0.0931
+Time taken: 32.75s
+==========
+
+Start of epoch 756:
+
+Avg training loss: 0.0638
+Avg val loss: 0.0811
+Time taken: 37.74s
+==========
+
+Start of epoch 757:
+
+Avg training loss: 0.1577
+Avg val loss: 0.0949
+Time taken: 32.52s
+==========
+
+Start of epoch 758:
+
+Avg training loss: 0.0968
+Avg val loss: 0.0815
+Time taken: 33.64s
+==========
+
+Start of epoch 759:
+
+Avg training loss: 0.0651
+Avg val loss: 0.0811
+Time taken: 38.65s
+==========
+
+Start of epoch 760:
+
+Avg training loss: 0.0851
+Avg val loss: 0.0817
+Time taken: 34.91s
+==========
+
+Start of epoch 761:
+
+Avg training loss: 0.0645
+Avg val loss: 0.0813
+Time taken: 38.81s
+==========
+
+Start of epoch 762:
+
+Avg training loss: 0.0459
+Avg val loss: 0.0814
+Time taken: 42.49s
+==========
+
+Start of epoch 763:
+
+Avg training loss: 0.1152
+Avg val loss: 0.0817
+Time taken: 33.99s
+==========
+
+Start of epoch 764:
+
+Avg training loss: 0.0529
+Avg val loss: 0.0810
+Time taken: 40.14s
+==========
+
+Start of epoch 765:
+
+Avg training loss: 0.0750
+Avg val loss: 0.0812
+Time taken: 37.20s
+==========
+
+Start of epoch 766:
+
+Avg training loss: 0.0466
+Avg val loss: 0.0813
+Time taken: 42.28s
+==========
+
+Start of epoch 767:
+
+Avg training loss: 0.1243
+Avg val loss: 0.0824
+Time taken: 33.54s
+==========
+
+Start of epoch 768:
+
+Avg training loss: 0.0794
+Avg val loss: 0.0810
+Time taken: 35.63s
+==========
+
+Start of epoch 769:
+
+Avg training loss: 0.0463
+Avg val loss: 0.0812
+Time taken: 43.52s
+==========
+
+Start of epoch 770:
+
+Avg training loss: 0.1148
+Avg val loss: 0.0815
+Time taken: 32.75s
+==========
+
+Start of epoch 771:
+
+Avg training loss: 0.0580
+Avg val loss: 0.0810
+Time taken: 40.17s
+==========
+
+Start of epoch 772:
+
+Avg training loss: 0.0739
+Avg val loss: 0.0811
+Time taken: 36.32s
+==========
+
+Start of epoch 773:
+
+Avg training loss: 0.0465
+Avg val loss: 0.0814
+Time taken: 43.31s
+==========
+
+Start of epoch 774:
+
+Avg training loss: 0.0472
+Avg val loss: 0.0815
+Time taken: 41.98s
+==========
+
+Start of epoch 775:
+
+Avg training loss: 0.0566
+Avg val loss: 0.0815
+Time taken: 40.26s
+==========
+
+Start of epoch 776:
+
+Avg training loss: 0.0562
+Avg val loss: 0.0816
+Time taken: 39.34s
+==========
+
+Start of epoch 777:
+
+Avg training loss: 0.0736
+Avg val loss: 0.0813
+Time taken: 37.17s
+==========
+
+Start of epoch 778:
+
+Avg training loss: 0.0459
+Avg val loss: 0.0816
+Time taken: 42.44s
+==========
+
+Start of epoch 779:
+
+Avg training loss: 0.1140
+Avg val loss: 0.0815
+Time taken: 33.91s
+==========
+
+Start of epoch 780:
+
+Avg training loss: 0.0719
+Avg val loss: 0.0810
+Time taken: 36.47s
+==========
+
+Start of epoch 781:
+
+Avg training loss: 0.1250
+Avg val loss: 0.0835
+Time taken: 33.45s
+==========
+
+Start of epoch 782:
+
+Avg training loss: 0.1032
+Avg val loss: 0.0819
+Time taken: 33.07s
+==========
+
+Start of epoch 783:
+
+Avg training loss: 0.0640
+Avg val loss: 0.0812
+Time taken: 38.97s
+==========
+
+Start of epoch 784:
+
+Avg training loss: 0.0635
+Avg val loss: 0.0813
+Time taken: 37.85s
+==========
+
+Start of epoch 785:
+
+Avg training loss: 0.0440
+Avg val loss: 0.0816
+Time taken: 44.45s
+==========
+
+Start of epoch 786:
+
+Avg training loss: 0.0919
+Avg val loss: 0.0809
+Time taken: 34.22s
+==========
+
+Start of epoch 787:
+
+Avg training loss: 0.1619
+Avg val loss: 0.1061
+Time taken: 32.22s
+==========
+
+Start of epoch 788:
+
+Avg training loss: 0.0512
+Avg val loss: 0.0803
+Time taken: 40.80s
+Best model is at epoch 788. Saving...
+==========
+
+Start of epoch 789:
+
+Avg training loss: 0.1175
+Avg val loss: 0.0810
+Time taken: 33.89s
+==========
+
+Start of epoch 790:
+
+Avg training loss: 0.0434
+Avg val loss: 0.0804
+Time taken: 43.58s
+==========
+
+Start of epoch 791:
+
+Avg training loss: 0.0765
+Avg val loss: 0.0805
+Time taken: 36.99s
+==========
+
+Start of epoch 792:
+
+Avg training loss: 0.1818
+Avg val loss: 0.0929
+Time taken: 30.75s
+==========
+
+Start of epoch 793:
+
+Avg training loss: 0.1309
+Avg val loss: 0.0819
+Time taken: 33.04s
+==========
+
+Start of epoch 794:
+
+Avg training loss: 0.0507
+Avg val loss: 0.0803
+Time taken: 40.86s
+==========
+
+Start of epoch 795:
+
+Avg training loss: 0.0441
+Avg val loss: 0.0805
+Time taken: 44.51s
+==========
+
+Start of epoch 796:
+
+Avg training loss: 0.0647
+Avg val loss: 0.0805
+Time taken: 37.73s
+==========
+
+Start of epoch 797:
+
+Avg training loss: 0.0507
+Avg val loss: 0.0808
+Time taken: 41.83s
+==========
+
+Start of epoch 798:
+
+Avg training loss: 0.0519
+Avg val loss: 0.0808
+Time taken: 40.66s
+==========
+
+Start of epoch 799:
+
+Avg training loss: 0.0570
+Avg val loss: 0.0809
+Time taken: 40.16s
+==========
+
+Start of epoch 800:
+
+Avg training loss: 0.1167
+Avg val loss: 0.0817
+Time taken: 32.81s
+==========
+
+Start of epoch 801:
+
+Avg training loss: 0.0852
+Avg val loss: 0.0810
+Time taken: 35.80s
+==========
+
+Start of epoch 802:
+
+Avg training loss: 0.0655
+Avg val loss: 0.0810
+Time taken: 37.44s
+==========
+
+Start of epoch 803:
+
+Avg training loss: 0.0519
+Avg val loss: 0.0811
+Time taken: 42.17s
+==========
+
+Start of epoch 804:
+
+Avg training loss: 0.0701
+Avg val loss: 0.0810
+Time taken: 36.88s
+==========
+
+Start of epoch 805:
+
+Avg training loss: 0.0561
+Avg val loss: 0.0812
+Time taken: 50.63s
+==========
+
+Start of epoch 806:
+
+Avg training loss: 0.1506
+Avg val loss: 0.0888
+Time taken: 41.38s
+==========
+
+Start of epoch 807:
+
+Avg training loss: 0.0673
+Avg val loss: 0.0806
+Time taken: 38.61s
+==========
+
+Start of epoch 808:
+
+Avg training loss: 0.0487
+Avg val loss: 0.0806
+Time taken: 51.20s
+==========
+
+Start of epoch 809:
+
+Avg training loss: 0.0739
+Avg val loss: 0.0807
+Time taken: 37.45s
+==========
+
+Start of epoch 810:
+
+Avg training loss: 0.0797
+Avg val loss: 0.0810
+Time taken: 45.41s
+==========
+
+Start of epoch 811:
+
+Avg training loss: 0.1011
+Avg val loss: 0.0818
+Time taken: 44.51s
+==========
+
+Start of epoch 812:
+
+Avg training loss: 0.0617
+Avg val loss: 0.0810
+Time taken: 38.18s
+==========
+
+Start of epoch 813:
+
+Avg training loss: 0.0571
+Avg val loss: 0.0811
+Time taken: 50.48s
+==========
+
+Start of epoch 814:
+
+Avg training loss: 0.0908
+Avg val loss: 0.0813
+Time taken: 34.17s
+==========
+
+Start of epoch 815:
+
+Avg training loss: 0.0439
+Avg val loss: 0.0810
+Time taken: 44.61s
+==========
+
+Start of epoch 816:
+
+Avg training loss: 0.0530
+Avg val loss: 0.0810
+Time taken: 40.11s
+==========
+
+Start of epoch 817:
+
+Avg training loss: 0.0483
+Avg val loss: 0.0813
+Time taken: 42.64s
+==========
+
+Start of epoch 818:
+
+Avg training loss: 0.0522
+Avg val loss: 0.0813
+Time taken: 40.70s
+==========
+
+Start of epoch 819:
+
+Avg training loss: 0.1218
+Avg val loss: 0.0821
+Time taken: 33.34s
+==========
+
+Start of epoch 820:
+
+Avg training loss: 0.0701
+Avg val loss: 0.0808
+Time taken: 36.74s
+==========
+
+Start of epoch 821:
+
+Avg training loss: 0.0995
+Avg val loss: 0.0813
+Time taken: 44.56s
+==========
+
+Start of epoch 822:
+
+Avg training loss: 0.0894
+Avg val loss: 0.0813
+Time taken: 44.15s
+==========
+
+Start of epoch 823:
+
+Avg training loss: 0.0661
+Avg val loss: 0.0811
+Time taken: 38.57s
+==========
+
+Start of epoch 824:
+
+Avg training loss: 0.0521
+Avg val loss: 0.0813
+Time taken: 50.76s
+==========
+
+Start of epoch 825:
+
+Avg training loss: 0.0643
+Avg val loss: 0.0812
+Time taken: 48.76s
+==========
+
+Start of epoch 826:
+
+Avg training loss: 0.0729
+Avg val loss: 0.0812
+Time taken: 36.22s
+==========
+
+Start of epoch 827:
+
+Avg training loss: 0.0678
+Avg val loss: 0.0813
+Time taken: 45.07s
+==========
+
+Start of epoch 828:
+
+Avg training loss: 0.1243
+Avg val loss: 0.0835
+Time taken: 32.32s
+==========
+
+Start of epoch 829:
+
+Avg training loss: 0.0581
+Avg val loss: 0.0809
+Time taken: 50.06s
+==========
+
+Start of epoch 830:
+
+Avg training loss: 0.0561
+Avg val loss: 0.0811
+Time taken: 39.42s
+==========
+
+Start of epoch 831:
+
+Avg training loss: 0.1165
+Avg val loss: 0.0820
+Time taken: 33.86s
+==========
+
+Start of epoch 832:
+
+Avg training loss: 0.0443
+Avg val loss: 0.0807
+Time taken: 43.09s
+==========
+
+Start of epoch 833:
+
+Avg training loss: 0.0438
+Avg val loss: 0.0808
+Time taken: 44.45s
+==========
+
+Start of epoch 834:
+
+Avg training loss: 0.0474
+Avg val loss: 0.0809
+Time taken: 41.99s
+==========
+
+Start of epoch 835:
+
+Avg training loss: 0.1140
+Avg val loss: 0.0810
+Time taken: 33.91s
+==========
+
+Start of epoch 836:
+
+Avg training loss: 0.1027
+Avg val loss: 0.0810
+Time taken: 33.44s
+==========
+
+Start of epoch 837:
+
+Avg training loss: 0.0821
+Avg val loss: 0.0808
+Time taken: 36.13s
+==========
+
+Start of epoch 838:
+
+Avg training loss: 0.1970
+Avg val loss: 0.0941
+Time taken: 30.77s
+==========
+
+Start of epoch 839:
+
+Avg training loss: 0.0531
+Avg val loss: 0.0805
+Time taken: 41.64s
+==========
+
+Start of epoch 840:
+
+Avg training loss: 0.0858
+Avg val loss: 0.0805
+Time taken: 35.03s
+==========
+
+Start of epoch 841:
+
+Avg training loss: 0.1181
+Avg val loss: 0.0818
+Time taken: 33.60s
+==========
+
+Start of epoch 842:
+
+Avg training loss: 0.0458
+Avg val loss: 0.0804
+Time taken: 42.54s
+==========
+
+Start of epoch 843:
+
+Avg training loss: 0.0656
+Avg val loss: 0.0805
+Time taken: 38.77s
+==========
+
+Start of epoch 844:
+
+Avg training loss: 0.0514
+Avg val loss: 0.0806
+Time taken: 40.60s
+==========
+
+Start of epoch 845:
+
+Avg training loss: 0.0976
+Avg val loss: 0.0807
+Time taken: 34.72s
+==========
+
+Start of epoch 846:
+
+Avg training loss: 0.0465
+Avg val loss: 0.0806
+Time taken: 42.20s
+==========
+
+Start of epoch 847:
+
+Avg training loss: 0.1339
+Avg val loss: 0.0826
+Time taken: 33.18s
+==========
+
+Start of epoch 848:
+
+Avg training loss: 0.1115
+Avg val loss: 0.0810
+Time taken: 32.59s
+==========
+
+Start of epoch 849:
+
+Avg training loss: 0.0528
+Avg val loss: 0.0806
+Time taken: 41.50s
+==========
+
+Start of epoch 850:
+
+Avg training loss: 0.0508
+Avg val loss: 0.0808
+Time taken: 41.89s
+==========
+
+Start of epoch 851:
+
+Avg training loss: 0.0441
+Avg val loss: 0.0810
+Time taken: 45.86s
+==========
+
+Start of epoch 852:
+
+Avg training loss: 0.0559
+Avg val loss: 0.0809
+Time taken: 41.25s
+==========
+
+Start of epoch 853:
+
+Avg training loss: 0.1950
+Avg val loss: 0.0870
+Time taken: 34.31s
+==========
+
+Start of epoch 854:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0803
+Time taken: 44.23s
+==========
+
+Start of epoch 855:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0802
+Time taken: 45.00s
+Best model is at epoch 855. Saving...
+==========
+
+Start of epoch 856:
+
+Avg training loss: 0.0901
+Avg val loss: 0.0803
+Time taken: 37.36s
+==========
+
+Start of epoch 857:
+
+Avg training loss: 0.0590
+Avg val loss: 0.0804
+Time taken: 43.32s
+==========
+
+Start of epoch 858:
+
+Avg training loss: 0.1519
+Avg val loss: 0.0857
+Time taken: 35.69s
+==========
+
+Start of epoch 859:
+
+Avg training loss: 0.0956
+Avg val loss: 0.0805
+Time taken: 38.18s
+==========
+
+Start of epoch 860:
+
+Avg training loss: 0.1189
+Avg val loss: 0.0818
+Time taken: 36.67s
+==========
+
+Start of epoch 861:
+
+Avg training loss: 0.0500
+Avg val loss: 0.0804
+Time taken: 45.74s
+==========
+
+Start of epoch 862:
+
+Avg training loss: 0.0546
+Avg val loss: 0.0805
+Time taken: 44.20s
+==========
+
+Start of epoch 863:
+
+Avg training loss: 0.1725
+Avg val loss: 0.0871
+Time taken: 35.11s
+==========
+
+Start of epoch 864:
+
+Avg training loss: 0.0487
+Avg val loss: 0.0799
+Time taken: 46.34s
+Best model is at epoch 864. Saving...
+==========
+
+Start of epoch 865:
+
+Avg training loss: 0.1147
+Avg val loss: 0.0803
+Time taken: 36.86s
+==========
+
+Start of epoch 866:
+
+Avg training loss: 0.0812
+Avg val loss: 0.0803
+Time taken: 40.04s
+==========
+
+Start of epoch 867:
+
+Avg training loss: 0.0598
+Avg val loss: 0.0804
+Time taken: 42.24s
+==========
+
+Start of epoch 868:
+
+Avg training loss: 0.0705
+Avg val loss: 0.0806
+Time taken: 41.52s
+==========
+
+Start of epoch 869:
+
+Avg training loss: 0.0537
+Avg val loss: 0.0806
+Time taken: 44.72s
+==========
+
+Start of epoch 870:
+
+Avg training loss: 0.1415
+Avg val loss: 0.0833
+Time taken: 34.20s
+==========
+
+Start of epoch 871:
+
+Avg training loss: 0.0796
+Avg val loss: 0.0804
+Time taken: 38.63s
+==========
+
+Start of epoch 872:
+
+Avg training loss: 0.1849
+Avg val loss: 0.0874
+Time taken: 35.78s
+==========
+
+Start of epoch 873:
+
+Avg training loss: 0.0595
+Avg val loss: 0.0802
+Time taken: 42.52s
+==========
+
+Start of epoch 874:
+
+Avg training loss: 0.0518
+Avg val loss: 0.0801
+Time taken: 42.94s
+==========
+
+Start of epoch 875:
+
+Avg training loss: 0.0717
+Avg val loss: 0.0804
+Time taken: 39.84s
+==========
+
+Start of epoch 876:
+
+Avg training loss: 0.1397
+Avg val loss: 0.0828
+Time taken: 34.21s
+==========
+
+Start of epoch 877:
+
+Avg training loss: 0.1227
+Avg val loss: 0.0822
+Time taken: 36.47s
+==========
+
+Start of epoch 878:
+
+Avg training loss: 0.0546
+Avg val loss: 0.0803
+Time taken: 43.65s
+==========
+
+Start of epoch 879:
+
+Avg training loss: 0.0446
+Avg val loss: 0.0804
+Time taken: 48.25s
+==========
+
+Start of epoch 880:
+
+Avg training loss: 0.0499
+Avg val loss: 0.0803
+Time taken: 45.07s
+==========
+
+Start of epoch 881:
+
+Avg training loss: 0.0614
+Avg val loss: 0.0804
+Time taken: 42.84s
+==========
+
+Start of epoch 882:
+
+Avg training loss: 0.0673
+Avg val loss: 0.0805
+Time taken: 41.73s
+==========
+
+Start of epoch 883:
+
+Avg training loss: 0.1272
+Avg val loss: 0.0822
+Time taken: 36.19s
+==========
+
+Start of epoch 884:
+
+Avg training loss: 0.0985
+Avg val loss: 0.0810
+Time taken: 37.95s
+==========
+
+Start of epoch 885:
+
+Avg training loss: 0.1677
+Avg val loss: 0.0953
+Time taken: 35.13s
+==========
+
+Start of epoch 886:
+
+Avg training loss: 0.1116
+Avg val loss: 0.0813
+Time taken: 37.02s
+==========
+
+Start of epoch 887:
+
+Avg training loss: 0.0589
+Avg val loss: 0.0804
+Time taken: 43.12s
+==========
+
+Start of epoch 888:
+
+Avg training loss: 0.1551
+Avg val loss: 0.0860
+Time taken: 35.63s
+==========
+
+Start of epoch 889:
+
+Avg training loss: 0.0485
+Avg val loss: 0.0799
+Time taken: 45.98s
+Best model is at epoch 889. Saving...
+==========
+
+Start of epoch 890:
+
+Avg training loss: 0.0468
+Avg val loss: 0.0800
+Time taken: 46.52s
+==========
+
+Start of epoch 891:
+
+Avg training loss: 0.0728
+Avg val loss: 0.0802
+Time taken: 37.81s
+==========
+
+Start of epoch 892:
+
+Avg training loss: 0.0732
+Avg val loss: 0.0804
+Time taken: 39.85s
+==========
+
+Start of epoch 893:
+
+Avg training loss: 0.1215
+Avg val loss: 0.0816
+Time taken: 38.14s
+==========
+
+Start of epoch 894:
+
+Avg training loss: 0.1019
+Avg val loss: 0.0812
+Time taken: 37.30s
+==========
+
+Start of epoch 895:
+
+Avg training loss: 0.1077
+Avg val loss: 0.0817
+Time taken: 35.97s
+==========
+
+Start of epoch 896:
+
+Avg training loss: 0.0557
+Avg val loss: 0.0806
+Time taken: 42.48s
+==========
+
+Start of epoch 897:
+
+Avg training loss: 0.0959
+Avg val loss: 0.0808
+Time taken: 37.71s
+==========
+
+Start of epoch 898:
+
+Avg training loss: 0.0466
+Avg val loss: 0.0805
+Time taken: 45.19s
+==========
+
+Start of epoch 899:
+
+Avg training loss: 0.0762
+Avg val loss: 0.0804
+Time taken: 40.96s
+==========
+
+Start of epoch 900:
+
+Avg training loss: 0.0631
+Avg val loss: 0.0806
+Time taken: 41.89s
+==========
+
+Start of epoch 901:
+
+Avg training loss: 0.0441
+Avg val loss: 0.0808
+Time taken: 48.23s
+==========
+
+Start of epoch 902:
+
+Avg training loss: 0.0532
+Avg val loss: 0.0807
+Time taken: 44.52s
+==========
+
+Start of epoch 903:
+
+Avg training loss: 0.0466
+Avg val loss: 0.0808
+Time taken: 46.49s
+==========
+
+Start of epoch 904:
+
+Avg training loss: 0.0492
+Avg val loss: 0.0809
+Time taken: 46.28s
+==========
+
+Start of epoch 905:
+
+Avg training loss: 0.0570
+Avg val loss: 0.0808
+Time taken: 43.70s
+==========
+
+Start of epoch 906:
+
+Avg training loss: 0.1895
+Avg val loss: 0.0869
+Time taken: 34.82s
+==========
+
+Start of epoch 907:
+
+Avg training loss: 0.1286
+Avg val loss: 0.0813
+Time taken: 36.95s
+==========
+
+Start of epoch 908:
+
+Avg training loss: 0.0884
+Avg val loss: 0.0804
+Time taken: 37.87s
+==========
+
+Start of epoch 909:
+
+Avg training loss: 0.1030
+Avg val loss: 0.0810
+Time taken: 38.27s
+==========
+
+Start of epoch 910:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0803
+Time taken: 45.18s
+==========
+
+Start of epoch 911:
+
+Avg training loss: 0.0843
+Avg val loss: 0.0803
+Time taken: 39.21s
+==========
+
+Start of epoch 912:
+
+Avg training loss: 0.0467
+Avg val loss: 0.0804
+Time taken: 44.45s
+==========
+
+Start of epoch 913:
+
+Avg training loss: 0.0442
+Avg val loss: 0.0806
+Time taken: 50.09s
+==========
+
+Start of epoch 914:
+
+Avg training loss: 0.0529
+Avg val loss: 0.0805
+Time taken: 43.80s
+==========
+
+Start of epoch 915:
+
+Avg training loss: 0.0943
+Avg val loss: 0.0804
+Time taken: 36.77s
+==========
+
+Start of epoch 916:
+
+Avg training loss: 0.0469
+Avg val loss: 0.0804
+Time taken: 45.32s
+==========
+
+Start of epoch 917:
+
+Avg training loss: 0.0429
+Avg val loss: 0.0807
+Time taken: 46.99s
+==========
+
+Start of epoch 918:
+
+Avg training loss: 0.0461
+Avg val loss: 0.0806
+Time taken: 47.58s
+==========
+
+Start of epoch 919:
+
+Avg training loss: 0.0506
+Avg val loss: 0.0807
+Time taken: 45.75s
+==========
+
+Start of epoch 920:
+
+Avg training loss: 0.1943
+Avg val loss: 0.0849
+Time taken: 34.75s
+==========
+
+Start of epoch 921:
+
+Avg training loss: 0.1014
+Avg val loss: 0.0802
+Time taken: 38.43s
+==========
+
+Start of epoch 922:
+
+Avg training loss: 0.0555
+Avg val loss: 0.0801
+Time taken: 43.35s
+==========
+
+Start of epoch 923:
+
+Avg training loss: 0.0463
+Avg val loss: 0.0802
+Time taken: 47.22s
+==========
+
+Start of epoch 924:
+
+Avg training loss: 0.1193
+Avg val loss: 0.0807
+Time taken: 36.37s
+==========
+
+Start of epoch 925:
+
+Avg training loss: 0.1626
+Avg val loss: 0.0909
+Time taken: 35.77s
+==========
+
+Start of epoch 926:
+
+Avg training loss: 0.0501
+Avg val loss: 0.0799
+Time taken: 45.09s
+Best model is at epoch 926. Saving...
+==========
+
+Start of epoch 927:
+
+Avg training loss: 0.0521
+Avg val loss: 0.0800
+Time taken: 45.20s
+==========
+
+Start of epoch 928:
+
+Avg training loss: 0.0471
+Avg val loss: 0.0801
+Time taken: 46.07s
+==========
+
+Start of epoch 929:
+
+Avg training loss: 0.0576
+Avg val loss: 0.0802
+Time taken: 42.96s
+==========
+
+Start of epoch 930:
+
+Avg training loss: 0.0844
+Avg val loss: 0.0803
+Time taken: 38.95s
+==========
+
+Start of epoch 931:
+
+Avg training loss: 0.0826
+Avg val loss: 0.0805
+Time taken: 35.61s
+==========
+
+Start of epoch 932:
+
+Avg training loss: 0.1389
+Avg val loss: 0.0833
+Time taken: 33.03s
+==========
+
+Start of epoch 933:
+
+Avg training loss: 0.1472
+Avg val loss: 0.0879
+Time taken: 31.48s
+==========
+
+Start of epoch 934:
+
+Avg training loss: 0.1564
+Avg val loss: 0.1006
+Time taken: 32.51s
+==========
+
+Start of epoch 935:
+
+Avg training loss: 0.0522
+Avg val loss: 0.0801
+Time taken: 40.65s
+==========
+
+Start of epoch 936:
+
+Avg training loss: 0.0447
+Avg val loss: 0.0801
+Time taken: 43.81s
+==========
+
+Start of epoch 937:
+
+Avg training loss: 0.0573
+Avg val loss: 0.0802
+Time taken: 39.69s
+==========
+
+Start of epoch 938:
+
+Avg training loss: 0.1371
+Avg val loss: 0.0817
+Time taken: 33.19s
+==========
+
+Start of epoch 939:
+
+Avg training loss: 0.0645
+Avg val loss: 0.0801
+Time taken: 37.74s
+==========
+
+Start of epoch 940:
+
+Avg training loss: 0.0853
+Avg val loss: 0.0803
+Time taken: 35.92s
+==========
+
+Start of epoch 941:
+
+Avg training loss: 0.0863
+Avg val loss: 0.0806
+Time taken: 34.99s
+==========
+
+Start of epoch 942:
+
+Avg training loss: 0.0652
+Avg val loss: 0.0804
+Time taken: 38.52s
+==========
+
+Start of epoch 943:
+
+Avg training loss: 0.0979
+Avg val loss: 0.0808
+Time taken: 34.58s
+==========
+
+Start of epoch 944:
+
+Avg training loss: 0.0467
+Avg val loss: 0.0803
+Time taken: 42.30s
+==========
+
+Start of epoch 945:
+
+Avg training loss: 0.1110
+Avg val loss: 0.0805
+Time taken: 34.16s
+==========
+
+Start of epoch 946:
+
+Avg training loss: 0.1086
+Avg val loss: 0.0808
+Time taken: 32.93s
+==========
+
+Start of epoch 947:
+
+Avg training loss: 0.0585
+Avg val loss: 0.0803
+Time taken: 40.04s
+==========
+
+Start of epoch 948:
+
+Avg training loss: 0.1054
+Avg val loss: 0.0807
+Time taken: 33.16s
+==========
+
+Start of epoch 949:
+
+Avg training loss: 0.0829
+Avg val loss: 0.0805
+Time taken: 36.24s
+==========
+
+Start of epoch 950:
+
+Avg training loss: 0.0792
+Avg val loss: 0.0806
+Time taken: 35.19s
+==========
+
+Start of epoch 951:
+
+Avg training loss: 0.0533
+Avg val loss: 0.0806
+Time taken: 41.27s
+==========
+
+Start of epoch 952:
+
+Avg training loss: 0.0558
+Avg val loss: 0.0807
+Time taken: 39.35s
+==========
+
+Start of epoch 953:
+
+Avg training loss: 0.0480
+Avg val loss: 0.0808
+Time taken: 43.07s
+==========
+
+Start of epoch 954:
+
+Avg training loss: 0.0632
+Avg val loss: 0.0806
+Time taken: 37.75s
+==========
+
+Start of epoch 955:
+
+Avg training loss: 0.0669
+Avg val loss: 0.0806
+Time taken: 38.31s
+==========
+
+Start of epoch 956:
+
+Avg training loss: 0.0478
+Avg val loss: 0.0808
+Time taken: 41.63s
+==========
+
+Start of epoch 957:
+
+Avg training loss: 0.0962
+Avg val loss: 0.0806
+Time taken: 34.93s
+==========
+
+Start of epoch 958:
+
+Avg training loss: 0.0433
+Avg val loss: 0.0805
+Time taken: 43.61s
+==========
+
+Start of epoch 959:
+
+Avg training loss: 0.0969
+Avg val loss: 0.0802
+Time taken: 34.77s
+==========
+
+Start of epoch 960:
+
+Avg training loss: 0.0569
+Avg val loss: 0.0804
+Time taken: 39.04s
+==========
+
+Start of epoch 961:
+
+Avg training loss: 0.1105
+Avg val loss: 0.0806
+Time taken: 34.16s
+==========
+
+Start of epoch 962:
+
+Avg training loss: 0.0460
+Avg val loss: 0.0803
+Time taken: 42.54s
+==========
+
+Start of epoch 963:
+
+Avg training loss: 0.0757
+Avg val loss: 0.0802
+Time taken: 37.35s
+==========
+
+Start of epoch 964:
+
+Avg training loss: 0.0851
+Avg val loss: 0.0804
+Time taken: 34.72s
+==========
+
+Start of epoch 965:
+
+Avg training loss: 0.0564
+Avg val loss: 0.0805
+Time taken: 40.59s
+==========
+
+Start of epoch 966:
+
+Avg training loss: 0.0464
+Avg val loss: 0.0807
+Time taken: 42.22s
+==========
+
+Start of epoch 967:
+
+Avg training loss: 0.1223
+Avg val loss: 0.0811
+Time taken: 33.59s
+==========
+
+Start of epoch 968:
+
+Avg training loss: 0.0578
+Avg val loss: 0.0802
+Time taken: 38.91s
+==========
+
+Start of epoch 969:
+
+Avg training loss: 0.1085
+Avg val loss: 0.0805
+Time taken: 34.32s
+==========
+
+Start of epoch 970:
+
+Avg training loss: 0.0673
+Avg val loss: 0.0803
+Time taken: 37.16s
+==========
+
+Start of epoch 971:
+
+Avg training loss: 0.0497
+Avg val loss: 0.0805
+Time taken: 42.45s
+==========
+
+Start of epoch 972:
+
+Avg training loss: 0.0691
+Avg val loss: 0.0804
+Time taken: 37.01s
+==========
+
+Start of epoch 973:
+
+Avg training loss: 0.1299
+Avg val loss: 0.0822
+Time taken: 33.22s
+==========
+
+Start of epoch 974:
+
+Avg training loss: 0.1718
+Avg val loss: 0.0956
+Time taken: 31.17s
+==========
+
+Start of epoch 975:
+
+Avg training loss: 0.0681
+Avg val loss: 0.0800
+Time taken: 38.48s
+==========
+
+Start of epoch 976:
+
+Avg training loss: 0.1920
+Avg val loss: 0.0856
+Time taken: 30.78s
+==========
+
+Start of epoch 977:
+
+Avg training loss: 0.0643
+Avg val loss: 0.0801
+Time taken: 39.08s
+==========
+
+Start of epoch 978:
+
+Avg training loss: 0.1920
+Avg val loss: 0.0836
+Time taken: 30.95s
+==========
+
+Start of epoch 979:
+
+Avg training loss: 0.0875
+Avg val loss: 0.0804
+Time taken: 35.82s
+==========
+
+Start of epoch 980:
+
+Avg training loss: 0.1061
+Avg val loss: 0.0807
+Time taken: 33.14s
+==========
+
+Start of epoch 981:
+
+Avg training loss: 0.1086
+Avg val loss: 0.0811
+Time taken: 34.24s
+==========
+
+Start of epoch 982:
+
+Avg training loss: 0.0609
+Avg val loss: 0.0802
+Time taken: 38.29s
+==========
+
+Start of epoch 983:
+
+Avg training loss: 0.1227
+Avg val loss: 0.0812
+Time taken: 33.66s
+==========
+
+Start of epoch 984:
+
+Avg training loss: 0.0702
+Avg val loss: 0.0803
+Time taken: 36.73s
+==========
+
+Start of epoch 985:
+
+Avg training loss: 0.0595
+Avg val loss: 0.0802
+Time taken: 39.80s
+==========
+
+Start of epoch 986:
+
+Avg training loss: 0.0628
+Avg val loss: 0.0803
+Time taken: 38.02s
+==========
+
+Start of epoch 987:
+
+Avg training loss: 0.0434
+Avg val loss: 0.0805
+Time taken: 44.85s
+==========
+
+Start of epoch 988:
+
+Avg training loss: 0.0521
+Avg val loss: 0.0802
+Time taken: 40.45s
+==========
+
+Start of epoch 989:
+
+Avg training loss: 0.1050
+Avg val loss: 0.0803
+Time taken: 34.31s
+==========
+
+Start of epoch 990:
+
+Avg training loss: 0.0574
+Avg val loss: 0.0802
+Time taken: 39.13s
+==========
+
+Start of epoch 991:
+
+Avg training loss: 0.0822
+Avg val loss: 0.0802
+Time taken: 36.31s
+==========
+
+Start of epoch 992:
+
+Avg training loss: 0.1346
+Avg val loss: 0.0822
+Time taken: 32.10s
+==========
+
+Start of epoch 993:
+
+Avg training loss: 0.0460
+Avg val loss: 0.0800
+Time taken: 43.70s
+==========
+
+Start of epoch 994:
+
+Avg training loss: 0.1693
+Avg val loss: 0.0843
+Time taken: 31.26s
+==========
+
+Start of epoch 995:
+
+Avg training loss: 0.0482
+Avg val loss: 0.0797
+Time taken: 42.92s
+Best model is at epoch 995. Saving...
+==========
+
+Start of epoch 996:
+
+Avg training loss: 0.0756
+Avg val loss: 0.0798
+Time taken: 35.98s
+==========
+
+Start of epoch 997:
+
+Avg training loss: 0.1033
+Avg val loss: 0.0801
+Time taken: 34.48s
+==========
+
+Start of epoch 998:
+
+Avg training loss: 0.0716
+Avg val loss: 0.0800
+Time taken: 36.55s
+==========
+
+Start of epoch 999:
+
+Avg training loss: 0.0759
+Avg val loss: 0.0801
+Time taken: 37.21s
+==========
