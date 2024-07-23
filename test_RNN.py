@@ -128,8 +128,6 @@ def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
 
         plt.close()
 
-    save_all_phase_vs_accuracy_plot(model_dir, fractions=fractions)
-    plt.close()
 
     all_predictions = np.concatenate(all_predictions)
     all_trues = np.concatenate(all_trues)
@@ -192,9 +190,6 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     # Make plots of the scores
     run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
-    # plot the make up of all the data sets
-    plot_data_set_composition(model_dir)
-    plt.close()
 
     # Make the gifs at leaf nodes
     cf_files = [f"{model_dir}/gif/leaf_cf/{f}.png" for f in fractions]
