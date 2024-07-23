@@ -177,22 +177,64 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
 def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], levels = ["level_1", "level_2", "leaf"]):
 
     plt.style.use(['default'])
+
+    # Making the f1 plot
     for level in levels:
 
-        arr = []
+        f1 = []
         for f in fractions:
 
             df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
-            arr.append(df_alpha1['f1-score'].to_numpy()[-1])
+            f1.append(df_alpha1['f1-score'].to_numpy()[-1])
 
-        plt.plot(fractions, arr, label=level, marker = 'o')
+        plt.plot(fractions, f1, label=level, marker = 'o')
 
-    plt.title(f"Performance at different levels of hierarchy")
-    plt.xlabel("Fraction of LC seen")
-    plt.ylabel("Weighted avg F1 score")
+    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.ylabel("Class-weighted F1 score", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
     plt.legend()
-    plt.savefig(f"{model_dir}/performance.pdf")
-    plt.savefig(f"{model_dir}/performance.jpg")
+    plt.savefig(f"{model_dir}/f1-performance.pdf")
+    plt.savefig(f"{model_dir}/f1-performance.jpg")
+    plt.close()
+
+    for level in levels:
+
+        precision = []
+        for f in fractions:
+
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            precision.append(df_alpha1['precision'].to_numpy()[-1])
+
+        plt.plot(fractions, precision, label=level, marker = 'o')
+
+    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.ylabel("Class-weighted precision", fontsize='xx-large')
+
+    plt.grid()
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig(f"{model_dir}/precision-performance.pdf")
+    plt.savefig(f"{model_dir}/precision-performance.jpg")
+    plt.close()
+
+    for level in levels:
+
+        recall = []
+        for f in fractions:
+
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            recall.append(df_alpha1['recall'].to_numpy()[-1])
+
+        plt.plot(fractions, recall, label=level, marker = 'o')
+
+    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.ylabel("Class-weighted recall", fontsize='xx-large')
+
+    plt.grid()
+    plt.tight_layout()
+    plt.legend()
+    plt.savefig(f"{model_dir}/recall-performance.pdf")
+    plt.savefig(f"{model_dir}/recall-performance.jpg")
+    plt.close()
