@@ -11,6 +11,34 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve,
 
 from taxonomy import source_node_label
 
+def plot_lc(table, class_name, file_name=None):
+
+    times = table['scaled_time_since_first_obs'].to_numpy()
+    flux = table['scaled_FLUXCAL'].to_numpy()
+    markers = ["*" if f == 1 else "o" for f in table['detection_flag'].to_numpy()]
+    colors = ["green" if f == 1 else "orange" for f in table['detection_flag'].to_numpy()]
+
+
+    first_detection_idx = np.where(table['detection_flag'].to_numpy() == 1)[0][0]
+    first_detection_t = times[first_detection_idx]
+
+    for t, f, m, c in zip(times, flux, markers, colors):
+        plt.scatter(t, f, marker=m, c=c)
+
+    plt.vlines(x=first_detection_t, ymin=min(flux), ymax=max(flux))
+
+
+    plt.xlabel('Scaled Time')
+    plt.ylabel('Flux')
+    plt.title(f"True class: {class_name}")
+
+    if file_name == None:
+        plt.show()
+    else:
+        plt.savefig(f"temp/{file_name}.png")
+    
+    plt.close()
+
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     
     n_class = len(labels)

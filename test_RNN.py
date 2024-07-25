@@ -14,7 +14,7 @@ from pathlib import Path
 from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, source_node_label
-from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score
+from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score, plot_lc
 from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs, save_all_phase_vs_accuracy_plot
 from train_RNN import default_batch_size
 
@@ -36,6 +36,18 @@ def parse_args():
     parser.add_argument('--max_class_count', type=int, default=default_max_class_count, help='Maximum number of samples in each class.')
     args = parser.parse_args()
     return args
+
+def plot_some_lcs(X_ts, astrophysical_classes, class_count=10):
+
+
+    for j, c in enumerate(np.unique(astrophysical_classes)):
+
+        idx = list(np.where(np.array(astrophysical_classes) == c)[0])[:class_count]
+        X_ts_class = [X_ts[i] for i in idx]
+
+        for i in range(len(X_ts_class)):
+            plot_lc(X_ts_class[i], c, file_name=f"{j}-{i}")
+
 
 def run_class_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysical_classes):
 
@@ -182,6 +194,9 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
 
     tree = get_taxonomy_tree()
     best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
+
+    # Some general code to plot light curves
+    # plot_some_lcs(X_ts_balanced, astrophysical_classes_balanced)
 
     # Run all the analysis code
     run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
