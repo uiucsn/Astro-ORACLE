@@ -63,8 +63,10 @@ def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
         if n_class > 10:
             label.set_fontsize(12)
         elif n_class <= 10 and n_class > 3:
+            disp.ax_.tick_params(axis='both', labelsize='x-large')
             label.set_fontsize(25)
         else:
+            disp.ax_.tick_params(axis='both', labelsize='x-large')
             label.set_fontsize(40)
     
     if title:
