@@ -8,7 +8,7 @@ from pathlib import Path
 
 from test_RNN import fractions
 from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition
-from interpret_results import save_all_phase_vs_accuracy_plot
+from interpret_results import save_all_phase_vs_accuracy_plot, merge_performance_tables
 
 default_seed = 40
 np.random.seed(default_seed)
@@ -53,6 +53,8 @@ def run_analysis(model_dir):
     plt.close()
 
     merge_sample_tables(model_dir)
+
+    merge_performance_tables(model_dir)
 
 if __name__=='__main__':
     args = parse_args()

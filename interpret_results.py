@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
+from functools import reduce
 
 from networkx.drawing.nx_agraph import write_dot, graphviz_layout
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
@@ -238,3 +239,24 @@ def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 
     plt.savefig(f"{model_dir}/recall-performance.pdf")
     plt.savefig(f"{model_dir}/recall-performance.jpg")
     plt.close()
+
+def merge_performance_tables(model_dir, fractions=[0.1, 0.4, 0.7, 1]):
+
+    levels = ['level_1','level_2','leaf']
+
+    for level in levels:
+
+        data_frames = []
+
+        for f in fractions:
+
+            df = pd.read_csv(f"{model_dir}/gif/{level}_csv/{f}.csv", index_col=0)
+            df.drop(columns=["support"], inplace=True)
+            df.index.name = 'Class'
+            df.rename(columns={'precision': 'p_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
+            df.rename(columns={'recall': 'r_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
+            df.rename(columns={'f1-score': 'f-1_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
+            data_frames.append(df)
+
+        df_merged = reduce(lambda  left,right: pd.merge(left,right, how='left',on='Class', sort=False), data_frames)
+        print(df_merged.to_latex(float_format="%.2f"))
