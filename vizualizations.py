@@ -157,7 +157,7 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
 
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), fancybox=True, shadow=False, ncol=3, fontsize = 16)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), fancybox=True, shadow=False, ncol=2, fontsize = 20)
     plt.title(title)
     plt.tight_layout()
     plt.gca().set_aspect('equal')
@@ -225,6 +225,8 @@ def make_gif(files, gif_file=None):
         ax.get_xaxis().set_ticks([])
         ax.get_yaxis().set_ticks([])
         ax.imshow(images[i])
+
+    fig.tight_layout()
         
     anim = animation.FuncAnimation(fig, animate, frames=len(images), interval=500)
 
