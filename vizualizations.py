@@ -97,8 +97,8 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         # plot the same data on both Axes
         for c_ in leaf_names:
             if c_ == c:
-                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3)
-                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3)
+                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--')
+                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--')
             else:
                 ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
                 ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
@@ -107,10 +107,11 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
                 ax1.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
                 ax2.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
         # High probability stuff - linear scale
-        ax1.set_ylim(.2, 1.01)  # outliers only
+        break_point = 0.25
+        ax1.set_ylim(break_point, 1.01)  # outliers only
 
         # Low probability stuff - log scale
-        ax2.set_ylim(-0.01, .20)  # most of the data
+        ax2.set_ylim(-0.01, break_point)  # most of the data
         #ax2.set_yscale('log')
 
         # hide the spines between ax and ax2
@@ -133,7 +134,7 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         ax1.plot([0, 1], [0, 0], transform=ax1.transAxes, **kwargs)
         ax2.plot([0, 1], [1, 1], transform=ax2.transAxes, **kwargs)
 
-        ax2.set_xlabel('Time since first detection (in days)', fontsize='x-large')
+        ax2.set_xlabel('Days from first detection', fontsize='x-large')
         ax1.set_ylabel('Mean Class score', fontsize='x-large')
         ax1.set_title(f"True Class: {c}", fontsize='x-large')
 
