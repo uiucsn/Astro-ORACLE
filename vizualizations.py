@@ -11,6 +11,26 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve,
 
 from taxonomy import source_node_label
 
+NUM_COLORS = 20
+cm = plt.get_cmap('gist_rainbow')
+color_arr=[cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)]
+
+def plot_legend(labels, filename=None, expand=[-5,-5,5,5]):
+
+    for i, l in enumerate(labels):
+        plt.plot([0], [0], label=l, color=color_arr[i])
+
+    legend = plt.legend(loc=3, ncol=2, framealpha=1, frameon=True, fontsize=20)
+
+    fig  = legend.figure
+    fig.canvas.draw()
+    bbox  = legend.get_window_extent()
+    bbox = bbox.from_extents(*(bbox.extents + np.array(expand)))
+    bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+    if filename != None:
+        fig.savefig(filename, dpi="figure", bbox_inches=bbox)
+    plt.close()
+
 def plot_lc(table, class_name, file_name=None):
 
     times = table['scaled_time_since_first_obs'].to_numpy()
@@ -97,17 +117,17 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         ax2.axvspan(-20, 0, color='gray', alpha=0.15)
 
         # plot the same data on both Axes
-        for c_ in leaf_names:
+        for j, c_ in enumerate(leaf_names):
             if c_ == c:
-                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--')
-                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--')
+                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--', color=color_arr[j])
+                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=3, linestyle='--', color=color_arr[j])
             else:
-                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
-                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1)
+                ax1.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1, color=color_arr[j])
+                ax2.plot(df['days_since_trigger'].to_numpy(), df[f"{c_}_mean"].to_numpy(), linewidth=1, color=color_arr[j])
 
             if show_uncertainties:
-                ax1.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
-                ax2.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2)
+                ax1.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2, color=color_arr[j])
+                ax2.fill_between(df['days_since_trigger'].to_numpy(), np.minimum(1, df[f"{c_}_mean"].to_numpy() + df[f"{c_}_std"].to_numpy()), np.maximum(0, df[f"{c_}_mean"].to_numpy() - df[f"{c_}_std"].to_numpy()), alpha=0.2, color=color_arr[j])
         # High probability stuff - linear scale
         break_point = 0.25
         ax1.set_ylim(break_point, 1.01)  # outliers only
@@ -144,6 +164,8 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         plt.savefig(f"{model_dir}/days_since_trigger/{i}.pdf")
         plt.close()
 
+        plot_legend(leaf_names, filename=f"{model_dir}/days_since_trigger/legend.pdf")
+
 def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
     chance = np.arange(0,1.01,0.01)
@@ -154,7 +176,7 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
 
         score = roc_auc_score(y_true[:, i], y_pred[:, i])
         fpr, tpr, _ = roc_curve(y_true[:, i], y_pred[:, i])
-        plt.plot(fpr, tpr, label=f"{label} (AUC = {score:.2f})")
+        plt.plot(fpr, tpr, label=f"{label} (AUC = {score:.2f})", color=color_arr[i])
 
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
