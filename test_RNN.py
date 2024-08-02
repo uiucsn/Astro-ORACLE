@@ -11,7 +11,7 @@ from tqdm import tqdm
 from pathlib import Path
 
 
-from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger
+from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger, ts_flag_value, static_flag_value
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, source_node_label
 from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score, plot_lc
@@ -149,6 +149,42 @@ def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
     plot_reliability_diagram(all_trues[:, -19:], all_predictions[:, -19:], title="Calibration at the leaves", img_file=f"{model_dir}/leaf_cal.pdf")
     plt.close()
 
+def run_pre_detection_comparison(model, tree, model_dir, X_ts, X_static, Y):
+
+    # Run comparison for model performance before the first detection using 1. both non detections and host 2. Non detections only 3. Host galaxy only
+
+    # Get data from upto 50 days before the trigger to upto the trigger, excluding the first detection
+    x1 = np.squeeze(get_ts_upto_days_since_trigger(X_ts, 0))
+
+    # Get all the static features and format them correctly
+    x2 = np.squeeze(X_static)
+    Y = np.squeeze(Y)
+
+    # Run predictions and analysis for non detections + host
+    y_pred_both = model.predict([x1, x2], batch_size=default_batch_size, verbose=0)
+    _, pseudo_conditional_probabilities_both = get_conditional_probabilites(y_pred_both, tree)
+
+    os.makedirs(f"{model_dir}/pre_trigger/both", exist_ok=True)
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", 0)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", 0)
+
+    # Run predictions and analysis for host only
+    y_pred_host = model.predict([np.ones_like(x1) * ts_flag_value, x2], batch_size=default_batch_size, verbose=0)
+    _, pseudo_conditional_probabilities_host = get_conditional_probabilites(y_pred_host, tree)
+
+    os.makedirs(f"{model_dir}/pre_trigger/host", exist_ok=True)
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", 0)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", 0)
+    
+    # Run predictions and analysis for non detections only
+    y_pred_nd = model.predict([x1, np.ones_like(x2) * static_flag_value], batch_size=default_batch_size, verbose=0)
+    _, pseudo_conditional_probabilities_nd = get_conditional_probabilites(y_pred_nd, tree)
+
+    os.makedirs(f"{model_dir}/pre_trigger/nd", exist_ok=True)
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", 0)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", 0)
+    
+
 def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max_class_count):
 
     random.seed(default_seed)
@@ -205,6 +241,8 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     # Make plots of the scores
     run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
+    # Run pre trigger analysis
+    run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
 
     # Make the gifs at leaf nodes
     cf_files = [f"{model_dir}/gif/leaf_cf/{f}.png" for f in fractions]
