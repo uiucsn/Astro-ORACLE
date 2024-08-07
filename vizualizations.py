@@ -33,8 +33,7 @@ def plot_legend(labels, filename=None, expand=[-5,-5,5,5]):
         fig.savefig(filename, dpi="figure", bbox_inches=bbox)
     plt.close()
 
-def plot_lc(table, class_name, file_name=None):
-
+def plot_lc(table, true_class_score, class_name, file_name=None):
 
     def get_pb_color(wavelength):
 
@@ -66,22 +65,41 @@ def plot_lc(table, class_name, file_name=None):
     days_since_trigger = (times - first_detection_t) * 100
 
     flux = table['scaled_FLUXCAL'].to_numpy() * LSST_Source.flux_scaling_const
+    flux_err = table['scaled_FLUXCALERR'].to_numpy() * LSST_Source.flux_scaling_const
     detection_mask = table['detection_flag'].to_numpy() == 1
     non_detection_mask = table['detection_flag'].to_numpy() == 0
     colors = np.array([get_pb_color(w) for w in table['band_label'].to_numpy()])
 
-    plt.scatter(days_since_trigger[detection_mask], flux[detection_mask], color=colors[detection_mask], marker="*")
-    plt.scatter(days_since_trigger[non_detection_mask], flux[non_detection_mask], color=colors[non_detection_mask], marker=".")
 
-    plt.xlim(-20, 200)
-    plt.axvspan(-20, 0, color='gray', alpha=0.15)
-    plt.tick_params(axis='x', which='both', labelbottom=False)
+    fig, ax1 = plt.subplots()
 
-    plt.ylabel('Calibrated Flux', fontsize='x-large')
-    plt.title(f"True class: {class_name}", fontsize='x-large')
+    # Plot the detections
+    for c in np.unique(colors):
 
-    plt.legend(handles=get_legend_patches())
-    plt.tight_layout()
+        color_mask = colors == c
+        combined_mask = color_mask & detection_mask
+        ax1.errorbar(x=days_since_trigger[combined_mask], y=flux[combined_mask], yerr=flux_err[combined_mask], color=c, fmt="o", label=c)
+
+
+    # Plot the non detections
+    #ax1.scatter(days_since_trigger[non_detection_mask], flux[non_detection_mask], color=colors[non_detection_mask], marker=".")
+
+    ax1.set_xlim(-20, 200)
+    ax1.axvspan(-20, 0, color='gray', alpha=0.15)
+
+    ax1.set_xlabel('Days from first detection', fontsize='xx-large')
+    ax1.set_ylabel('Calibrated Flux', fontsize='xx-large')
+    ax1.set_title(f"True class: {class_name}", fontsize='xx-large')
+
+    ax2 = ax1.twinx()  # instantiate a second Axes that shares the same x-axis
+
+  
+    ax2.set_ylabel('True Class Score', fontsize='xx-large') 
+    ax2.plot(days_since_trigger, true_class_score, color='black', linestyle='dotted')
+
+    ax1.legend(handles=get_legend_patches())
+
+    fig.tight_layout()
 
     if file_name == None:
         plt.show()
@@ -190,9 +208,9 @@ def plot_day_vs_class_score(tree, model_dir, show_uncertainties=False):
         ax1.set_xlim(-20, 200)
         ax2.set_xlim(-20, 200)
 
-        ax2.set_xlabel('Days from first detection', fontsize='x-large')
+        ax2.set_xlabel('Days from first detection', fontsize='xx-large')
         ax1.set_ylabel('Mean Class score', fontsize='x-large')
-        #ax1.set_title(f"True Class: {c}", fontsize='x-large')
+        ax1.set_title(f"True Class: {c}", fontsize='xx-large')
 
         plt.tight_layout()
         plt.savefig(f"{model_dir}/days_since_trigger/{i}.pdf")

@@ -10,7 +10,7 @@ from tensorflow import keras
 from tqdm import tqdm
 from pathlib import Path
 
-
+from tensorflow.keras.utils import pad_sequences
 from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger, ts_flag_value, static_flag_value
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, source_node_label
@@ -37,16 +37,39 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def plot_some_lcs(X_ts, astrophysical_classes, class_count=10):
-
+def plot_some_lcs(model, X_ts, X_static, Y,  astrophysical_classes, class_count=10):
+    tree = get_taxonomy_tree()
 
     for j, c in enumerate(np.unique(astrophysical_classes)):
 
         idx = list(np.where(np.array(astrophysical_classes) == c)[0])[:class_count]
         X_ts_class = [X_ts[i] for i in idx]
+        X_static_class = [X_static[i] for i in idx]
+        Y_class = [Y[i] for i in idx]
 
         for i in range(5):
-            plot_lc(X_ts_class[i], c, file_name=f"{j}-{i}")
+
+            table = X_ts_class[i]
+            static = X_static_class[i]
+            target = Y_class[i]
+
+            tables = []
+            statics = []
+            for k in range(1, table.to_numpy().shape[0] + 1):
+                tables.append(table.to_numpy()[:k, :])
+                statics.append(static)
+            
+            tables = pad_sequences(tables, maxlen=ts_length,  dtype='float32', padding='post', value=ts_flag_value)
+            statics = np.squeeze(statics)
+
+            true_class_idx = np.argmax(target[-19:])
+
+            logits = model.predict([tables, statics], verbose=0)
+            _, pseudo_conditional_probabilities = get_conditional_probabilites(logits, tree)
+            leaf_probs = pseudo_conditional_probabilities[:, -19:]
+            true_class_score = leaf_probs[:, true_class_idx]
+
+            plot_lc(table, true_class_score, c, file_name=f"{j}-{i}")
 
 
 def run_class_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysical_classes):
@@ -232,7 +255,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
 
     # Some general code to plot light curves
-    plot_some_lcs(X_ts_balanced, astrophysical_classes_balanced)
+    plot_some_lcs(best_model, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run all the analysis code
     run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
