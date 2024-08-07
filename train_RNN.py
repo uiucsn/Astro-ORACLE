@@ -235,16 +235,8 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
             
         print("==========")
 
-    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Data')
-    plt.plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Data')
+    pd.DataFrame({'Avg_train_loss': avg_train_losses, 'Avg_val_loss': avg_val_losses}).to_csv(f"{model_dir}/loss_history.csv")
 
-    plt.xlabel("Epoch")
-    plt.ylabel("Avg log loss during training")
-
-    plt.legend()
-
-    plt.savefig(f"{model_dir}/training_history.pdf")
-    plt.close()
  
 if __name__=='__main__':
     args = parse_args()

@@ -33,6 +33,23 @@ def merge_sample_tables(model_dir):
     df_combined.to_csv(f'{model_dir}/combined_sample.csv')
     print(df_combined.to_latex(index=False))
     
+def make_training_history_plot(model_dir):
+
+    df = pd.read_csv(f"{model_dir}/loss_history.csv")
+
+    avg_train_losses = df['Avg_train_loss']
+    avg_val_losses = df['Avg_val_loss']
+
+    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Data')
+    plt.plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Data')
+
+    plt.xlabel("Epoch", fontsize='x-large')
+    plt.ylabel("Mean log loss", fontsize='x-large')
+
+    plt.legend()
+
+    plt.savefig(f"{model_dir}/training_history.pdf")
+    plt.close()
 
 def parse_args():
     '''
@@ -44,6 +61,8 @@ def parse_args():
     return args
 
 def run_analysis(model_dir):
+
+    make_training_history_plot(model_dir)
 
     save_all_phase_vs_accuracy_plot(model_dir, fractions=fractions)
     plt.close()
