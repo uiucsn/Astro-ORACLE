@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
+import seaborn as sns
 
 from sklearn.calibration import calibration_curve
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve, roc_auc_score
@@ -345,3 +346,54 @@ def make_training_history_plot(model_dir):
 
     plt.savefig(f"{model_dir}/training_history.pdf")
     plt.close()
+
+def make_z_plots(a_classes, redshifts, model_dir):
+
+    unique_classes = np.unique(a_classes)
+
+    class_z = {}
+    max_z = 0
+    n = 0
+
+    for i, c in enumerate(unique_classes):
+
+
+        idx = list(np.where(np.array(a_classes) == c)[0])
+
+        z = []
+        for i in idx:
+            if redshifts[i] != -9:
+                z.append(redshifts[i])
+                if redshifts[i] > max_z:
+                    max_z = redshifts[i]
+        
+        if len(z) > 10:
+            class_z[c] = z
+            n += 1
+
+    fig, axs = plt.subplots(ncols=1, nrows=n, figsize=(5, n*1), layout="constrained")
+
+    i = 0
+    for key in class_z:
+
+        z = class_z[key]
+        ax = axs[i]
+        sns.kdeplot(data=np.array(z) ,color='#FF6645', label=key, fill=True, alpha=1, linewidth=1.5, ax=ax)
+
+        ax.set_xlim(0, max_z)
+        ax.annotate(key, xy=(0.9,0.9),xycoords='axes fraction',fontsize='x-large')
+        ax.spines[['left','right', 'top']].set_visible(False)
+        ax.set_yticks([])
+        ax.set_ylabel('')
+
+        i += 1
+
+        if i != n:
+            ax.set_xticks([])
+        else:
+            ax.set_xlabel('Redshift')
+
+
+    plt.tight_layout()
+    plt.savefig(f"{model_dir}/z_dist.pdf")
+    plt.show()

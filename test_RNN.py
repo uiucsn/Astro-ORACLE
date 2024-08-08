@@ -14,7 +14,7 @@ from tensorflow.keras.utils import pad_sequences
 from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger, ts_flag_value, static_flag_value, augment_ts_length_to_days_since_trigger
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, source_node_label
-from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score, plot_lc
+from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score, plot_lc, make_z_plots
 from interpret_results import get_conditional_probabilites, save_all_cf_and_rocs, save_leaf_cf_and_rocs, save_all_phase_vs_accuracy_plot
 from train_RNN import default_batch_size
 
@@ -308,6 +308,9 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     X_static = load(f"{test_dir}/x_static.pkl")
     Y = load(f"{test_dir}/y.pkl")
     astrophysical_classes = load(f"{test_dir}/a_labels.pkl")
+
+    z_arr = [X_static[i]['REDSHIFT_HELIO'] for i in range(len(X_static))]
+    make_z_plots(astrophysical_classes, z_arr, model_dir)
 
     a, b = np.unique(astrophysical_classes, return_counts=True)
     print(f"Total sample count = {np.sum(b)}")
