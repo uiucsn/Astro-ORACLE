@@ -107,7 +107,7 @@ def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, plot_title):
     pd.DataFrame(report).transpose().to_csv(csv_plot_file)
     print('===========')
 
-def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
+def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, plot_title):
     
     def get_path_length(tree, source, target):
         return len(nx.shortest_path(tree, source=source, target=target)) - 1
@@ -152,18 +152,18 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
             os.makedirs(f"{model_dir}/gif/level_{depth}_roc", exist_ok=True)
             os.makedirs(f"{model_dir}/gif/level_{depth}_csv", exist_ok=True)
 
-            csv_plot_file = f"{model_dir}/gif/level_{depth}_csv/{fraction}.csv"
+            csv_plot_file = f"{model_dir}/gif/level_{depth}_csv/{plot_title}.csv"
 
-            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{fraction}.png")
+            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{plot_title}.png")
             plt.close()
 
-            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{fraction}.pdf")
+            plot_confusion_matrix(true_labels, pred_labels, mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_cf/{plot_title}.pdf")
             plt.close()
 
-            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{fraction}.png")
+            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{plot_title}.png")
             plt.close()
 
-            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{fraction}.pdf")
+            plot_roc_curves(y_true[:, mask], y_pred[:, mask], mask_classes, plot_title, f"{model_dir}/gif/level_{depth}_roc/{plot_title}.pdf")
             plt.close()
             
             report = classification_report(true_labels, pred_labels)
@@ -172,7 +172,7 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
             pd.DataFrame(report).transpose().to_csv(csv_plot_file)
             print('===========')
 
-def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], levels = ["level_1", "level_2", "leaf"]):
+def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), levels = ["level_1", "level_2", "leaf"]):
 
     plt.style.use(['default'])
 
@@ -180,19 +180,21 @@ def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 
     for level in levels:
 
         f1 = []
-        for f in fractions:
+        for d in days:
 
-            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
             f1.append(df_alpha1['f1-score'].to_numpy()[-1])
 
-        plt.plot(fractions, f1, label=level, marker = 'o')
+        plt.plot(days, f1, label=level, marker = 'o')
 
-    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.xlabel("Days since trigger", fontsize='xx-large')
     plt.ylabel("Class-weighted F1 score", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
     plt.legend()
+    plt.xscale('log')
+    plt.xticks(days, days)
     plt.savefig(f"{model_dir}/f1-performance.pdf")
     plt.savefig(f"{model_dir}/f1-performance.jpg")
     plt.close()
@@ -200,19 +202,21 @@ def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 
     for level in levels:
 
         precision = []
-        for f in fractions:
+        for d in days:
 
-            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
             precision.append(df_alpha1['precision'].to_numpy()[-1])
 
-        plt.plot(fractions, precision, label=level, marker = 'o')
+        plt.plot(days, precision, label=level, marker = 'o')
 
-    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.xlabel("Days since trigger", fontsize='xx-large')
     plt.ylabel("Class-weighted precision", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
     plt.legend()
+    plt.xscale('log')
+    plt.xticks(days, days)
     plt.savefig(f"{model_dir}/precision-performance.pdf")
     plt.savefig(f"{model_dir}/precision-performance.jpg")
     plt.close()
@@ -220,24 +224,26 @@ def save_all_phase_vs_accuracy_plot(model_dir, fractions = [0.1, 0.2, 0.3, 0.4, 
     for level in levels:
 
         recall = []
-        for f in fractions:
+        for d in days:
 
-            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/{f}.csv')
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
             recall.append(df_alpha1['recall'].to_numpy()[-1])
 
-        plt.plot(fractions, recall, label=level, marker = 'o')
+        plt.plot(days, recall, label=level, marker = 'o')
 
-    plt.xlabel("Fraction of LC seen", fontsize='xx-large')
+    plt.xlabel("Days since trigger", fontsize='xx-large')
     plt.ylabel("Class-weighted recall", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
     plt.legend()
+    plt.xscale('log')
+    plt.xticks(days, days)
     plt.savefig(f"{model_dir}/recall-performance.pdf")
     plt.savefig(f"{model_dir}/recall-performance.jpg")
     plt.close()
 
-def merge_performance_tables(model_dir, fractions=[0.1, 0.4, 0.7, 1]):
+def merge_performance_tables(model_dir, days=[1,8,128,1024]):
 
     levels = ['level_1','level_2','leaf']
 
@@ -245,14 +251,14 @@ def merge_performance_tables(model_dir, fractions=[0.1, 0.4, 0.7, 1]):
 
         data_frames = []
 
-        for f in fractions:
+        for d in days:
 
-            df = pd.read_csv(f"{model_dir}/gif/{level}_csv/{f}.csv", index_col=0)
+            df = pd.read_csv(f"{model_dir}/gif/{level}_csv/Trigger + {d} days.csv", index_col=0)
             df.drop(columns=["support"], inplace=True)
             df.index.name = 'Class'
-            df.rename(columns={'precision': 'p_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
-            df.rename(columns={'recall': 'r_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
-            df.rename(columns={'f1-score': 'f-1_{' + f"{f * 100:.0f}\%" + '}'}, inplace=True)
+            df.rename(columns={'precision': 'p_{' + f"{d} days" + '}'}, inplace=True)
+            df.rename(columns={'recall': 'r_{' + f"{d} days" + '}'}, inplace=True)
+            df.rename(columns={'f1-score': 'f-1_{' + f"{d} days" + '}'}, inplace=True)
             data_frames.append(df)
 
         df_merged = reduce(lambda  left,right: pd.merge(left,right, how='left',on='Class', sort=False), data_frames)

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 
-from test_RNN import fractions
+from test_RNN import fractions, days
 from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition
 from interpret_results import save_all_phase_vs_accuracy_plot, merge_performance_tables
 
@@ -62,9 +62,9 @@ def parse_args():
 
 def run_analysis(model_dir):
 
-    make_training_history_plot(model_dir)
+    #make_training_history_plot(model_dir)
 
-    save_all_phase_vs_accuracy_plot(model_dir, fractions=fractions)
+    save_all_phase_vs_accuracy_plot(model_dir, days=days)
     plt.close()
 
     # plot the make up of all the data sets
