@@ -25,6 +25,19 @@ def load(file_name):
     with open(file_name, 'rb') as f:
         return pickle.load(f)
     
+def augment_ts_length_to_days_since_trigger(X_ts, X_static, Y, a_classes, days):
+
+    # Augment the length of the ts data
+    X_ts = get_ts_upto_days_since_trigger(X_ts, days=days)
+
+    # Squeeze data into homogeneously shaped numpy arrays
+    X_ts = np.squeeze(X_ts)
+    X_static = np.squeeze(X_static)
+    Y = np.squeeze(Y).astype(np.float32)
+    astrophysical_classes = np.squeeze(a_classes)
+
+    return X_ts, X_static, Y, astrophysical_classes
+
 def get_ts_upto_days_since_trigger(X_ts, days, add_padding=True):
 
     augmented_list = []

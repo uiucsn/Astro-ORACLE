@@ -70,7 +70,7 @@ def get_conditional_probabilites(y_pred, tree):
         
     return pseudo_probabilities, pseudo_conditional_probabilities
 
-def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
+def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, plot_title):
     
     # Find the indexes of the leaf nodes i.e. nodes with out degree = 0.
     level_order_nodes = list(nx.bfs_tree(tree, source=source_node_label).nodes())
@@ -82,26 +82,23 @@ def save_leaf_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
     y_pred_label = [leaf_labels[i] for i in np.argmax(y_pred[:, idx], axis=1)]
     y_true_label = [leaf_labels[i] for i in np.argmax(y_true[:, idx], axis=1)]
 
-    # Make plots
-    plot_title = f"~{fraction * 100}% of each LC visible"
-
     # Make the dirs to store results
     os.makedirs(f"{model_dir}/gif/leaf_cf", exist_ok=True)
     os.makedirs(f"{model_dir}/gif/leaf_roc", exist_ok=True)
     os.makedirs(f"{model_dir}/gif/leaf_csv", exist_ok=True)
 
-    csv_plot_file = f"{model_dir}/gif/leaf_csv/{fraction}.csv"
+    csv_plot_file = f"{model_dir}/gif/leaf_csv/{plot_title}.csv"
     
-    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{fraction}.png")
+    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{plot_title}.png")
     plt.close()
 
-    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{fraction}.pdf")
+    plot_confusion_matrix(y_true_label, y_pred_label, leaf_labels, plot_title, f"{model_dir}/gif/leaf_cf/{plot_title}.pdf")
     plt.close()
     
-    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{fraction}.png")
+    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{plot_title}.png")
     plt.close()
 
-    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{fraction}.pdf")
+    plot_roc_curves(y_true[:, idx], y_pred[:, idx], leaf_labels, plot_title, f"{model_dir}/gif/leaf_roc/{plot_title}.pdf")
     plt.close()
 
     report = classification_report(y_true_label, y_pred_label)
@@ -148,7 +145,7 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, fraction="NA"):
                 predicted_class_idx = np.argmax(y_pred[i, mask])
                 pred_labels.append(mask_classes[predicted_class_idx])
             
-            plot_title = f"~{fraction * 100}% of each LC visible"
+            plot_title = f"~{1 * 100}% of each LC visible"
 
             # Create the dirs to save plots
             os.makedirs(f"{model_dir}/gif/level_{depth}_cf", exist_ok=True)

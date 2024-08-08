@@ -11,7 +11,7 @@ from tqdm import tqdm
 from pathlib import Path
 
 from tensorflow.keras.utils import pad_sequences
-from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger, ts_flag_value, static_flag_value
+from dataloader import LSSTSourceDataSet, load, get_augmented_data, get_static_features, ts_length, get_ts_upto_days_since_trigger, ts_flag_value, static_flag_value, augment_ts_length_to_days_since_trigger
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree, source_node_label
 from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition, plot_day_vs_class_score, plot_lc
@@ -25,6 +25,7 @@ default_test_dir = Path("processed/test")
 default_max_class_count = 1000
 
 fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+days = 2 ** np.array(range(11))
 
 def parse_args():
     '''
@@ -133,6 +134,42 @@ def run_class_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
     combined_df = pd.concat(df_list)
     combined_df.to_csv(f"{model_dir}/days_since_trigger/combined.csv")
 
+def run_day_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysical_classes):
+    
+
+    all_predictions = []
+    all_trues = []
+
+
+    for d in days:
+
+        print(f'Running inference for trigger + {d} days...')
+
+        x1, x2, y_true, _ = augment_ts_length_to_days_since_trigger(X_ts, X_static, Y, astrophysical_classes, d)
+        
+        # Run inference on these
+        y_pred = model.predict([x1, x2], batch_size=default_batch_size)
+
+        # Get the conditional probabilities
+        _, pseudo_conditional_probabilities = get_conditional_probabilites(y_pred, tree)
+        
+        print(f'For trigger + {d} days, these are the statistics:')
+
+        plot_title = f"Trigger + {d} days"
+        
+        # Print all the stats and make plots...
+        save_all_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, plot_title)
+        save_leaf_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, plot_title)
+
+        all_predictions.append(pseudo_conditional_probabilities)
+        all_trues.append(y_true)
+
+        plt.close()
+
+
+    all_predictions = np.concatenate(all_predictions)
+    all_trues = np.concatenate(all_trues)
+
 
 def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysical_classes):
 
@@ -153,10 +190,12 @@ def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
         _, pseudo_conditional_probabilities = get_conditional_probabilites(y_pred, tree)
         
         print(f'For {int(f*100)}% of the light curve, these are the statistics:')
+
+        plot_title = f"{int(f*100)} percent"
         
         # Print all the stats and make plots...
-        save_all_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
-        save_leaf_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, f)
+        save_all_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, plot_title)
+        save_leaf_cf_and_rocs(y_true, pseudo_conditional_probabilities, tree, model_dir, plot_title)
 
         all_predictions.append(pseudo_conditional_probabilities)
         all_trues.append(y_true)
@@ -188,24 +227,25 @@ def run_pre_detection_comparison(model, tree, model_dir, X_ts, X_static, Y):
     _, pseudo_conditional_probabilities_both = get_conditional_probabilites(y_pred_both, tree)
 
     os.makedirs(f"{model_dir}/pre_trigger/both", exist_ok=True)
-    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", 0)
-    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", 0)
+    plot_title = f"0 percent"
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", plot_title)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_both, tree, f"{model_dir}/pre_trigger/both", plot_title)
 
     # Run predictions and analysis for host only
     y_pred_host = model.predict([np.ones_like(x1) * ts_flag_value, x2], batch_size=default_batch_size, verbose=0)
     _, pseudo_conditional_probabilities_host = get_conditional_probabilites(y_pred_host, tree)
 
     os.makedirs(f"{model_dir}/pre_trigger/host", exist_ok=True)
-    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", 0)
-    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", 0)
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", plot_title)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_host, tree, f"{model_dir}/pre_trigger/host", plot_title)
     
     # Run predictions and analysis for non detections only
     y_pred_nd = model.predict([x1, np.ones_like(x2) * static_flag_value], batch_size=default_batch_size, verbose=0)
     _, pseudo_conditional_probabilities_nd = get_conditional_probabilites(y_pred_nd, tree)
 
     os.makedirs(f"{model_dir}/pre_trigger/nd", exist_ok=True)
-    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", 0)
-    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", 0)
+    save_all_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", plot_title)
+    save_leaf_cf_and_rocs(Y, pseudo_conditional_probabilities_nd, tree, f"{model_dir}/pre_trigger/nd", plot_title)
     
 
 def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max_class_count):
@@ -261,37 +301,67 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
     plot_day_vs_class_score(tree, model_dir)
 
+    # Run day wise analysis
+    run_day_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
+
     # Make plots of the scores
     run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run pre trigger analysis
     run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
 
-    # Make the gifs at leaf nodes
-    cf_files = [f"{model_dir}/gif/leaf_cf/{f}.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf.gif')
+    # Make the gifs at leaf nodes for percents
+    cf_files = [f"{model_dir}/gif/leaf_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_fraction.gif')
     plt.close()
 
-    roc_files = [f"{model_dir}/gif/leaf_roc/{f}.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc.gif')
+    roc_files = [f"{model_dir}/gif/leaf_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_fraction.gif')
     plt.close()
 
     # Make the gifs at the level 1 of the tree
-    cf_files = [f"{model_dir}/gif/level_1_cf/{f}.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf.gif')
+    cf_files = [f"{model_dir}/gif/level_1_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_fraction.gif')
     plt.close()
 
-    roc_files = [f"{model_dir}/gif/level_1_roc/{f}.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc.gif')
+    roc_files = [f"{model_dir}/gif/level_1_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_fraction.gif')
     plt.close()
 
     # Make the gifs at the level 2 of the tree
-    cf_files = [f"{model_dir}/gif/level_2_cf/{f}.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf.gif')
+    cf_files = [f"{model_dir}/gif/level_2_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_fraction.gif')
     plt.close()
 
-    roc_files = [f"{model_dir}/gif/level_2_roc/{f}.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc.gif')
+    roc_files = [f"{model_dir}/gif/level_2_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_fraction.gif')
+    plt.close()
+
+    # Make the gifs at leaf nodes for days
+    cf_files = [f"{model_dir}/gif/leaf_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/leaf_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_days.gif')
+    plt.close()
+
+    # Make the gifs at the level 1 of the tree
+    cf_files = [f"{model_dir}/gif/level_1_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_1_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_days.gif')
+    plt.close()
+
+    # Make the gifs at the level 2 of the tree
+    cf_files = [f"{model_dir}/gif/level_2_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_2_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_days.gif')
     plt.close()
 
 
