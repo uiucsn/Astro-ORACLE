@@ -167,8 +167,32 @@ def run_day_wise_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysic
         plt.close()
 
 
-    all_predictions = np.concatenate(all_predictions)
-    all_trues = np.concatenate(all_trues)
+    # Make the gifs at leaf nodes for days
+    cf_files = [f"{model_dir}/gif/leaf_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/leaf_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_days.gif')
+    plt.close()
+
+    # Make the gifs at the level 1 of the tree
+    cf_files = [f"{model_dir}/gif/level_1_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_1_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_days.gif')
+    plt.close()
+
+    # Make the gifs at the level 2 of the tree
+    cf_files = [f"{model_dir}/gif/level_2_cf/Trigger + {d} days.png" for d in days]
+    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_days.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_2_roc/Trigger + {d} days.png" for d in days]
+    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_days.gif')
+    plt.close()
 
 
 def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophysical_classes):
@@ -210,6 +234,32 @@ def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
     # plot_reliability_diagram(all_trues[:, 3:8], all_predictions[:, 3:8], title="Calibration at level 2", img_file=f"{model_dir}/level_2_cal.pdf")
     # plot_reliability_diagram(all_trues[:, -19:], all_predictions[:, -19:], title="Calibration at the leaves", img_file=f"{model_dir}/leaf_cal.pdf")
     # plt.close()
+
+    cf_files = [f"{model_dir}/gif/leaf_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_fraction.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/leaf_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_fraction.gif')
+    plt.close()
+
+    # Make the gifs at the level 1 of the tree
+    cf_files = [f"{model_dir}/gif/level_1_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_fraction.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_1_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_fraction.gif')
+    plt.close()
+
+    # Make the gifs at the level 2 of the tree
+    cf_files = [f"{model_dir}/gif/level_2_cf/{int(f*100)} percent.png" for f in fractions]
+    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_fraction.gif')
+    plt.close()
+
+    roc_files = [f"{model_dir}/gif/level_2_roc/{int(f*100)} percent.png" for f in fractions]
+    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_fraction.gif')
+    plt.close()
 
 def run_pre_detection_comparison(model, tree, model_dir, X_ts, X_static, Y):
 
@@ -308,61 +358,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run pre trigger analysis
-    run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
-
-    # Make the gifs at leaf nodes for percents
-    cf_files = [f"{model_dir}/gif/leaf_cf/{int(f*100)} percent.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_fraction.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/leaf_roc/{int(f*100)} percent.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_fraction.gif')
-    plt.close()
-
-    # Make the gifs at the level 1 of the tree
-    cf_files = [f"{model_dir}/gif/level_1_cf/{int(f*100)} percent.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_fraction.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/level_1_roc/{int(f*100)} percent.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_fraction.gif')
-    plt.close()
-
-    # Make the gifs at the level 2 of the tree
-    cf_files = [f"{model_dir}/gif/level_2_cf/{int(f*100)} percent.png" for f in fractions]
-    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_fraction.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/level_2_roc/{int(f*100)} percent.png" for f in fractions]
-    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_fraction.gif')
-    plt.close()
-
-    # Make the gifs at leaf nodes for days
-    cf_files = [f"{model_dir}/gif/leaf_cf/Trigger + {d} days.png" for d in days]
-    make_gif(cf_files, f'{model_dir}/gif/leaf_cf/leaf_cf_days.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/leaf_roc/Trigger + {d} days.png" for d in days]
-    make_gif(roc_files, f'{model_dir}/gif/leaf_roc/leaf_roc_days.gif')
-    plt.close()
-
-    # Make the gifs at the level 1 of the tree
-    cf_files = [f"{model_dir}/gif/level_1_cf/Trigger + {d} days.png" for d in days]
-    make_gif(cf_files, f'{model_dir}/gif/level_1_cf/level_1_cf_days.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/level_1_roc/Trigger + {d} days.png" for d in days]
-    make_gif(roc_files, f'{model_dir}/gif/level_1_roc/level_1_roc_days.gif')
-    plt.close()
-
-    # Make the gifs at the level 2 of the tree
-    cf_files = [f"{model_dir}/gif/level_2_cf/Trigger + {d} days.png" for d in days]
-    make_gif(cf_files, f'{model_dir}/gif/level_2_cf/level_2_cf_days.gif')
-    plt.close()
-
-    roc_files = [f"{model_dir}/gif/level_2_roc/Trigger + {d} days.png" for d in days]
-    make_gif(roc_files, f'{model_dir}/gif/level_2_roc/level_2_roc_days.gif')
-    plt.close()
+    #run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
 
 
 if __name__=='__main__':

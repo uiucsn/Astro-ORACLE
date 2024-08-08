@@ -144,8 +144,6 @@ def save_all_cf_and_rocs(y_true, y_pred, tree, model_dir, plot_title):
                 # Find the predicted label
                 predicted_class_idx = np.argmax(y_pred[i, mask])
                 pred_labels.append(mask_classes[predicted_class_idx])
-            
-            plot_title = f"~{1 * 100}% of each LC visible"
 
             # Create the dirs to save plots
             os.makedirs(f"{model_dir}/gif/level_{depth}_cf", exist_ok=True)
@@ -256,9 +254,9 @@ def merge_performance_tables(model_dir, days=[1,8,128,1024]):
             df = pd.read_csv(f"{model_dir}/gif/{level}_csv/Trigger + {d} days.csv", index_col=0)
             df.drop(columns=["support"], inplace=True)
             df.index.name = 'Class'
-            df.rename(columns={'precision': 'p_{' + f"{d} days" + '}'}, inplace=True)
-            df.rename(columns={'recall': 'r_{' + f"{d} days" + '}'}, inplace=True)
-            df.rename(columns={'f1-score': 'f-1_{' + f"{d} days" + '}'}, inplace=True)
+            df.rename(columns={'precision': 'p_{' + f"{d}d" + '}'}, inplace=True)
+            df.rename(columns={'recall': 'r_{' + f"{d}d" + '}'}, inplace=True)
+            df.rename(columns={'f1-score': 'f-1_{' + f"{d}d" + '}'}, inplace=True)
             data_frames.append(df)
 
         df_merged = reduce(lambda  left,right: pd.merge(left,right, how='left',on='Class', sort=False), data_frames)
