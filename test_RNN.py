@@ -206,10 +206,10 @@ def run_fractional_analysis(model, tree, model_dir, X_ts, X_static, Y, astrophys
     all_predictions = np.concatenate(all_predictions)
     all_trues = np.concatenate(all_trues)
 
-    plot_reliability_diagram(all_trues[:, 1:3], all_predictions[:, 1:3], title="Calibration at level 1", img_file=f"{model_dir}/level_1_cal.pdf")
-    plot_reliability_diagram(all_trues[:, 3:8], all_predictions[:, 3:8], title="Calibration at level 2", img_file=f"{model_dir}/level_2_cal.pdf")
-    plot_reliability_diagram(all_trues[:, -19:], all_predictions[:, -19:], title="Calibration at the leaves", img_file=f"{model_dir}/leaf_cal.pdf")
-    plt.close()
+    # plot_reliability_diagram(all_trues[:, 1:3], all_predictions[:, 1:3], title="Calibration at level 1", img_file=f"{model_dir}/level_1_cal.pdf")
+    # plot_reliability_diagram(all_trues[:, 3:8], all_predictions[:, 3:8], title="Calibration at level 2", img_file=f"{model_dir}/level_2_cal.pdf")
+    # plot_reliability_diagram(all_trues[:, -19:], all_predictions[:, -19:], title="Calibration at the leaves", img_file=f"{model_dir}/leaf_cal.pdf")
+    # plt.close()
 
 def run_pre_detection_comparison(model, tree, model_dir, X_ts, X_static, Y):
 
