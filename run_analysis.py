@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 from test_RNN import fractions, days
-from vizualizations import make_gif, plot_reliability_diagram, plot_data_set_composition
+from vizualizations import plot_data_set_composition, make_training_history_plot
 from interpret_results import save_all_phase_vs_accuracy_plot, merge_performance_tables
 
 default_seed = 40
@@ -33,23 +33,6 @@ def merge_sample_tables(model_dir):
     df_combined.to_csv(f'{model_dir}/combined_sample.csv')
     print(df_combined.to_latex(index=False))
     
-def make_training_history_plot(model_dir):
-
-    df = pd.read_csv(f"{model_dir}/loss_history.csv")
-
-    avg_train_losses = df['Avg_train_loss']
-    avg_val_losses = df['Avg_val_loss']
-
-    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Data')
-    plt.plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Data')
-
-    plt.xlabel("Epoch", fontsize='x-large')
-    plt.ylabel("Mean log loss", fontsize='x-large')
-
-    plt.legend()
-
-    plt.savefig(f"{model_dir}/training_history.pdf")
-    plt.close()
 
 def parse_args():
     '''
@@ -62,7 +45,7 @@ def parse_args():
 
 def run_analysis(model_dir):
 
-    #make_training_history_plot(model_dir)
+    make_training_history_plot(model_dir)
 
     save_all_phase_vs_accuracy_plot(model_dir, days=days)
     plt.close()

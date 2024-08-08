@@ -312,3 +312,36 @@ def make_gif(files, gif_file=None):
         # Save the animation as a GIF
         anim.save(gif_file)
 
+def make_training_history_plot(model_dir):
+
+    window_size = 3
+
+    df = pd.read_csv(f"{model_dir}/loss_history.csv")
+
+    avg_train_losses = df['Avg_train_loss']
+    avg_val_losses = df['Avg_val_loss']
+
+    rolling_train = []
+    rolling_val = []
+    s = []
+
+    for i in range(len(avg_train_losses) - window_size):
+
+        rolling_train.append(np.mean(avg_train_losses[i:i+window_size]))
+        rolling_val.append(np.mean(avg_val_losses[i:i+window_size]))
+        s.append(i) #s.append(i + window_size)
+
+
+    plt.plot(s, np.log(rolling_train), label='Rolling Avg Train Loss', color='C0', linestyle='--')
+    plt.plot(s, np.log(rolling_val), label='Rolling Avg Validation Loss', color='C1', linestyle='--')
+
+    plt.plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Loss', color='C0', alpha=0.3)
+    plt.plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Loss', color='C1', alpha=0.3)
+
+    plt.xlabel("Epoch", fontsize='x-large')
+    plt.ylabel("Mean log loss", fontsize='x-large')
+
+    plt.legend()
+
+    plt.savefig(f"{model_dir}/training_history.pdf")
+    plt.close()
