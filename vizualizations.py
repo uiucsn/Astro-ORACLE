@@ -13,8 +13,8 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_curve,
 from taxonomy import source_node_label
 from LSST_Source import LSST_Source
 
-NUM_COLORS = 20
 cm = plt.get_cmap('gist_rainbow')
+NUM_COLORS = 20
 color_arr=[cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)]
 
 def plot_legend(labels, filename=None, expand=[-5,-5,5,5]):
@@ -223,6 +223,8 @@ def plot_roc_curves(y_true, y_pred, labels, title=None, img_file=None):
     chance = np.arange(0,1.01,0.01)
     plt.figure(figsize=(12,12))
     plt.plot(chance, chance, '--', color='black', label='Random Chance (AUC = 0.5)')
+
+    color_arr=[cm(1.*i/y_true.shape[1]) for i in range(y_true.shape[1])]
 
     for i, label in enumerate(labels):
 
