@@ -36,6 +36,19 @@ def plot_legend(labels, filename=None, expand=[-5,-5,5,5]):
 
 def plot_lc(table, true_class_score, class_name, file_name=None):
 
+    def plot_lc_legend(filename=None, expand=[-5,-5,5,5]):
+
+        legend = plt.legend(handles=get_legend_patches(), ncol=2)
+
+        fig  = legend.figure
+        fig.canvas.draw()
+        bbox  = legend.get_window_extent()
+        bbox = bbox.from_extents(*(bbox.extents + np.array(expand)))
+        bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+        if filename != None:
+            fig.savefig(filename, dpi="figure", bbox_inches=bbox)
+        plt.close()
+
     def get_pb_color(wavelength):
 
         all_wavelengths = list(LSST_Source.pb_wavelengths.values())
@@ -98,7 +111,7 @@ def plot_lc(table, true_class_score, class_name, file_name=None):
     ax2.set_ylabel('True Class Score', fontsize='xx-large') 
     ax2.plot(days_since_trigger, true_class_score, color='black', linestyle='dotted')
 
-    ax1.legend(handles=get_legend_patches())
+    #ax1.legend(handles=get_legend_patches())
 
     fig.tight_layout()
 
@@ -108,6 +121,7 @@ def plot_lc(table, true_class_score, class_name, file_name=None):
         plt.savefig(f"lcs/{file_name}.pdf")
     
     plt.close()
+    plot_lc_legend(filename=f"lcs/legend.pdf")
 
 def plot_confusion_matrix(y_true, y_pred, labels, title=None, img_file=None):
     
@@ -388,10 +402,11 @@ def make_z_plots(a_classes, redshifts, model_dir):
         sns.kdeplot(data=np.array(z) ,color='#FF6645', label=key, fill=True, alpha=1, linewidth=1.5, ax=ax)
 
         ax.set_xlim(0, max_z)
-        ax.annotate(key, xy=(0.9,0.9),xycoords='axes fraction',fontsize='x-large')
-        ax.spines[['left','right', 'top']].set_visible(False)
-        ax.set_yticks([])
-        ax.set_ylabel('')
+        ax.set_ylim(0, 4)
+        ax.annotate(f"{key} | Count: {len(z)}", xy=(0.5,0.6),xycoords='axes fraction',fontsize='large')
+        ax.spines[['right', 'top']].set_visible(False)
+        #ax.set_yticks([])
+        ax.set_ylabel('Density')
 
         i += 1
 
