@@ -11,6 +11,7 @@
 
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
+pip install seaborn
 
 nvidia-smi
 python test_RNN.py --model_dir models/lsst_alpha_0.5/ --max_class_count 20000
