@@ -89,19 +89,19 @@ TODO: build out object to tensor conversion. Build out pipelines to do this conv
 
 Overall model performance:
 
-![](models/lsst_alpha_0.5/performance.jpg)
+![](models/lsst_alpha_0.5/f1-performance.jpg)
 
 First at the root,
 
-![](models/lsst_alpha_0.5/gif/level_1_cf/level_1_cf.gif)
-![](models/lsst_alpha_0.5/gif/level_1_roc/level_1_roc.gif)
+![](models/lsst_alpha_0.5/gif/level_1_cf/level_1_cf_days.gif)
+![](models/lsst_alpha_0.5/gif/level_1_roc/level_1_roc_days.gif)
 
 At the next level in the hierarchy
 
-![](models/lsst_alpha_0.5/gif/level_2_cf/level_2_cf.gif)
-![](models/lsst_alpha_0.5/gif/level_2_roc/level_2_roc.gif)
+![](models/lsst_alpha_0.5/gif/level_2_cf/level_2_cf_days.gif)
+![](models/lsst_alpha_0.5/gif/level_2_roc/level_2_roc_days.gif)
 
 And finally, at the leaf...
 
-![](models/lsst_alpha_0.5/gif/leaf_cf/leaf_cf.gif)
-![](models/lsst_alpha_0.5/gif/leaf_roc/leaf_roc.gif)
+![](models/lsst_alpha_0.5/gif/leaf_cf/leaf_cf_days.gif)
+![](models/lsst_alpha_0.5/gif/leaf_roc/leaf_roc_days.gif)
