@@ -254,9 +254,9 @@ def merge_performance_tables(model_dir, days=[1,8,128,1024]):
             df = pd.read_csv(f"{model_dir}/gif/{level}_csv/Trigger + {d} days.csv", index_col=0)
             df.drop(columns=["support"], inplace=True)
             df.index.name = 'Class'
-            df.rename(columns={'precision': 'p_{' + f"{d}d" + '}'}, inplace=True)
-            df.rename(columns={'recall': 'r_{' + f"{d}d" + '}'}, inplace=True)
-            df.rename(columns={'f1-score': 'f-1_{' + f"{d}d" + '}'}, inplace=True)
+            df.rename(columns={'precision': '$p_{' + f"{d}d" + '}$'}, inplace=True)
+            df.rename(columns={'recall': '$r_{' + f"{d}d" + '}$'}, inplace=True)
+            df.rename(columns={'f1-score': '$f1_{' + f"{d}d" + '}$'}, inplace=True)
             data_frames.append(df)
 
         df_merged = reduce(lambda  left,right: pd.merge(left,right, how='left',on='Class', sort=False), data_frames)

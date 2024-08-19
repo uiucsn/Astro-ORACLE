@@ -332,7 +332,7 @@ def make_gif(files, gif_file=None):
 
 def make_training_history_plot(model_dir):
 
-    window_size = 3
+    window_size = 10
 
     df = pd.read_csv(f"{model_dir}/loss_history.csv")
 
@@ -351,15 +351,15 @@ def make_training_history_plot(model_dir):
 
     fig, axs = plt.subplots(ncols=1, nrows=2, figsize=(5, 7), layout="constrained")
 
-    axs[0].plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Loss', color='C0', alpha=0.3)
-    axs[0].plot(s, np.log(rolling_train), label='Rolling Avg Train Loss', color='C1', linestyle='--')
+    axs[0].plot(list(range(len(avg_train_losses))), np.log(avg_train_losses), label='Train Loss', color='C0', alpha=0.5)
+    axs[0].plot(s, np.log(rolling_train), label='Rolling Avg Train Loss', color='C1')
 
     axs[0].set_ylabel("Mean log loss", fontsize='x-large')
     axs[0].legend()
     axs[0].set_xticks([])
 
-    axs[1].plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Loss', color='C0', alpha=0.3)
-    axs[1].plot(s, np.log(rolling_val), label='Rolling Avg Validation Loss', color='C1', linestyle='--')
+    axs[1].plot(list(range(len(avg_val_losses))), np.log(avg_val_losses), label='Validation Loss', color='C0', alpha=0.5)
+    axs[1].plot(s, np.log(rolling_val), label='Rolling Avg Validation Loss', color='C1')
 
     axs[1].set_xlabel("Epoch", fontsize='x-large')
     axs[1].set_ylabel("Mean log loss", fontsize='x-large')
