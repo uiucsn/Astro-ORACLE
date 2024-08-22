@@ -181,17 +181,18 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
         for d in days:
 
             df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
-            f1.append(df_alpha1['f1-score'].to_numpy()[-1])
+            f1.append(df_alpha1['f1-score'].to_numpy()[-2])
 
         plt.plot(days, f1, label=level, marker = 'o')
 
     plt.xlabel("Days since trigger", fontsize='xx-large')
-    plt.ylabel("Class-weighted F1 score", fontsize='xx-large')
+    plt.ylabel("Macro avg F1 score", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.xscale('log')
+    plt.ylim(0.5, 1.05)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/f1-performance.pdf")
     plt.savefig(f"{model_dir}/f1-performance.jpg")
@@ -203,17 +204,18 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
         for d in days:
 
             df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
-            precision.append(df_alpha1['precision'].to_numpy()[-1])
+            precision.append(df_alpha1['precision'].to_numpy()[-2])
 
         plt.plot(days, precision, label=level, marker = 'o')
 
     plt.xlabel("Days since trigger", fontsize='xx-large')
-    plt.ylabel("Class-weighted precision", fontsize='xx-large')
+    plt.ylabel("Macro avg precision", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.xscale('log')
+    plt.ylim(0.5, 1.05)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/precision-performance.pdf")
     plt.savefig(f"{model_dir}/precision-performance.jpg")
@@ -225,17 +227,18 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
         for d in days:
 
             df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
-            recall.append(df_alpha1['recall'].to_numpy()[-1])
+            recall.append(df_alpha1['recall'].to_numpy()[-2])
 
         plt.plot(days, recall, label=level, marker = 'o')
 
     plt.xlabel("Days since trigger", fontsize='xx-large')
-    plt.ylabel("Class-weighted recall", fontsize='xx-large')
+    plt.ylabel("Macro avg recall", fontsize='xx-large')
 
     plt.grid()
     plt.tight_layout()
-    plt.legend()
+    plt.legend(loc='lower right')
     plt.xscale('log')
+    plt.ylim(0.5, 1.05)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/recall-performance.pdf")
     plt.savefig(f"{model_dir}/recall-performance.jpg")
