@@ -348,7 +348,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     best_model = keras.models.load_model(f"{model_dir}/best_model.h5", compile=False)
 
     # Some general code to plot light curves
-    plot_some_lcs(best_model, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
+    #plot_some_lcs(best_model, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run all the analysis code
     run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
@@ -361,7 +361,7 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     #run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run pre trigger analysis
-    #run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
+    run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
 
 
 if __name__=='__main__':
