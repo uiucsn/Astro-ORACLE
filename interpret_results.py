@@ -192,7 +192,7 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
     plt.tight_layout()
     plt.legend(loc='lower right')
     plt.xscale('log')
-    plt.ylim(0.5, 1.05)
+    plt.ylim(0.5, 1.01)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/f1-performance.pdf")
     plt.savefig(f"{model_dir}/f1-performance.jpg")
@@ -215,7 +215,7 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
     plt.tight_layout()
     plt.legend(loc='lower right')
     plt.xscale('log')
-    plt.ylim(0.5, 1.05)
+    plt.ylim(0.5, 1.01)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/precision-performance.pdf")
     plt.savefig(f"{model_dir}/precision-performance.jpg")
@@ -238,13 +238,13 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
     plt.tight_layout()
     plt.legend(loc='lower right')
     plt.xscale('log')
-    plt.ylim(0.5, 1.05)
+    plt.ylim(0.5, 1.01)
     plt.xticks(days, days)
     plt.savefig(f"{model_dir}/recall-performance.pdf")
     plt.savefig(f"{model_dir}/recall-performance.jpg")
     plt.close()
 
-def merge_performance_tables(model_dir, days=[1,8,128,1024]):
+def merge_performance_tables(model_dir, days=[2,8,64,1024]):
 
     levels = ['level_1','level_2','leaf']
 

@@ -407,7 +407,7 @@ def make_z_plots(a_classes, redshifts, model_dir):
             class_z[c] = z
             n += 1
 
-    fig, axs = plt.subplots(ncols=1, nrows=n, figsize=(5, n*1), layout="constrained")
+    fig, axs = plt.subplots(ncols=1, nrows=n, figsize=(5, n*1))
 
     i = 0
     for key in class_z:
@@ -421,15 +421,18 @@ def make_z_plots(a_classes, redshifts, model_dir):
         ax.annotate(f"{key} | Count: {len(z)}", xy=(0.5,0.6),xycoords='axes fraction',fontsize='large')
         ax.spines[['right', 'top']].set_visible(False)
         #ax.set_yticks([])
-        ax.set_ylabel('Density')
+
+        if i == int(n/2):
+            ax.set_ylabel('Density', fontsize='x-large')
+        else:
+            ax.set_ylabel('')
 
         i += 1
 
         if i != n:
             ax.set_xticks([])
         else:
-            ax.set_xlabel('Redshift')
-
+            ax.set_xlabel('Redshift', fontsize='x-large')
 
     plt.tight_layout()
     plt.savefig(f"{model_dir}/z_dist.pdf")
