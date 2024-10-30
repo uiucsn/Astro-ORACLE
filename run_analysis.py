@@ -8,7 +8,7 @@ from pathlib import Path
 
 from test_RNN import fractions, days
 from vizualizations import plot_data_set_composition, make_training_history_plot
-from interpret_results import save_all_phase_vs_accuracy_plot, merge_performance_tables
+from interpret_results import save_all_phase_vs_accuracy_plot, save_class_wise_phase_vs_accuracy_plot, merge_performance_tables
 
 default_seed = 40
 np.random.seed(default_seed)
@@ -48,6 +48,9 @@ def run_analysis(model_dir):
     make_training_history_plot(model_dir)
 
     save_all_phase_vs_accuracy_plot(model_dir, days=days)
+    plt.close()
+
+    save_class_wise_phase_vs_accuracy_plot(model_dir, days=days)
     plt.close()
 
     # plot the make up of all the data sets

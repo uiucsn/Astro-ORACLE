@@ -380,6 +380,9 @@ def make_training_history_plot(model_dir):
     axs[1].set_ylabel("Mean log loss", fontsize='x-large')
     axs[1].legend()
 
+    axs[0].set_ylim(-3.4, -1)
+    axs[1].set_ylim(-3.4, -1)
+
     plt.savefig(f"{model_dir}/training_history.pdf")
     plt.close()
 

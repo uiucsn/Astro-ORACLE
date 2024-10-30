@@ -244,6 +244,60 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
     plt.savefig(f"{model_dir}/recall-performance.jpg")
     plt.close()
 
+def save_class_wise_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), levels = ["level_1", "level_2", "leaf"]):
+
+    plt.style.use(['default'])
+
+    cm = plt.get_cmap('gist_rainbow')
+
+    # Making the f1 plot
+    for level in levels:
+
+        class_wise_f1s = {}
+        for d in days:
+
+            df_alpha1 = pd.read_csv(f'{model_dir}/gif/{level}_csv/Trigger + {d} days.csv')
+
+            classes = df_alpha1.iloc[:-3,0].to_numpy()
+            f1 = df_alpha1['f1-score'].to_numpy()[:-3]
+
+
+            for i, c in enumerate(classes):
+                
+                if c not in class_wise_f1s:
+                    class_wise_f1s[c] = []
+                
+                class_wise_f1s[c].append(f1[i])
+
+        for i, c in enumerate(classes):
+
+            if i >= 10:
+                linestyle='dotted'
+                plt.plot(days, class_wise_f1s[c], label=c, marker = '*', alpha=0.5, linestyle=linestyle)
+            else:
+                linestyle='dashed'
+                plt.plot(days, class_wise_f1s[c], label=c, marker = '.', alpha=0.5, linestyle=linestyle)
+
+        plt.xscale('log')
+
+        if len(classes) > 10:
+            plt.ylim(-0.1, 1.01)
+            plt.legend(ncol=5, fontsize=7, loc='lower right')
+        else:
+            plt.legend()
+        plt.xticks(days, days)
+
+        #plt.ylim(0, 1.1)
+
+
+        plt.xlabel("Days since trigger", fontsize='xx-large')
+        plt.ylabel("F1 score", fontsize='xx-large')
+        plt.tight_layout()
+
+        plt.savefig(f"{model_dir}/per_class_{level}_F1.pdf")
+        plt.close()
+
+
 def merge_performance_tables(model_dir, days=[2,8,64,1024]):
 
     levels = ['level_1','level_2','leaf']
