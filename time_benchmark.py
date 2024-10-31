@@ -86,7 +86,7 @@ def run_time_bench_mark(model_dir, test_dir=default_test_dir, max_class_count=de
     # Run inference on these for batch size = 2000
     batch_size = 2000
     start = time.time()
-    model.predict([x1[:n, :, :], x2[:n, :]], batch_size=batch_size)
+    model.predict([x1[n:2*n, :, :], x2[:n, :]], batch_size=batch_size)
     end = time.time()
     print(f'Avg time for batch size = {batch_size}:', (end - start)/n, "s per LC")
 
