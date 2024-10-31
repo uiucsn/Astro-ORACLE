@@ -11,6 +11,7 @@
 
 module load anaconda/2023-Mar/3
 source activate /projects/caps/uiucsn/ved/HC_env
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/caps/uiucsn/ved/HC_env/lib
 
 nvidia-smi
 python time_benchmark.py --model_dir models/lsst_alpha_0.5/
