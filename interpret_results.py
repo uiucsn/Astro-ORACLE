@@ -185,7 +185,7 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
 
         plt.plot(days, f1, label=level, marker = 'o')
 
-    plt.xlabel("Days since trigger", fontsize='xx-large')
+    plt.xlabel("Days from first detection", fontsize='xx-large')
     plt.ylabel("Macro avg F1 score", fontsize='xx-large')
 
     plt.grid()
@@ -208,7 +208,7 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
 
         plt.plot(days, precision, label=level, marker = 'o')
 
-    plt.xlabel("Days since trigger", fontsize='xx-large')
+    plt.xlabel("Days from first detection", fontsize='xx-large')
     plt.ylabel("Macro avg precision", fontsize='xx-large')
 
     plt.grid()
@@ -231,7 +231,7 @@ def save_all_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range(11)), 
 
         plt.plot(days, recall, label=level, marker = 'o')
 
-    plt.xlabel("Days since trigger", fontsize='xx-large')
+    plt.xlabel("Days from first detection", fontsize='xx-large')
     plt.ylabel("Macro avg recall", fontsize='xx-large')
 
     plt.grid()
@@ -290,7 +290,7 @@ def save_class_wise_phase_vs_accuracy_plot(model_dir, days = 2 ** np.array(range
         #plt.ylim(0, 1.1)
 
 
-        plt.xlabel("Days since trigger", fontsize='xx-large')
+        plt.xlabel("Days from first detection", fontsize='xx-large')
         plt.ylabel("F1 score", fontsize='xx-large')
         plt.tight_layout()
 
