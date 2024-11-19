@@ -2,6 +2,7 @@ import argparse
 import time
 import numpy as np
 import random 
+import matplotlib.pyplot as plt
 
 from tensorflow import keras
 from tqdm import tqdm
@@ -20,6 +21,13 @@ default_max_class_count = 10000
 
 fractions = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 days = 2 ** np.array(range(11))
+
+# Uncomment for CPU testing 
+# import os
+# import tensorflow as tf
+# tf.config.threading.set_inter_op_parallelism_threads(1)
+# tf.config.threading.set_intra_op_parallelism_threads(1)
+# os.environ["OMP_NUM_THREADS"] = "1"
 
 def parse_args():
     '''
@@ -40,9 +48,6 @@ def run_time_bench_mark(model_dir, test_dir=default_test_dir, max_class_count=de
     X_static = load(f"{test_dir}/x_static.pkl")
     Y = load(f"{test_dir}/y.pkl")
     astrophysical_classes = load(f"{test_dir}/a_labels.pkl")
-
-    z_arr = [X_static[i]['REDSHIFT_HELIO'] for i in range(len(X_static))]
-    make_z_plots(astrophysical_classes, z_arr, model_dir)
 
     a, b = np.unique(astrophysical_classes, return_counts=True)
 
