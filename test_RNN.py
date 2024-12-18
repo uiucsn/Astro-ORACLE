@@ -38,7 +38,7 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def plot_some_lcs(model, X_ts, X_static, Y,  astrophysical_classes, class_count=10):
+def plot_some_lcs(model, X_ts, X_static, Y,  astrophysical_classes, class_count=20):
     tree = get_taxonomy_tree()
 
     for j, c in enumerate(np.unique(astrophysical_classes)):
@@ -48,7 +48,7 @@ def plot_some_lcs(model, X_ts, X_static, Y,  astrophysical_classes, class_count=
         X_static_class = [X_static[i] for i in idx]
         Y_class = [Y[i] for i in idx]
 
-        for i in range(5):
+        for i in range(class_count):
 
             table = X_ts_class[i]
             static = X_static_class[i]
@@ -310,7 +310,8 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     astrophysical_classes = load(f"{test_dir}/a_labels.pkl")
 
     z_arr = [X_static[i]['REDSHIFT_HELIO'] for i in range(len(X_static))]
-    make_z_plots(astrophysical_classes, z_arr, model_dir)
+    
+    #make_z_plots(astrophysical_classes, z_arr, X_static, model_dir)
 
     a, b = np.unique(astrophysical_classes, return_counts=True)
     print(f"Total sample count = {np.sum(b)}")
@@ -323,6 +324,9 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     X_static_balanced = []
     Y_balanced = []
     astrophysical_classes_balanced = []
+
+    # Fix random seed while generating LCs for figure 19
+    #random.seed(42)
 
     for c in np.unique(astrophysical_classes):
 
@@ -351,17 +355,17 @@ def test_model(model_dir, test_dir=default_test_dir, max_class_count=default_max
     #plot_some_lcs(best_model, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run all the analysis code
-    run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
-    plot_day_vs_class_score(tree, model_dir)
+    # run_class_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
+    # plot_day_vs_class_score(tree, model_dir)
 
     # Run day wise analysis
-    run_day_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
+    # run_day_wise_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Make plots of the scores
     #run_fractional_analysis(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced, astrophysical_classes_balanced)
 
     # Run pre trigger analysis
-    run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
+    # run_pre_detection_comparison(best_model, tree, model_dir, X_ts_balanced, X_static_balanced, Y_balanced)
 
 
 if __name__=='__main__':
