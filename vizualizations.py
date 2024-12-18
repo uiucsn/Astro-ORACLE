@@ -92,11 +92,11 @@ def plot_lc(table, true_class_score, class_name, file_name=None):
 
         color_mask = colors == c
         combined_mask = color_mask & detection_mask
-        ax1.errorbar(x=days_since_trigger[combined_mask], y=flux[combined_mask], yerr=flux_err[combined_mask], color=c, fmt="o", label=c)
+        ax1.errorbar(x=days_since_trigger[combined_mask], y=flux[combined_mask], yerr=flux_err[combined_mask], color=c, fmt="*", label=c)
 
 
     # Plot the non detections
-    #ax1.scatter(days_since_trigger[non_detection_mask], flux[non_detection_mask], color=colors[non_detection_mask], marker=".")
+    ax1.scatter(days_since_trigger[non_detection_mask], flux[non_detection_mask], color=colors[non_detection_mask], marker="x", alpha=0.5)
 
     ax1.set_xlim(-20, 200)
     ax1.axvspan(-20, 0, color='gray', alpha=0.15)
@@ -386,13 +386,25 @@ def make_training_history_plot(model_dir):
     plt.savefig(f"{model_dir}/training_history.pdf")
     plt.close()
 
-def make_z_plots(a_classes, redshifts, model_dir):
+def make_z_plots(a_classes, redshifts, X_static, model_dir):
 
     unique_classes = np.unique(a_classes)
 
     class_z = {}
+    class_z_ddf = {}
+    class_z_non_ddf = {}
+
     max_z = 0
     n = 0
+
+    # Get flags for DDFs
+    f1 = np.array([X_static[i]['MW_plane_flag'] for i in range(len(X_static))])
+    f2 = np.array([X_static[i]['ELAIS_S1_flag'] for i in range(len(X_static))])
+    f3 = np.array([X_static[i]['XMM-LSS_flag'] for i in range(len(X_static))])
+    f4 = np.array([X_static[i]['Extended_Chandra_Deep_Field-South_flag'] for i in range(len(X_static))])
+    f5 = np.array([X_static[i]['COSMOS_flag'] for i in range(len(X_static))])
+
+    ddf_flag = f1 | f2 | f3 | f4 | f5
 
     for i, c in enumerate(unique_classes):
 
@@ -400,33 +412,50 @@ def make_z_plots(a_classes, redshifts, model_dir):
         idx = list(np.where(np.array(a_classes) == c)[0])
 
         z = []
+        z_ddf = []
+        z_non_ddf = []
         for i in idx:
             if redshifts[i] != -9:
                 z.append(redshifts[i])
+
+                if ddf_flag[i] == 1:
+                    z_ddf.append(redshifts[i])
+                else:
+                    z_non_ddf.append(redshifts[i])
+
                 if redshifts[i] > max_z:
                     max_z = redshifts[i]
         
         if len(z) > 10:
+            class_z_non_ddf[c] = z_non_ddf
+            class_z_ddf[c] = z_ddf
             class_z[c] = z
             n += 1
 
     fig, axs = plt.subplots(ncols=1, nrows=n, figsize=(5, n*1))
 
     i = 0
+    bins = np.arange(0, max_z + 0.5, 0.5)
     for key in class_z:
 
         z = class_z[key]
+        z_ddf = class_z_ddf[key]
+        z_non_ddf = class_z_non_ddf[key]
+
         ax = axs[i]
-        sns.kdeplot(data=np.array(z) ,color='#FF6645', label=key, fill=True, alpha=1, linewidth=1.5, ax=ax)
+        ax.hist(np.array(z), bins=bins, color='black', label=key, fill=False, alpha=1, linewidth=1, histtype='step')
+        ax.hist(np.array(z_non_ddf), bins=bins, color='#008080', label=key, fill=True, alpha=0.8, histtype='stepfilled')
+        ax.hist(np.array(z_ddf), bins=bins, color='#FF6645', label=key, fill=True, alpha=0.8,  histtype='stepfilled')
 
         ax.set_xlim(0, max_z)
-        ax.set_ylim(0, 4)
-        ax.annotate(f"{key} | Count: {len(z)}", xy=(0.5,0.6),xycoords='axes fraction',fontsize='large')
+        #ax.set_ylim(0, 4)
+        ax.annotate(f"{key} | Count: {len(z)}", xy=(0.6,0.85),xycoords='axes fraction',fontsize='large')
         ax.spines[['right', 'top']].set_visible(False)
+        ax.set_yscale("log")
         #ax.set_yticks([])
 
         if i == int(n/2):
-            ax.set_ylabel('Density', fontsize='x-large')
+            ax.set_ylabel('Count', fontsize='x-large')
         else:
             ax.set_ylabel('')
 
