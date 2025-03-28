@@ -1,7 +1,30 @@
-# ELAsTiCC-Classification
-Hierarchical classification of ELAsTiCC 2.
+# ORACLE
 
-The motivating idea here is when we have limited time series data, we can still make broader classification accurately (higher up the taxonomy) using these static features. Further, as more time series data becomes available we can make more granular classification lower in the tree and finally have the correct classification in the leaves. 
+We present ORACLE, the first hierarchical deep-learning model for real-time, context-aware classification of transient and variable astrophysical phenomena. ORACLE is a recurrent neural network with Gated Recurrent Units (GRUs), and has been trained using a custom hierarchical cross-entropy loss function to provide high-confidence classifications along an observationally-driven taxonomy with as little as a single photometric observation. Contextual information for each object, including host galaxy photometric redshift, offset, ellipticity and brightness, is concatenated to the light curve embedding and used to make a final prediction.
+
+For more information, please read the our paper - https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S/abstract
+
+If you use any of this code in your own work, please cite the associated paper using the following 
+
+```
+@ARTICLE{2025arXiv250101496S,
+       author = {{Shah}, Ved G. and {Gagliano}, Alex and {Malanchev}, Konstantin and {Narayan}, Gautham and {The LSST Dark Energy Science Collaboration}},
+        title = "{ORACLE: A Real-Time, Hierarchical, Deep-Learning Photometric Classifier for the LSST}",
+      journal = {arXiv e-prints},
+     keywords = {Astrophysics - Instrumentation and Methods for Astrophysics, Astrophysics - High Energy Astrophysical Phenomena, Computer Science - Artificial Intelligence, Computer Science - Machine Learning},
+         year = 2025,
+        month = jan,
+          eid = {arXiv:2501.01496},
+        pages = {arXiv:2501.01496},
+          doi = {10.48550/arXiv.2501.01496},
+archivePrefix = {arXiv},
+       eprint = {2501.01496},
+ primaryClass = {astro-ph.IM},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+```
+
 
 # General file descriptions:
 
