@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu
 
 module load anaconda/2023-Mar/3
-source activate /projects/caps/uiucsn/ved/HC_env
+source activate /projects/ncsa/caps/uiucsn/ved/HC_env
 pip install seaborn
 
 nvidia-smi

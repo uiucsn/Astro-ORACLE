@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu
 
 module load anaconda/2023-Mar/3
-source activate /projects/caps/uiucsn/ved/HC_env
+source activate /projects/ncsa/caps/uiucsn/ved/HC_env
 
 nvidia-smi
 python train_RNN.py --model_dir models/lsst_alpha_0.5_no_md --num_epochs 2000 --alpha 0.5 --lr 0.0002 --no_md
