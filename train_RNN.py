@@ -154,7 +154,7 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
         model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size)
     model.compile(optimizer=optimizer, loss=criterion)
 
-    keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
+    #keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
 
     # Create an augmented data set for validation
     print("Creating augmented validation data set")
