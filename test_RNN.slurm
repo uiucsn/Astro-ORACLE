@@ -9,7 +9,7 @@
 #SBATCH --mem-per-cpu=65G
 #SBATCH --gres=gpu
 
-module load anaconda/2023-Mar/3
+module load anaconda/2024.06
 source activate /projects/ncsa/caps/uiucsn/ved/HC_env
 pip install seaborn
 
