@@ -34,6 +34,30 @@ def get_RNN_model(ts_dim, static_dim, output_dim, latent_size):
     
     return model
 
+def get_RNN_model_no_MD(ts_dim, static_dim, output_dim, latent_size):
+
+    input_1 = Input((ts_length, ts_dim)) 
+    masking_input1 = Masking(mask_value=ts_flag_value)(input_1)
+
+    lstm1 = GRU(100, return_sequences=True, activation='tanh')(masking_input1)
+    lstm2 = GRU(100, return_sequences=False, activation='tanh')(lstm1)
+
+    dense1 = Dense(100, activation='tanh')(lstm2)
+
+    # NOTE: yes, this does not use the static input. We are keeping it here for consistency with the original API and to ensure code reusability.
+    input_2 = Input(shape = (static_dim,)) 
+    masking_input2 = Masking(mask_value=static_flag_value)(input_2)
+
+    dense3 = Dense(100, activation='relu')(dense1)
+
+    dense4 = Dense(latent_size, activation='relu')(dense3)
+
+    output = Dense(output_dim)(dense4)
+
+    model = keras.Model(inputs=[input_1, input_2], outputs=output)
+    
+    return model
+
 if __name__=='__main__':
 
     ts_dim = 5

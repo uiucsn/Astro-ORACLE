@@ -12,7 +12,7 @@ from tensorflow import keras
 from tqdm import tqdm
 from pathlib import Path
 
-from RNN_model import get_RNN_model
+from RNN_model import get_RNN_model, get_RNN_model_no_MD
 from dataloader import load, get_augmented_data, get_static_features
 from loss import WHXE_Loss
 from taxonomy import get_taxonomy_tree
@@ -26,6 +26,7 @@ default_batch_size = 1024
 default_learning_rate=5e-4
 default_latent_size = 64
 default_alpha = 0.5
+default_no_md = False
 
 default_train_dir = Path("processed/train")
 default_model_dir = Path("models/test")
@@ -46,6 +47,7 @@ def parse_args():
     parser.add_argument('--max_class_count', type=int, default=default_max_class_count, help='Maximum number of samples in each class.')
     parser.add_argument('--train_dir', type=Path, default=default_train_dir, help='Directory which contains the training data.')
     parser.add_argument('--model_dir', type=Path, default=default_model_dir, help='Directory for saving the models and best model during training.')
+    parser.add_argument('--no_md', action='store_true', default=False, help='Do not use the meta data while training the model. This ignores the MD input branch completely.')
 
     args = parser.parse_args()
     return args
@@ -67,7 +69,7 @@ def test_step(x_ts, x_static, y, model, criterion):
     return loss_value
 
 
-def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir):
+def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, learning_rate=default_learning_rate, latent_size=default_latent_size, alpha=default_alpha, max_class_count=default_max_class_count, train_dir=default_train_dir, model_dir=default_model_dir, no_md=default_no_md):
 
     random.seed(default_seed)
     os.mkdir(f"{model_dir}")
@@ -144,10 +146,15 @@ def train_model(num_epochs=default_num_epochs, batch_size=default_batch_size, le
 
     print(f"TS Input Dim: {ts_dim} | Static Input Dim: {static_dim} | Output Dim: {output_dim}")
 
-    model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size)
+    if no_md:
+        print("Using model without meta data")
+        model = get_RNN_model_no_MD(ts_dim, static_dim, output_dim, latent_size)
+    else:
+        print("Using model with meta data")
+        model = get_RNN_model(ts_dim, static_dim, output_dim, latent_size)
     model.compile(optimizer=optimizer, loss=criterion)
 
-    #keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
+    keras.utils.plot_model(model, to_file=f'{model_dir}/lstm.pdf', show_shapes=True, show_layer_names=True)
 
     # Create an augmented data set for validation
     print("Creating augmented validation data set")
@@ -247,4 +254,5 @@ if __name__=='__main__':
                 alpha=args.alpha, 
                 max_class_count=args.max_class_count, 
                 train_dir=args.train_dir, 
-                model_dir=args.model_dir)
+                model_dir=args.model_dir,
+                no_md=args.no_md)
