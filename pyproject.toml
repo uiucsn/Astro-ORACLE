@@ -20,7 +20,10 @@ dependencies = [
     "seaborn==0.13.2",
     "tensorflow==2.15.0",
     "tqdm==4.66.4",
-    "umap-learn==0.5.7"
+    "umap-learn==0.5.7",
+    "imageio==2.34.1",
+    "Jinja2==3.1.4",
+    "jupyterlab==4.2.2"
 ]
 
 [build-system]
@@ -31,11 +34,11 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project.scripts]
-Oracle-train = "astroOracle.train_RNN:main"
-Oracle-test = "astroOracle.train_RNN:main"
-Oracle-runAnalysis = "astroOracle.run_analysis:main"
-Oracle-classSummaries = "astroOracle.class_summaries:main"
-Oracle-combineParquet = "astroOracle.combine_parquet:main"
-Oracle-fitsToParquet = "astroOracle.fits_to_parquet:main"
-Oracle-prepArrays = "astroOracle.prep_arrays:main"
-Oracle-timeBenchmark = "astroOracle.time_benchmark:main"
+oracle-train = "astroOracle.train_RNN:main"
+oracle-test = "astroOracle.test_RNN:main"
+oracle-runAnalysis = "astroOracle.run_analysis:main"
+oracle-classSummaries = "astroOracle.class_summaries:main"
+oracle-combineParquet = "astroOracle.combine_parquet:main"
+oracle-fitsToParquet = "astroOracle.fits_to_parquet:main"
+oracle-prepArrays = "astroOracle.prep_arrays:main"
+oracle-timeBenchmark = "astroOracle.time_benchmark:main"

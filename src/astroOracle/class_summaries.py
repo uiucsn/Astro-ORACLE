@@ -32,7 +32,7 @@ def main(argv=None):
     for i in range(df.shape[0]):
 
         row = df[i]
-        source = LSST_Source(row, object_class)
+        source = LSST_Source(row)
         if len(source.MJD) == 0:
             print(len(source.MJD), source.MJD)
         ts_lengths.append(len(source.MJD))
