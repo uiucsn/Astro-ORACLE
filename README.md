@@ -37,10 +37,9 @@ Oracle is a pip installable package and was developed on python `3.10.16`. I rec
 
 Next, you can install oracle using
 
-`pip install git+https://github.com/uiucsn/ELAsTiCC-Classification.git`
+`pip install git+https://github.com/uiucsn/Astro-ORACLE.git`
 
 This should set up oracle and all of the related dependencies.
-
 
 # Usage
 
