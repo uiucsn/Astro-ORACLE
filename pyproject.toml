@@ -23,7 +23,8 @@ dependencies = [
     "umap-learn==0.5.7",
     "imageio==2.34.1",
     "Jinja2==3.1.4",
-    "jupyterlab==4.2.2"
+    "jupyterlab==4.2.2",
+    "sncosmo==2.12.1",
 ]
 
 [build-system]

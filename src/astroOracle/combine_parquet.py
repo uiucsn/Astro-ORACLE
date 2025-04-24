@@ -5,7 +5,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import polars as pl
-import pyarrow as pa
 from sncosmo import read_snana_fits
 
 seed = 42
