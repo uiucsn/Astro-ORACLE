@@ -1,44 +1,0 @@
-2024-08-28 17:02:36.436831: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2024-08-28 17:02:36.526327: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-2024-08-28 17:02:36.526374: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-2024-08-28 17:02:36.527585: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2024-08-28 17:02:36.534937: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI AMX_TILE AMX_INT8 AMX_BF16 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2024-08-28 17:02:45.083065: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-/projects/caps/uiucsn/ved/ELAsTiCC-Classification/vizualizations.py:434: UserWarning: The figure layout has changed to tight
-  plt.tight_layout()
-  0%|          | 0/463528 [00:00<?, ?it/s]  5%|▍         | 22394/463528 [00:00<00:01, 223922.60it/s] 10%|█         | 47160/463528 [00:00<00:01, 237876.79it/s] 16%|█▌        | 73684/463528 [00:00<00:01, 250362.88it/s] 21%|██▏       | 98721/463528 [00:00<00:01, 241800.17it/s] 27%|██▋       | 122944/463528 [00:00<00:01, 238751.60it/s] 32%|███▏      | 146847/463528 [00:00<00:01, 233329.85it/s] 37%|███▋      | 170210/463528 [00:00<00:01, 230444.11it/s] 42%|████▏     | 193274/463528 [00:00<00:01, 228268.41it/s] 47%|████▋     | 216112/463528 [00:00<00:01, 226630.99it/s] 52%|█████▏    | 238781/463528 [00:01<00:00, 225278.63it/s] 56%|█████▋    | 261312/463528 [00:01<00:00, 224825.29it/s] 61%|██████    | 283796/463528 [00:01<00:00, 223839.83it/s] 66%|██████▌   | 306181/463528 [00:01<00:00, 223033.70it/s] 71%|███████   | 328484/463528 [00:01<00:00, 222457.68it/s] 76%|███████▌  | 350730/463528 [00:01<00:00, 222310.17it/s] 80%|████████  | 372961/463528 [00:01<00:00, 221620.19it/s] 85%|████████▌ | 395123/463528 [00:01<00:00, 221052.98it/s] 90%|█████████ | 417228/463528 [00:01<00:00, 220968.70it/s] 95%|█████████▍| 439718/463528 [00:01<00:00, 222140.22it/s]100%|██████████| 463528/463528 [00:02<00:00, 228398.95it/s]
-2024-08-28 17:03:58.777953: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
-2024-08-28 17:03:58.783168: W tensorflow/core/common_runtime/gpu/gpu_device.cc:2348] TensorFlow was not built with CUDA kernel binaries compatible with compute capability 9.0. CUDA kernels will be jit-compiled from PTX, which could take 30 minutes or longer.
-2024-08-28 17:03:59.242331: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1929] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 36673 MB memory:  -> device: 0, name: NVIDIA H100 80GB HBM3, pci bus id: 0000:4e:00.0, compute capability: 9.0
-2024-08-28 17:05:04.082953: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:454] Loaded cuDNN version 8907
-MovieWriter ffmpeg unavailable; using Pillow instead.
-MovieWriter ffmpeg unavailable; using Pillow instead.
-MovieWriter ffmpeg unavailable; using Pillow instead.
-MovieWriter ffmpeg unavailable; using Pillow instead.
-MovieWriter ffmpeg unavailable; using Pillow instead.
-MovieWriter ffmpeg unavailable; using Pillow instead.
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
-/projects/caps/uiucsn/ved/HC_env/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1509: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
