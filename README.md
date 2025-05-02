@@ -15,7 +15,7 @@ For more information, please read the our paper - https://ui.adsabs.harvard.edu/
 If you use any of this code in your own work, please cite the associated paper and software using the following 
 
 ```
-@ARTICLE{2025arXiv250101496S,
+@ARTICLE{oracle1,
        author = {{Shah}, Ved G. and {Gagliano}, Alex and {Malanchev}, Konstantin and {Narayan}, Gautham and {The LSST Dark Energy Science Collaboration}},
         title = "{ORACLE: A Real-Time, Hierarchical, Deep-Learning Photometric Classifier for the LSST}",
       journal = {arXiv e-prints},
@@ -32,7 +32,7 @@ archivePrefix = {arXiv},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
 
-@software{shah_2025_15099699,
+@software{oracle1-software,
   author       = {Shah, Ved and
                   Gagliano, Alexander and
                   Malanchev, Konstantin and
