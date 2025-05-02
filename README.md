@@ -1,5 +1,7 @@
 # ORACLE
 
+[![DOI](https://img.shields.io/badge/astro.IM-2501.01496-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2501.01496)  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.15099699.svg)](https://zenodo.org/records/15099699)
+
 <p align="center">
   <img src="figures/logo.jpeg" width="500" />
 </p>
@@ -8,7 +10,7 @@ We present ORACLE, the first hierarchical deep-learning model for real-time, con
 
 For more information, please read the our paper - https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S/abstract
 
-If you use any of this code in your own work, please cite the associated paper using the following 
+If you use any of this code in your own work, please cite the associated paper and software using the following 
 
 ```
 @ARTICLE{2025arXiv250101496S,
@@ -27,11 +29,34 @@ archivePrefix = {arXiv},
        adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S},
       adsnote = {Provided by the SAO/NASA Astrophysics Data System}
 }
+
+@software{shah_2025_15099699,
+  author       = {Shah, Ved and
+                  Gagliano, Alexander and
+                  Malanchev, Konstantin and
+                  Narayan, Gautham and
+                  Malz, A.I. and
+                  The LSST Dark Energy Science Collaboration},
+  title        = {ORACLE: A Real-Time, Hierarchical, Deep-Learning
+                   Photometric Classifier for the LSST
+                  },
+  month        = mar,
+  year         = 2025,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.15099699},
+  url          = {https://doi.org/10.5281/zenodo.15099699},
+  swhid        = {swh:1:dir:731eb324342ca22b473e5ff6710483c721d417aa
+                   ;origin=https://doi.org/10.5281/zenodo.15099698;vi
+                   sit=swh:1:snp:8fc4b2c5a108b4542b5133dcfcd1dc2d7087
+                   2fca;anchor=swh:1:rel:4aa4f29a46142866d1d3d0182950
+                   4631c8b02696;path=ELAsTiCC-Classification-main
+                  },
+}
 ```
 
 # Installation:
 
-Oracle is a pip installable package and was developed on python `3.10.16`. I recommend create a new environment for every project. If you use conda, you can do using
+Oracle is a pip installable package and was developed on `python 3.10.16`. I recommend creating a new environment for every project. If you are using conda, you can do this using
 
 `conda create -n <ENV_NAME> python=3.10`
 
@@ -39,7 +64,7 @@ Next, you can install oracle using
 
 `pip install git+https://github.com/uiucsn/Astro-ORACLE.git`
 
-This should set up oracle and all of the related dependencies.
+This should set up oracle and related dependencies.
 
 # Usage
 
