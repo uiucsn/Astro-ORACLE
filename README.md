@@ -1,6 +1,8 @@
 # ORACLE
 
-[![DOI](https://img.shields.io/badge/astro.IM-2501.01496-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2501.01496)  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.15099699.svg)](https://zenodo.org/records/15099699)
+[![DOI](https://img.shields.io/badge/astro.IM-2501.01496-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2501.01496) [![DOI](https://zenodo.org/badge/doi/10.48550/arXiv.2501.01496.svg)](https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S/abstract) [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.15099699.svg)](https://zenodo.org/records/15099699)
+ 
+
 
 <p align="center">
   <img src="figures/logo.jpeg" width="500" />
