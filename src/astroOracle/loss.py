@@ -8,6 +8,17 @@ from astroOracle.taxonomy import source_node_label, get_taxonomy_tree
 from astroOracle.RNN_model import get_RNN_model
 from astroOracle.dataloader import ts_length
 
+def weighted_categorical_crossentropy(class_weights):
+    class_weights = tf.constant(class_weights, dtype=tf.float32) 
+    def loss(y_true, y_pred):
+        y_pred = tf.nn.softmax(y_pred, axis=-1)
+        y_pred = y_pred / tf.reduce_sum(y_pred, axis=-1, keepdims=True)
+        y_pred = tf.clip_by_value(y_pred, tf.keras.backend.epsilon(), 1 - tf.keras.backend.epsilon())
+        log_preds = tf.math.log(y_pred)
+        weighted_logs = y_true * log_preds * class_weights
+        return -tf.reduce_sum(weighted_logs)
+    return loss
+
 class WHXE_Loss:
 
     # Implementation of Weighted Hierarchical Cross Entropy loss function by Villar et. al. 2023 (https://arxiv.org/abs/2312.02266)
