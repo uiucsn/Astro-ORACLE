@@ -16,7 +16,7 @@ def weighted_categorical_crossentropy(class_weights):
         y_pred = tf.clip_by_value(y_pred, tf.keras.backend.epsilon(), 1 - tf.keras.backend.epsilon())
         log_preds = tf.math.log(y_pred)
         weighted_logs = y_true * log_preds * class_weights
-        return -tf.reduce_sum(weighted_logs)
+        return tf.reduce_mean(-tf.reduce_sum(weighted_logs, axis=1))
     return loss
 
 class WHXE_Loss:
