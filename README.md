@@ -2,7 +2,8 @@
 
 [![DOI](https://img.shields.io/badge/astro.IM-2501.01496-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2501.01496) [![DOI](https://zenodo.org/badge/doi/10.48550/arXiv.2501.01496.svg)](https://ui.adsabs.harvard.edu/abs/2025arXiv250101496S/abstract) [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.15099699.svg)](https://zenodo.org/records/15099699)
  
-
+> [!WARNING]
+> Oracle was rewritten from the ground up in pytorch to be much more performant and modular. If you are a new user, we encourage you to use the new version [here](https://github.com/dev-ved30/Oracle). This repository will no longer be maintained and is only availible for legacy/reproducibility reasons.
 
 <p align="center">
   <img src="figures/logo.jpeg" width="500" />
